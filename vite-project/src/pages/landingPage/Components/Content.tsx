@@ -1,0 +1,14 @@
+import React from "react";
+import ContentDetail from "./ContentDetail";
+import ContentList from "./ContentList";
+
+const Content = () => {
+  return (
+    <div className="mt-140">
+      <ContentDetail />
+      <ContentList />
+    </div>
+  );
+};
+
+export default Content;

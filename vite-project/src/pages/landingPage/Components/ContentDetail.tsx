@@ -12,6 +12,10 @@ const ContentDetail = () => {
         scroller &&
           scroller.current &&
           scroller.current.classList.remove(...addClass.split(" "));
+      } else if (scrollY < 200) {
+        scroller &&
+          scroller.current &&
+          scroller.current.classList.add(...addClass.split(" "));
       }
     }
     window.addEventListener("scroll", handleScroll);
@@ -27,29 +31,29 @@ const ContentDetail = () => {
         ref={scroller}
       >
         <ContentDetailHeader />
-        <div className="w-full mt-25 sm:flex sm:justify-center  md:justify-between flex-wrap ">
-          <div className="mt-4">
+        <div className="w-full mt-25 flex justify-between flex-wrap ">
+          <div className="mt-4 lg:w-1/5 lg:mr-4 ">
             <ContentDetailTitle
               title="공지사항 입니다."
               text="튼튼하며, 천지는 곳이 광야에서 천하를 말이다. 불러 청춘의 바이며, 있는 못할 석가는 끓는 생의 찾아다녀도, 사막이다. 크고 두손을 원대하고, 인간의 봄바람이 ..."
               date="2023-05-05"
             />
           </div>
-          <div className="mt-4">
+          <div className="mt-4 lg:w-1/5 lg:mx-4 ">
             <ContentDetailTitle
               title="공지사항 입니다."
               text="튼튼하며, 천지는 곳이 광야에서 천하를 말이다. 불러 청춘의 바이며, 있는 못할 석가는 끓는 생의 찾아다녀도, 사막이다. 크고 두손을 원대하고, 인간의 봄바람이 ..."
               date="2023-05-05"
             />
           </div>
-          <div className="mt-4">
+          <div className="mt-4 lg:w-1/5 lg:mx-4">
             <ContentDetailTitle
               title="공지사항 입니다."
               text="튼튼하며, 천지는 곳이 광야에서 천하를 말이다. 불러 청춘의 바이며, 있는 못할 석가는 끓는 생의 찾아다녀도, 사막이다. 크고 두손을 원대하고, 인간의 봄바람이 ..."
               date="2023-05-05"
             />
           </div>
-          <div className="mt-4">
+          <div className="mt-4 lg:w-1/5 lg:ml-4 ">
             <ContentDetailTitle
               title="공지사항 입니다."
               text="튼튼하며, 천지는 곳이 광야에서 천하를 말이다. 불러 청춘의 바이며, 있는 못할 석가는 끓는 생의 찾아다녀도, 사막이다. 크고 두손을 원대하고, 인간의 봄바람이 ..."

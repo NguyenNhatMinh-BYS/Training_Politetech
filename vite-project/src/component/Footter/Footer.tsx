@@ -3,8 +3,8 @@ import logoFooter from "../../assets/data/img/Screenshot 2023-06-27 120013.png";
 const Footer = () => {
   return (
     <footer className="w-full h-158 bg-footer">
-      <div className="w-80 flex items-center h-full  text-textFooter justify-center">
-        <div className="flex w-80 items-center">
+      <div className="lg:w-80 flex items-center h-full  text-textFooter justify-center ">
+        <div className="flex w-80 items-center sm:flex-col sm:items-start md:items-center md:flex-row">
           <img src={logoFooter} alt="logoFooter" />
           <div className="ml-5">
             <p className="text-sm">

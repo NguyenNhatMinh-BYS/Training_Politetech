@@ -11,7 +11,6 @@ const LandingPage = () => {
 
   return (
     <div className="w-full bg-white ">
-      <Navigate />
       <Banner />
       <Content />
       <Footer />

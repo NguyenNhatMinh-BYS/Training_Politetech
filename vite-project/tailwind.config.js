@@ -13,11 +13,12 @@ module.exports = {
       translate: {
         50: "-50%",
       },
-      fontSize: {},
+
       margin: {
         25: "25px",
         50: "50px",
         140: "140px",
+        200: "260px",
       },
       width: {
         80: "80%",

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import logo from "../../assets/data/img/logo@2x.png";
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
@@ -25,7 +25,7 @@ const Navigate = () => {
 
         navIconOpen &&
           navIconOpen.current &&
-          navIconOpen.current.classList.remove("sm:text-white");
+          navIconOpen.current.classList.remove("max-[1279px]:text-white");
         console.log(navIconOpen.current);
       } else {
         navIcon &&
@@ -39,7 +39,7 @@ const Navigate = () => {
           scrollYElement.current.classList.remove(...classesToAdd.split(" "));
         navIconOpen &&
           navIconOpen.current &&
-          navIconOpen.current.classList.add("sm:text-white");
+          navIconOpen.current.classList.add("max-[1279px]:text-white");
       }
     }
 
@@ -60,12 +60,13 @@ const Navigate = () => {
       navIcon.current &&
       navIcon.current.classList.remove("text-white");
     const addClass =
-      "sm:right-10 sm:translate-x-full sm:opacity-0 sm:pointer-events-none";
+      "max-[1279px]:right-10 max-[1279px]:translate-x-full max-[1279px]:opacity-0 max-[1279px]:pointer-events-none";
     navIcon &&
       navIcon.current &&
       navIcon.current.classList.remove(...addClass.split(" "));
 
-    const addClassListNav = "sm:opacity-0 sm:pointer-events-none";
+    const addClassListNav =
+      "max-[1279px]:opacity-0 max-[1279px]:pointer-events-none";
 
     navIconClose &&
       navIconClose.current &&
@@ -73,11 +74,12 @@ const Navigate = () => {
   };
   const handleClickCloseNav = () => {
     const addClass =
-      "sm:right-10 sm:translate-x-full sm:opacity-0 sm:pointer-events-none";
+      "max-[1279px]:right-10 max-[1279px]:translate-x-full max-[1279px]:opacity-0 max-[1279px]:pointer-events-none";
     navIcon &&
       navIcon.current &&
       navIcon.current.classList.add(...addClass.split(" "));
-    const addClassListNav = "sm:opacity-0 sm:pointer-events-none";
+    const addClassListNav =
+      "max-[1279px]:opacity-0 max-[1279px]:pointer-events-none";
     navIconClose &&
       navIconClose.current &&
       navIconClose.current.classList.add(...addClassListNav.split(" "));
@@ -97,7 +99,7 @@ const Navigate = () => {
           </div>
           <div
             ref={navIcon}
-            className="text-white xl:pt-8 xl:sm:backdrop-blur-0 xl:block xl:h-full xl:w-full xl:right-0 xl:translate-y-2 xl:text-end xl:leading-3  xl:static xl:bg-transparent xl:translate-x-0 xl:opacity-100  xl:pointer-events-auto  sm:transform sm:transition-all sm:duration-100 sm:linear sm:flex sm:flex-col sm:absolute sm:top-0 sm:bg-nav sm:p-6  sm:w-full sm:h-screen sm:right-0  sm:right-10 sm:backdrop-blur-md sm:translate-x-full sm:opacity-0 sm:pointer-events-none sm:text-end sm:pt-20 sm:pr-16 "
+            className="text-white xl:pt-8 xl:sm:backdrop-blur-0 xl:block xl:h-full xl:w-full xl:right-0 xl:translate-y-2 xl:text-end xl:leading-3  xl:static xl:bg-transparent xl:translate-x-0 xl:opacity-100  xl:pointer-events-auto  sm:transform sm:transition-all sm:duration-100 sm:linear max-[1279px]:flex max-[1279px]:flex-col max-[1279px]:absolute max-[1279px]:top-0 max-[1279px]:bg-nav max-[1279px]:p-6  max-[1279px]:w-full max-[1279px]:h-screen max-[1279px]:right-0  max-[1279px]:right-10 max-[1279px]:backdrop-blur-md max-[1279px]:translate-x-full max-[1279px]:opacity-0 max-[1279px]:pointer-events-none max-[1279px]:text-end max-[1279px]:pt-20 max-[1279px]:pr-16 "
           >
             <NavLink
               onClick={handleClickCloseNav}
@@ -177,22 +179,22 @@ const Navigate = () => {
 
           <div onClick={handleClickOpenNav}>
             <i
-              className="bi bi-list  xl:hidden sm:block sm:text-4xl sm:text-white"
+              className="bi bi-list  xl:hidden max-[1279px]:block max-[1279px]:text-4xl max-[1279px]:text-white"
               ref={navIconOpen}
             ></i>
           </div>
           <div
             ref={navIconClose}
             onClick={handleClickCloseNav}
-            className="sm:flex sm:justify-between sm:w-full sm:transform sm:transition-all sm:duration-100 sm:linear absolute sm:opacity-0 sm:pointer-events-none z-20 right-20 xl:hidden"
+            className="max-[1279px]:flex max-[1279px]:justify-between max-[1279px]:w-full max-[1279px]:transform max-[1279px]:transition-all max-[1279px]:duration-100 max-[1279px]:linear absolute max-[1279px]:opacity-0 max-[1279px]:pointer-events-none z-20 right-20 xl:hidden"
           >
             {" "}
             <img
               src={logo}
               alt="logo"
-              className="sm:relative sm:left-44  w-56 cursor-pointer"
+              className="max-[1279px]:relative min-[640px]:left-44  w-56 cursor-pointer min-[180px]:left-32"
             />
-            <i className="bi bi-x-lg  sm:text-3xl sm:text-nav "></i>
+            <i className="bi bi-x-lg  max-[1279px]:text-3xl max-[1279px]:text-nav "></i>
           </div>
         </header>
       </div>

@@ -31,7 +31,7 @@ const ContentList = () => {
         className="w-80 flex justify-between mt-140 opacity-0 duration-500 transition-all flex-wrap"
         ref={scroller}
       >
-        <div className="lg:w-1/5 mt-8 sm:w-full ">
+        <div className="lg:w-1/5 mt-8 min-[180px]:w-full ">
           <ContentDetailHeader />
           <div>
             <ul className="list-square">
@@ -74,7 +74,7 @@ const ContentList = () => {
             </ul>
           </div>
         </div>
-        <div className="lg:w-1/5 mt-8 sm:w-full ">
+        <div className="lg:w-1/5 mt-8 min-[180px]:w-full ">
           <ContentDetailHeader />
           <div>
             <ul className="list-square">
@@ -117,7 +117,7 @@ const ContentList = () => {
             </ul>
           </div>
         </div>
-        <div className="lg:w-1/5 mt-8 sm:w-full">
+        <div className="lg:w-1/5 mt-8 min-[180px]:w-full">
           <ContentDetailHeader />
           <div>
             <ul className="list-square">
@@ -160,7 +160,7 @@ const ContentList = () => {
             </ul>
           </div>
         </div>
-        <div className="lg:w-1/5 mt-8 sm:w-full">
+        <div className="lg:w-1/5 mt-8 min-[180px]:w-full">
           <ContentDetailHeader />
           <div>
             <ul className="list-square">

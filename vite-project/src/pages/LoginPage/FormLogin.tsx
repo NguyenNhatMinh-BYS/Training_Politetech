@@ -6,10 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { getDataUser } from "../../features/DataUserSlice/DataUserSlice";
-interface User {
-  username: string;
-  password: string;
-}
+import { User } from "../../model/Auth.model";
+import { getToken } from "../../features/DataUserSlice/authSlice";
 
 const FormLogin = () => {
   const checkBox = useRef<HTMLInputElement>(null);
@@ -23,8 +21,23 @@ const FormLogin = () => {
     try {
       const response = await login(data);
 
-      dispatch(getDataUser(response.data.user));
-      navigate("/");
+      dispatch(getDataUser(response.data.data.user));
+
+      if (response.data?.success) {
+        //save token to local storage
+        localStorage.setItem("token", response.data.data?.user.token);
+        // console.log("abc");
+
+        //save tokent redux
+        dispatch(
+          getToken({
+            userToken: response.data.data?.user.token,
+          })
+        );
+        navigate("/");
+      } else {
+        toast.error("Not logged in");
+      }
     } catch (err: any) {
       console.log(err);
 

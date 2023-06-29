@@ -3,11 +3,13 @@ import logo from "../../assets/data/img/logo@2x.png";
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { NavLink } from "react-router-dom";
-const Navigate = () => {
+import { useNavigate } from "react-router-dom";
+const Nav = () => {
   const scrollYElement = useRef<HTMLDivElement>(null);
   const navIcon = useRef<HTMLDivElement>(null);
   const navIconClose = useRef<HTMLDivElement>(null);
   const navIconOpen = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
   useEffect(() => {
     function handleScroll() {
       let scrollY = window.scrollY;
@@ -52,6 +54,7 @@ const Navigate = () => {
   // click logo
   const handleClickLogo = () => {
     window.scrollTo(0, 0);
+    navigate("/");
   };
   // click icon nav
 
@@ -205,4 +208,4 @@ const Navigate = () => {
   );
 };
 
-export default Navigate;
+export default Nav;

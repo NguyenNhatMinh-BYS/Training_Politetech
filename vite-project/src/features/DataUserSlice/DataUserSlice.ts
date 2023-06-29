@@ -1,16 +1,6 @@
 import { createSlice, current } from "@reduxjs/toolkit";
-import { log } from "console";
-interface dataUser {
-  created_at: string;
-  email: string;
-  full_name: string;
-  id: string;
-  phone_number: string;
-  role: string;
-  token: string;
-  updated_at: string;
-  username: string;
-}
+
+import { dataUser } from "../../model/Auth.model";
 let initialState: dataUser = {
   created_at: "",
   email: "",
@@ -27,9 +17,7 @@ export const DataUserSlice = createSlice({
   initialState,
   reducers: {
     getDataUser: (state, action) => {
-      let test = { ...action.payload };
       state = { ...action.payload };
-      console.log(test);
     },
   },
 });

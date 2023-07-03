@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import  { useEffect, useRef, useState } from "react";
 import ContentDetailTitle from "./ContentDetailTitle";
 import ContentDetailHeader from "./ContentDetailHeader";
 import { notice } from "../../../services/DataLandingPage";

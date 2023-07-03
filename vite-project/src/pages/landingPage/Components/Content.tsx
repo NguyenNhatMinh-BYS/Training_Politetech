@@ -1,4 +1,4 @@
-import React from "react";
+
 import ContentDetail from "./ContentDetail";
 import ContentList from "./ContentList";
 

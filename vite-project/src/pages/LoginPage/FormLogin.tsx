@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import {useRef, useState } from "react";
 import { login } from "../../services/DataUser";
 import { toast } from "react-toastify";
-import { RootState } from "../../app/store";
+
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+
 import { useDispatch } from "react-redux";
 import { getDataUser } from "../../features/DataUserSlice/DataUserSlice";
 import { User } from "../../model/Auth.model";
@@ -14,7 +14,7 @@ const FormLogin = () => {
   const [inputName, setInputName] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const navigate = useNavigate();
-  const payload = useSelector((state: RootState) => state.dataUser);
+  // const payload = useSelector((state: RootState) => state.dataUser);
   const dispatch = useDispatch();
   //post api
   const handlePostAPI = async (data: User) => {
@@ -26,7 +26,7 @@ const FormLogin = () => {
       if (response.data?.success) {
         //save token to local storage
         localStorage.setItem("token", response.data.data?.user.token);
-        // console.log("abc");
+        
 
         //save tokent redux
         dispatch(
@@ -39,7 +39,7 @@ const FormLogin = () => {
         toast.error("Not logged in");
       }
     } catch (err: any) {
-      // console.log(err);
+      
 
       if (err.response && err.response.status === 400) {
         toast.error("Password Incorrect !!!");

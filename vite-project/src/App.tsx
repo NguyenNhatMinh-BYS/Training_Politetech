@@ -13,12 +13,13 @@ function App() {
     <div>
       <Routes>
         <Route>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/" element={<Nav />}>
+          <Route path="/">
+            <Route path="" element={<Nav />}></Route>
             <Route path="" element={<LandingPage />}></Route>
+            <Route path="login" element={<Login />}></Route>
+            <Route path="register" element={<Register />}></Route>
           </Route>
-          
+
           {/* PrivateRoute */}
           <Route path="" element={<PrivateRoute />}>
             <Route path="/" element={<Nav />}>

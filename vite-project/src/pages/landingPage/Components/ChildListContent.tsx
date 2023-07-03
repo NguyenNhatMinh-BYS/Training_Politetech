@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { other } from "../../../services/DataLandingPage";
 interface Prop {
   url: string;

@@ -2,7 +2,7 @@ import axios from "axios";
 import { env } from "./config.ts";
 import { InternalAxiosRequestConfig } from "axios";
 import { store } from "../app/store.tsx";
-import { useSelector } from "react-redux";
+
 const instance = axios.create({
   baseURL: env.VITE_API_ENDPOINT,
   timeout: 15000,

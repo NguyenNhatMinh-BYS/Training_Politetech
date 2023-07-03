@@ -28,7 +28,7 @@ const Nav = () => {
         navIconOpen &&
           navIconOpen.current &&
           navIconOpen.current.classList.remove("max-[1279px]:text-white");
-        console.log(navIconOpen.current);
+        // console.log(navIconOpen.current);
       } else {
         navIcon &&
           navIcon.current &&

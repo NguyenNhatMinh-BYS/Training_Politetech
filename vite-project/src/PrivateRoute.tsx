@@ -5,7 +5,7 @@ import Login from "./pages/LoginPage/Login";
 
 const PrivateRoute = (prop: any) => {
   const token = localStorage.getItem("token");
-  console.log("Private");
+  // console.log("Private");
 
   return token ? <Outlet /> : <Navigate to="/Login" />;
 };

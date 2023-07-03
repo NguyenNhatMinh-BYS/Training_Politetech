@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { login } from "../../services/login";
+import { login } from "../../services/DataUser";
 import { toast } from "react-toastify";
 import { RootState } from "../../app/store";
 import { useNavigate } from "react-router-dom";
@@ -39,7 +39,7 @@ const FormLogin = () => {
         toast.error("Not logged in");
       }
     } catch (err: any) {
-      console.log(err);
+      // console.log(err);
 
       if (err.response && err.response.status === 400) {
         toast.error("Password Incorrect !!!");
@@ -110,7 +110,7 @@ const FormLogin = () => {
           <div className="h-5 w-5 relative " onClick={handleClickCheckBox}>
             <input disabled className="h-5 w-5 " type="checkbox" />
             <i
-              className="bi bi-check2 absolute left-[2px] top-[-2px] opacity-0"
+              className=" text-[#FF4040] bi bi-check2 absolute left-[2px] top-[-2px] opacity-0"
               ref={checkBox}
             ></i>
           </div>

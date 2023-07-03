@@ -7,7 +7,7 @@ export const SliceTest = createSlice({
   initialState,
   reducers: {
     getIdea: (state) => {
-      console.log("1234");
+      // console.log("1234");
     },
   },
 });

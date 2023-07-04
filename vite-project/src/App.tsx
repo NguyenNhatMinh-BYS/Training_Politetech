@@ -7,14 +7,15 @@ import Login from "./pages/loginPage/Login";
 import LandingPage from "./pages/landingPage/LandingPage";
 import { Route, Routes } from "react-router-dom";
 import Register from "./pages/register/Register";
-import ContactPage from "./pages/contactPage/contactPage";
+
+import AnnouncementPage from "./pages/announcementPage/AnnouncementPage";
 function App() {
   return (
     <div>
       <Routes>
         <Route>
           <Route path="/">
-            <Route path="" element={<Nav />}>
+            <Route path="" element={<Nav colorText="text-white" />}>
               <Route path="" element={<LandingPage />}></Route>
             </Route>
             <Route path="login" element={<Login />}></Route>
@@ -23,9 +24,11 @@ function App() {
 
           {/* PrivateRoute */}
           <Route path="" element={<PrivateRoute />}>
-            <Route path="/" element={<Nav />}>
-              <Route path="" element={<LandingPage />}></Route>
-              <Route path="/contact" element={<ContactPage />}></Route>
+            <Route path="/" element={<Nav colorText="text-white" />}>
+              <Route path="/" element={<LandingPage />}></Route>
+            </Route>
+            <Route path="/" element={<Nav colorText="text-black" />}>
+              <Route path="announcement" element={<AnnouncementPage />}></Route>
             </Route>
           </Route>
         </Route>

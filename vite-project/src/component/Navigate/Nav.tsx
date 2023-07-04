@@ -4,12 +4,17 @@ import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-const Nav = () => {
+
+interface Prop {
+  colorText: string;
+}
+const Nav = ({ colorText }: Prop) => {
   const scrollYElement = useRef<HTMLDivElement>(null);
   const navIcon = useRef<HTMLDivElement>(null);
   const navIconClose = useRef<HTMLDivElement>(null);
   const navIconOpen = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
   useEffect(() => {
     function handleScroll() {
       let scrollY = window.scrollY;
@@ -28,11 +33,8 @@ const Nav = () => {
         navIconOpen &&
           navIconOpen.current &&
           navIconOpen.current.classList.remove("max-[1279px]:text-white");
-        // console.log(navIconOpen.current);
       } else {
-        navIcon &&
-          navIcon.current &&
-          navIcon.current.classList.add("text-white");
+        navIcon && navIcon.current && navIcon.current.classList.add(colorText);
         scrollYElement &&
           scrollYElement.current &&
           scrollYElement.current.classList.add("bg-transparent");
@@ -41,7 +43,7 @@ const Nav = () => {
           scrollYElement.current.classList.remove(...classesToAdd.split(" "));
         navIconOpen &&
           navIconOpen.current &&
-          navIconOpen.current.classList.add("max-[1279px]:text-white");
+          navIconOpen.current.classList.add(`max-[1279px]:${colorText}`);
       }
     }
 
@@ -59,6 +61,7 @@ const Nav = () => {
   // click icon nav
 
   const handleClickOpenNav = () => {
+    document.body.style.overflow = "hidden";
     navIcon &&
       navIcon.current &&
       navIcon.current.classList.remove("text-white");
@@ -76,6 +79,7 @@ const Nav = () => {
       navIconClose.current.classList.remove(...addClassListNav.split(" "));
   };
   const handleClickCloseNav = () => {
+    document.body.style.overflow = "scroll";
     const addClass =
       "max-[1279px]:right-10 max-[1279px]:translate-x-full max-[1279px]:opacity-0 max-[1279px]:pointer-events-none";
     navIcon &&
@@ -98,11 +102,15 @@ const Nav = () => {
           ref={scrollYElement}
         >
           <div onClick={handleClickLogo}>
-            <img className="h-full w-56 cursor-pointer" src={logo} alt="logo" />
+            <img
+              className="h-full w-56 cursor-pointer object-cover"
+              src={logo}
+              alt="logo"
+            />
           </div>
           <div
             ref={navIcon}
-            className="text-white xl:pt-8 xl:sm:backdrop-blur-0 xl:block xl:h-full xl:w-full xl:right-0 xl:translate-y-2 xl:text-end xl:leading-3  xl:static xl:bg-transparent xl:translate-x-0 xl:opacity-100  xl:pointer-events-auto  sm:transform sm:transition-all sm:duration-100 sm:linear max-[1279px]:flex max-[1279px]:flex-col max-[1279px]:absolute max-[1279px]:top-0 max-[1279px]:bg-nav max-[1279px]:p-6  max-[1279px]:w-full max-[1279px]:h-screen max-[1279px]:right-0  max-[1279px]:right-10 max-[1279px]:backdrop-blur-md max-[1279px]:translate-x-full max-[1279px]:opacity-0 max-[1279px]:pointer-events-none max-[1279px]:text-end max-[1279px]:pt-20 max-[1279px]:pr-16 "
+            className={`xl:pt-8 xl:sm:backdrop-blur-0 xl:block xl:h-full xl:w-full xl:right-0 xl:translate-y-2 xl:text-end xl:leading-3  xl:static xl:bg-transparent xl:translate-x-0 xl:opacity-100  xl:pointer-events-auto  sm:transform sm:transition-all sm:duration-100 sm:linear max-[1279px]:flex max-[1279px]:flex-col max-[1279px]:absolute max-[1279px]:top-0 max-[1279px]:bg-nav max-[1279px]:p-6  max-[1279px]:w-full max-[1279px]:h-screen max-[1279px]:right-0  max-[1279px]:right-10 max-[1279px]:backdrop-blur-md max-[1279px]:translate-x-full max-[1279px]:opacity-0 max-[1279px]:pointer-events-none max-[1279px]:text-end max-[1279px]:pt-20 max-[1279px]:pr-16 ${colorText} `}
           >
             <NavLink
               onClick={handleClickCloseNav}
@@ -124,7 +132,7 @@ const Nav = () => {
             </NavLink>
             <NavLink
               onClick={handleClickCloseNav}
-              to="page3"
+              to="/announcement"
               className={({ isActive }) =>
                 isActive ? "text-main font-semibold sm:mt-9" : "sm:mt-9"
               }
@@ -182,7 +190,7 @@ const Nav = () => {
 
           <div onClick={handleClickOpenNav}>
             <i
-              className="bi bi-list  xl:hidden max-[1279px]:block max-[1279px]:text-4xl max-[1279px]:text-white"
+              className={`bi bi-list  xl:hidden max-[1279px]:block max-[1279px]:text-4xl max-[1279px]:${colorText}`}
               ref={navIconOpen}
             ></i>
           </div>

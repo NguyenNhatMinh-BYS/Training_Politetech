@@ -1,9 +1,9 @@
-import {useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { login } from "../../services/DataUser";
 import { toast } from "react-toastify";
 
 import { useNavigate } from "react-router-dom";
-
+import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getDataUser } from "../../features/DataUserSlice/DataUserSlice";
 import { User } from "../../model/Auth.model";
@@ -26,7 +26,6 @@ const FormLogin = () => {
       if (response.data?.success) {
         //save token to local storage
         localStorage.setItem("token", response.data.data?.user.token);
-        
 
         //save tokent redux
         dispatch(
@@ -39,8 +38,6 @@ const FormLogin = () => {
         toast.error("Not logged in");
       }
     } catch (err: any) {
-      
-
       if (err.response && err.response.status === 400) {
         toast.error("Password Incorrect !!!");
       } else if (err.response && err.response.status === 404) {
@@ -124,9 +121,11 @@ const FormLogin = () => {
           >
             확인
           </button>
-          <button className="hover:opacity-60 opacity-100 h-[40px] border-2 border-solid border-#ACACAC bg-[#F6F6F6] mt-[6px]">
-            리빙랩 회원가입
-          </button>
+          <Link to="/register" className="w-full">
+            <button className="hover:opacity-60 opacity-100 h-[40px] border-2 border-solid border-#ACACAC bg-[#F6F6F6] mt-[6px] w-full">
+              리빙랩 회원가입
+            </button>
+          </Link>
         </div>
       </div>
     </div>

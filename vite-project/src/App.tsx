@@ -2,12 +2,12 @@ import "./App.css";
 import PrivateRoute from "./PrivateRoute";
 
 import Nav from "./component/Navigate/Nav";
-import Login from "./pages/LoginPage/Login";
-import Page2 from "./pages/Page2/Page2";
-import Page3 from "./pages/Page3/Page3";
+import Login from "./pages/loginPage/Login";
+
 import LandingPage from "./pages/landingPage/LandingPage";
 import { Route, Routes } from "react-router-dom";
-import Register from "./pages/Register/Register";
+import Register from "./pages/register/Register";
+import ContactPage from "./pages/contactPage/contactPage";
 function App() {
   return (
     <div>
@@ -25,9 +25,7 @@ function App() {
           <Route path="" element={<PrivateRoute />}>
             <Route path="/" element={<Nav />}>
               <Route path="" element={<LandingPage />}></Route>
-
-              <Route path="page2" element={<Page2 />} />
-              <Route path="page3" element={<Page3 />} />
+              <Route path="/contact" element={<ContactPage />}></Route>
             </Route>
           </Route>
         </Route>

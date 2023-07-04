@@ -6,3 +6,11 @@ html {
   scroll-behavior: smooth;
   font-family: "Noto Sans KR", sans-serif;
 }
+@keyframes spin180 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(180deg);
+  }
+}

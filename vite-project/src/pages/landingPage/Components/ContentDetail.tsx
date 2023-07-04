@@ -1,8 +1,8 @@
-import  { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ContentDetailTitle from "./ContentDetailTitle";
 import ContentDetailHeader from "./ContentDetailHeader";
-import { notice } from "../../../services/DataLandingPage";
-import { DataNotice } from "../../../model/Auth.model";
+import { notice } from "services/apiLandingPage";
+import { DataNotice } from "model/Auth.model";
 const ContentDetail = () => {
   const scroller = useRef<HTMLDivElement>(null);
   const [dataNotice, setDataNotice] = useState([]);
@@ -31,7 +31,7 @@ const ContentDetail = () => {
     (async () => {
       try {
         const responsive = await notice();
-        let data = responsive.data.data?.list;
+        let data = responsive.data.data?.list.slice(0, 4);
         while (data.length < 4) {
           data.push({
             title: "공지사항 입니다",

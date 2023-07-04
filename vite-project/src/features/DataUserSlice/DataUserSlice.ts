@@ -1,6 +1,6 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
-import { dataUser } from "../../model/Auth.model";
+import { dataUser } from "model/Auth.model";
 let initialState: dataUser = {
   created_at: "",
   email: "",
@@ -12,7 +12,7 @@ let initialState: dataUser = {
   updated_at: "",
   username: "",
 };
-export const DataUserSlice = createSlice({
+export const dataUserSlice = createSlice({
   name: "dataUser",
   initialState,
   reducers: {
@@ -22,5 +22,5 @@ export const DataUserSlice = createSlice({
   },
 });
 
-export const { getDataUser } = DataUserSlice.actions;
-export default DataUserSlice.reducer;
+export const { getDataUser } = dataUserSlice.actions;
+export default dataUserSlice.reducer;

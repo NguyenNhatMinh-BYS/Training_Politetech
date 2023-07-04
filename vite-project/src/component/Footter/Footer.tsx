@@ -1,4 +1,4 @@
-import logoFooter from "../../assets/data/img/Screenshot 2023-06-27 120013.png";
+import logoFooter from "assets/img/logoFooter.png";
 const Footer = () => {
   return (
     <footer className="w-full h-[158px] bg-footer">

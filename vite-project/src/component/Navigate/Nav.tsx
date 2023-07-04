@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import logo from "../../assets/data/img/logo@2x.png";
+import logo from "assets/img/logo@2x.png";
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { NavLink } from "react-router-dom";
@@ -115,7 +115,7 @@ const Nav = () => {
             </NavLink>
             <NavLink
               onClick={handleClickCloseNav}
-              to="page2"
+              to="contact"
               className={({ isActive }) =>
                 isActive ? "text-main font-semibold sm:mt-9" : "sm:mt-9"
               }

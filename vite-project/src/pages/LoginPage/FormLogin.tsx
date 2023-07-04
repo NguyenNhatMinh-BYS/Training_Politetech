@@ -1,13 +1,13 @@
 import { useRef, useState } from "react";
-import { login } from "../../services/DataUser";
+import { Login } from "../../services/apiUser";
 import { toast } from "react-toastify";
 
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { getDataUser } from "../../features/DataUserSlice/DataUserSlice";
-import { User } from "../../model/Auth.model";
-import { getToken } from "../../features/DataUserSlice/authSlice";
+import { getDataUser } from "features/DataUserSlice/dataUserSlice";
+import { User } from "model/Auth.model";
+import { getToken } from "features/DataUserSlice/authSlice";
 
 const FormLogin = () => {
   const checkBox = useRef<HTMLInputElement>(null);
@@ -19,7 +19,7 @@ const FormLogin = () => {
   //post api
   const handlePostAPI = async (data: User) => {
     try {
-      const response = await login(data);
+      const response = await Login(data);
 
       dispatch(getDataUser(response.data.data.user));
 

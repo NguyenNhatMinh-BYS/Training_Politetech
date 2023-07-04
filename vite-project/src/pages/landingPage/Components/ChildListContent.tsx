@@ -1,5 +1,5 @@
-import  { useEffect, useState } from "react";
-import { other } from "../../../services/DataLandingPage";
+import { useEffect, useState } from "react";
+import { other } from "services/apiLandingPage";
 interface Prop {
   url: string;
 }
@@ -7,10 +7,14 @@ const ChildListContent = ({ url }: Prop) => {
   const [dataListContent, setdataListContent] = useState([]);
   useEffect(() => {
     (async () => {
-      const responsive = await other(url);
-      console.log(responsive.data.data?.list.slice(0, 4));
+      try {
+        const responsive = await other(url);
+        console.log(responsive.data.data?.list.slice(0, 4));
 
-      setdataListContent(responsive.data.data?.list.slice(0, 4));
+        setdataListContent(responsive.data.data?.list.slice(0, 4));
+      } catch (err) {
+        console.log(err);
+      }
     })();
   }, []);
   return (

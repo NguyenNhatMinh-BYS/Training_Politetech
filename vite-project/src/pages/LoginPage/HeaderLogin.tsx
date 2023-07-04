@@ -1,4 +1,4 @@
-import logo from "../../assets/data/img/logo@2x.png";
+import logo from "assets/img/logo@2x.png";
 
 const HeaderLogin = () => {
   return (

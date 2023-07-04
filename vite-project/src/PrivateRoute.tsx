@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { Route } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import Login from "./pages/LoginPage/Login";
+import Login from "./pages/loginPage/Login";
 
 const PrivateRoute = (prop: any) => {
   const token = localStorage.getItem("token");

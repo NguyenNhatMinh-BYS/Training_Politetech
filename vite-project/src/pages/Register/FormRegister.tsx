@@ -3,9 +3,9 @@ import * as yub from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect, useRef, useState } from "react";
 import InputRegister from "./InputRegister";
-import { regex } from "../../utils/regex";
-import { Register } from "../../services/DataUser";
-import { FormValueRegister } from "../../model/Auth.model";
+import { regex } from "utils/regex";
+import { Register } from "services/apiUser";
+import { FormValueRegister } from "model/Auth.model";
 import { toast } from "react-toastify";
 const schema = yub.object().shape({
   username: yub.string().required("Username is required").min(4).max(100),

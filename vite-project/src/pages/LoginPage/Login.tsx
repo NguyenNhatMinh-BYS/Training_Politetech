@@ -1,9 +1,9 @@
 import HeaderLogin from "./HeaderLogin";
 import FormLogin from "./FormLogin";
-import Footer from "../../component/Footter/Footer";
+import Footer from "component/Footter/Footer";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../../app/store";
+import { RootState } from "app/store";
 import { useNavigate } from "react-router-dom";
 const Login = () => {
   const tokens = useSelector((state: RootState) => state.auth.userToken);

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { other } from "services/apiLandingPage";
+import { other } from "@/services/apiNotice";
 interface Prop {
   url: string;
 }
@@ -9,7 +9,7 @@ const ChildListContent = ({ url }: Prop) => {
     (async () => {
       try {
         const responsive = await other(url);
-        console.log(responsive.data.data?.list.slice(0, 4));
+        // console.log(responsive.data.data?.list.slice(0, 4));
 
         setdataListContent(responsive.data.data?.list.slice(0, 4));
       } catch (err) {

@@ -1,4 +1,4 @@
-import HeaderLogin from "../loginPage/HeaderLogin";
+import HeaderLogin from "../login-page/HeaderLogin";
 import Footer from "component/Footter/Footer";
 import FormRegister from "./FormRegister";
 import { useEffect } from "react";

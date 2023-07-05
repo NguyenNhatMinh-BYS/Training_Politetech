@@ -22,6 +22,7 @@ export interface FormValueRegister {
   email: string;
 }
 export type DataNotice = {
+  index?: number;
   author?: string;
   content?: string;
   created_at?: string;
@@ -30,3 +31,10 @@ export type DataNotice = {
   updated_at?: string;
   user_id?: string;
 };
+export interface Notice {
+  page_size?: string;
+  page?: string;
+  user_id?: string;
+  search_value?: string;
+  search_by?: string;
+}

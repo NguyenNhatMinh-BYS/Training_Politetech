@@ -4,8 +4,7 @@ import React from "react";
 const ContactPage = () => {
   return (
     <div>
-      <Nav colorText="text-black" />
-      
+      {/* <Nav /> */}
     </div>
   );
 };

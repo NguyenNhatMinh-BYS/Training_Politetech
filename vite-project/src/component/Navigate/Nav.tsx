@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
 interface Prop {
   colorText: string;
 }
@@ -14,8 +13,11 @@ const Nav = ({ colorText }: Prop) => {
   const navIconClose = useRef<HTMLDivElement>(null);
   const navIconOpen = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-
+  const shadow = useRef("");
   useEffect(() => {
+    if (colorText === "text-black") shadow.current = "shadow-lg";
+    // console.log(shadow.current);
+
     function handleScroll() {
       let scrollY = window.scrollY;
       // const innerHeight = window.innerHeight;
@@ -23,27 +25,20 @@ const Nav = ({ colorText }: Prop) => {
 
       const classesToAdd = "bg-white shadow-black-400 shadow-lg text-black";
       if (scrollY > 0) {
-        navIcon &&
-          navIcon.current &&
-          navIcon.current.classList.remove("text-white");
-        scrollYElement &&
-          scrollYElement.current &&
-          scrollYElement.current.classList.add(...classesToAdd.split(" "));
+        navIcon.current?.classList.remove("text-white");
 
-        navIconOpen &&
-          navIconOpen.current &&
-          navIconOpen.current.classList.remove("max-[1279px]:text-white");
-      } else {
-        navIcon && navIcon.current && navIcon.current.classList.add(colorText);
-        scrollYElement &&
-          scrollYElement.current &&
-          scrollYElement.current.classList.add("bg-transparent");
-        scrollYElement &&
-          scrollYElement.current &&
-          scrollYElement.current.classList.remove(...classesToAdd.split(" "));
-        navIconOpen &&
-          navIconOpen.current &&
-          navIconOpen.current.classList.add(`max-[1279px]:${colorText}`);
+        scrollYElement.current?.classList.add(...classesToAdd.split(" "));
+
+        navIconOpen.current?.classList.remove("max-[1279px]:text-white");
+      }
+      if (scrollY === 0 && colorText !== "text-black") {
+        navIcon.current?.classList.add(colorText);
+
+        scrollYElement.current?.classList.add("bg-transparent");
+
+        scrollYElement.current?.classList.remove(...classesToAdd.split(" "));
+
+        navIconOpen.current?.classList.add(`max-[1279px]:${colorText}`);
       }
     }
 
@@ -94,7 +89,7 @@ const Nav = ({ colorText }: Prop) => {
   return (
     <div>
       <div
-        className="  flex justify-center w-full fixed	z-10 bg-transparent transform transition-all duration-200 linear  top-0 "
+        className={`flex justify-center w-full fixed	z-10 bg-transparent transform transition-all duration-200 linear  top-0 ${shadow.current}`}
         ref={scrollYElement}
       >
         <header
@@ -110,7 +105,7 @@ const Nav = ({ colorText }: Prop) => {
           </div>
           <div
             ref={navIcon}
-            className={`xl:pt-8 xl:sm:backdrop-blur-0 xl:block xl:h-full xl:w-full xl:right-0 xl:translate-y-2 xl:text-end xl:leading-3  xl:static xl:bg-transparent xl:translate-x-0 xl:opacity-100  xl:pointer-events-auto  sm:transform sm:transition-all sm:duration-100 sm:linear max-[1279px]:flex max-[1279px]:flex-col max-[1279px]:absolute max-[1279px]:top-0 max-[1279px]:bg-nav max-[1279px]:p-6  max-[1279px]:w-full max-[1279px]:h-screen max-[1279px]:right-0  max-[1279px]:right-10 max-[1279px]:backdrop-blur-md max-[1279px]:translate-x-full max-[1279px]:opacity-0 max-[1279px]:pointer-events-none max-[1279px]:text-end max-[1279px]:pt-20 max-[1279px]:pr-16 ${colorText} `}
+            className={` xl:pt-8 xl:sm:backdrop-blur-0 xl:block xl:h-full xl:w-full xl:right-0 xl:translate-y-2 xl:text-end xl:leading-3  xl:static xl:bg-transparent xl:translate-x-0 xl:opacity-100  xl:pointer-events-auto  sm:transform sm:transition-all sm:duration-100 sm:linear max-[1279px]:flex max-[1279px]:flex-col max-[1279px]:absolute max-[1279px]:top-0 max-[1279px]:bg-nav max-[1279px]:p-6  max-[1279px]:w-full max-[1279px]:h-screen max-[1279px]:right-0  max-[1279px]:right-10 max-[1279px]:backdrop-blur-md max-[1279px]:translate-x-full max-[1279px]:opacity-0 max-[1279px]:pointer-events-none max-[1279px]:text-end max-[1279px]:pt-20 max-[1279px]:pr-16 ${colorText} `}
           >
             <NavLink
               onClick={handleClickCloseNav}
@@ -123,7 +118,7 @@ const Nav = ({ colorText }: Prop) => {
             </NavLink>
             <NavLink
               onClick={handleClickCloseNav}
-              to="contact"
+              to="/contact"
               className={({ isActive }) =>
                 isActive ? "text-main font-semibold sm:mt-9" : "sm:mt-9"
               }

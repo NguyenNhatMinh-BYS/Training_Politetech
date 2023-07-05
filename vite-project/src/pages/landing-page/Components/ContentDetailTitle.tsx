@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 interface Props {
   title?: string;
-  text?: string;
+  text?: string | TrustedHTML;
   date?: string;
 }
 const ContentDetailTitle = (props: Props) => {
@@ -13,7 +13,7 @@ const ContentDetailTitle = (props: Props) => {
         {title}
       </h1>
       <p
-        dangerouslySetInnerHTML={{ __html: text }}
+        dangerouslySetInnerHTML={{ __html: text || "" }}
         className="mb-2 overflow-hidden line-clamp-3 text-sm flex-[9]"
       />
       <p className="text-xs">{dayjs(date).format("YYYY-MM-DD")}</p>

@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
 import { other } from "@/services/apiNotice";
+import Loading from "@/pages/loading/Loading";
+import { useDispatch } from "react-redux";
+import { activeLoading } from "@/features/loadingSlice/loadingSlice";
 interface Prop {
   url: string;
 }
 const ChildListContent = ({ url }: Prop) => {
   const [dataListContent, setdataListContent] = useState([]);
+  const dispath = useDispatch();
   useEffect(() => {
+    dispath(activeLoading(true));
     (async () => {
       try {
         const responsive = await other(url);
@@ -16,9 +21,11 @@ const ChildListContent = ({ url }: Prop) => {
         console.log(err);
       }
     })();
+    dispath(activeLoading(false));
   }, []);
   return (
     <div className="border-y-[2px] border-main mt-[12px]">
+      <Loading />
       <ul className="list-square">
         {dataListContent &&
           dataListContent.map((item: { title: string }, index: number) => (

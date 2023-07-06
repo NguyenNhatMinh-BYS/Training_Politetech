@@ -1,10 +1,13 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useState } from "react";
 import { notice } from "@/services/apiNotice";
 import { DataNotice } from "@/model/Auth.model";
 import dayjs from "dayjs";
-import { Link, Outlet } from "react-router-dom";
-
+import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Loading from "@/pages/loading/Loading";
+import { useDispatch } from "react-redux";
+import { activeLoading } from "@/features/loadingSlice/loadingSlice";
 const Content = () => {
   const [placeholder, setPlaceholder] = useState("제목");
   const listItem = useRef<HTMLDivElement>(null);
@@ -14,17 +17,22 @@ const Content = () => {
   const [colDataCurrent, setColDataCurrent] = useState("0");
   const [maxMinListData, setMaxMinListData] = useState<string[]>([]);
   const [inputSearch, setInputSearch] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [inputSearchBy, setInputSearchBy] = useState("title");
+  const dispath = useDispatch();
+
+  const nagiate = useNavigate();
   //set data
   const setData = async () => {
-    setLoading(true);
+    dispath(activeLoading(true));
     const search_by = placeholder === "제목" ? "title" : "author";
+    setInputSearchBy(search_by);
     const response = await notice({
       page_size: "10",
       page: colDataCurrent,
       search_value: inputSearch,
       search_by: search_by,
     });
+
     let data = response.data.data?.list;
 
     const totalData = response.data.data?.total;
@@ -43,7 +51,7 @@ const Content = () => {
     }
     setTotalListData(Array(Math.ceil(totalData / 10)).fill(""));
     setMaxMinListData(["0", (Math.ceil(totalData / 10) - 1).toString()]);
-    setLoading(false);
+    dispath(activeLoading(false));
     return data;
   };
   //get api
@@ -53,6 +61,7 @@ const Content = () => {
         setData();
       } catch (err) {
         console.log(err);
+        dispath(activeLoading(false));
       }
     })();
   }, [colDataCurrent]);
@@ -76,7 +85,7 @@ const Content = () => {
   //handle click index list
   const handleClickIndexList = (index: number) => {
     // console.log(index);
-// 
+    //
     setColDataCurrent(index.toString());
   };
   //handle sreach
@@ -90,6 +99,8 @@ const Content = () => {
       id="search"
       className=" w-full flex justify-center flex-col items-center "
     >
+      {" "}
+      <Loading />
       {/* search */}
       <div className="max-[1024px]:flex-col max-[1024px]:items-start my-[60px] flex justify-between  w-3/4 px-[40px] items-center">
         <div>
@@ -180,8 +191,15 @@ const Content = () => {
         <div>
           {listData &&
             listData.map((item: DataNotice, index) => (
-              <Link
-                to={`/announcement/${item.id}` || "/"}
+              <div
+                onClick={() => {
+                  nagiate(`/announcement/${item.id}`, {
+                    state: {
+                      search_by: inputSearchBy,
+                      search_value: inputSearch,
+                    },
+                  });
+                }}
                 key={index}
                 className=" flex  py-[10px] border-b-[1px] border-solid"
               >
@@ -203,7 +221,7 @@ const Content = () => {
                 <p className="max-[1024px]:hidden py-[10px] w-[180px] text-center">
                   {dayjs(item.updated_at).format("YYYY-MM-DD")}
                 </p>
-              </Link>
+              </div>
             ))}
         </div>
         {/* footer list contents */}

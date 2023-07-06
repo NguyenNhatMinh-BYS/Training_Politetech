@@ -3,9 +3,13 @@ import ContentDetailTitle from "./ContentDetailTitle";
 import ContentDetailHeader from "./ContentDetailHeader";
 import { notice } from "@/services/apiNotice";
 import { DataNotice } from "model/Auth.model";
+import { useDispatch } from "react-redux";
+import { activeLoading } from "@/features/loadingSlice/loadingSlice";
+import Loading from "@/pages/loading/Loading";
 const ContentDetail = () => {
   const scroller = useRef<HTMLDivElement>(null);
   const [dataNotice, setDataNotice] = useState([]);
+  const dispath = useDispatch();
   useEffect(() => {
     function handleScroll() {
       let scrollY = window.scrollY;
@@ -29,6 +33,7 @@ const ContentDetail = () => {
   });
   useEffect(() => {
     (async () => {
+      dispath(activeLoading(true));
       try {
         const responsive = await notice({
           page_size: "4",
@@ -44,9 +49,11 @@ const ContentDetail = () => {
         console.log(err);
       }
     })();
+    dispath(activeLoading(false));
   }, []);
   return (
     <div className="flex justify-center w-full  duration-500 transition-all ">
+      <Loading />
       <div
         className="w-80 mt-140 opacity-0 duration-500 transition-all "
         ref={scroller}

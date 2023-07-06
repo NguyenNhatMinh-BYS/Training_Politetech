@@ -30,8 +30,11 @@ export type DataNotice = {
   title?: string;
   updated_at?: string;
   user_id?: string;
+  previous?: string;
+  next?: string;
 };
 export interface Notice {
+  id?: string;
   page_size?: string;
   page?: string;
   user_id?: string;

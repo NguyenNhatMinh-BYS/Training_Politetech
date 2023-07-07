@@ -145,7 +145,7 @@ const Nav = ({ colorText }: Prop) => {
             </NavLink>
             <NavLink
               onClick={handleClickCloseNav}
-              to="page5"
+              to="/content"
               className={({ isActive }) =>
                 isActive ? "text-main font-semibold sm:mt-9" : "sm:mt-9"
               }

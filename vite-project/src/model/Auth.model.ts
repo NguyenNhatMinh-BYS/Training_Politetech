@@ -41,3 +41,15 @@ export interface Notice {
   search_value?: string;
   search_by?: string;
 }
+export interface ContentApi {
+  author?: string;
+  created_at?: string;
+  description?: string;
+  id?: string;
+  title?: string;
+  updated_at?: string;
+  user_id?: string;
+  video?: string;
+  page_size?: string;
+  page?: string;
+}

@@ -29,7 +29,7 @@ const Banner = () => {
             alt="banner img "
           />
         </div>
-        <p className="text-center text-white relative w-full  mt-[20px]">
+        <p className="text-center text-white relative mt-[20px] text-[24px]">
           깨바부의 다양한 콘텐츠를 확인해보세요.
         </p>
       </div>

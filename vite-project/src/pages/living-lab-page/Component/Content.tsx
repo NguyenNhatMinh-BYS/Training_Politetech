@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import Loading from "@/pages/loading/Loading";
 import { useDispatch } from "react-redux";
 import { activeLoading } from "@/features/loadingSlice/loadingSlice";
+import { livingLab } from "@/services/apiLivingLab";
 const Content = () => {
   const [placeholder, setPlaceholder] = useState("제목");
   const listItem = useRef<HTMLDivElement>(null);
@@ -26,7 +27,7 @@ const Content = () => {
     dispath(activeLoading(true));
     const search_by = placeholder === "제목" ? "title" : "author";
     setInputSearchBy(search_by);
-    const response = await notice({
+    const response = await livingLab({
       page_size: "10",
       page: colDataCurrent,
       search_value: inputSearch,
@@ -34,6 +35,7 @@ const Content = () => {
     });
 
     let data = response.data.data?.list;
+    console.log(data);
 
     const totalData = response.data.data?.total;
 
@@ -79,9 +81,8 @@ const Content = () => {
 
   const handleClickSelect = () => {
     listItem.current?.classList.toggle("hidden");
-    const addClass = "border-[#0075DC]";
 
-    clickButton.current?.classList.toggle(addClass);
+    clickButton.current?.classList.add("border-[#0075DC]");
   };
   //handle click index list
   const handleClickIndexList = (index: number) => {
@@ -115,14 +116,14 @@ const Content = () => {
         <div className="flex items-center max-[1024px]:mt-[28px] max-[1024px]:w-full min-[100px]:flex-col min-[100px]:items-start min-[1024px]:flex-row min-[1024px]:items-center ">
           <div className="max-[1024px]:mx-0  cursor-pointer relative flex  mx-[8px] ">
             <div
-              onClick={(e) => {
-                handleClickSelect();
-                e.stopPropagation();
-              }}
               ref={clickButton}
               className=" border-solid border-[2px] p-[6px]"
             >
               <input
+                onClick={(e) => {
+                  handleClickSelect();
+                  e.stopPropagation();
+                }}
                 id="input"
                 maxLength={30}
                 value={placeholder}
@@ -135,7 +136,7 @@ const Content = () => {
             </div>
             <div
               ref={listItem}
-              className="hidden absolute bottom-[-80px] left-0 right-0 bg-white shadow-[0_0_5px_2px_rgba(0,0,0,0.1)] rounded-md"
+              className="hidden z-30 absolute bottom-[-80px] left-0 right-0 bg-white shadow-[0_0_5px_2px_rgba(0,0,0,0.1)] rounded-md"
             >
               <p
                 className="p-[6px] "
@@ -200,7 +201,7 @@ const Content = () => {
               <div
                 onClick={() => {
                   dispath(activeLoading(true));
-                  navigate(`/announcement/${item.id}`, {
+                  navigate(`/living-lab/${item.id}`, {
                     state: {
                       search_by: inputSearchBy,
                       search_value: inputSearch,

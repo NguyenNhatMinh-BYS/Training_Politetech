@@ -29,7 +29,7 @@ const Banner = () => {
             alt="banner img"
           />
         </div>
-        <p className="text-center text-white relative mt-[20px]">
+        <p className="text-center text-white relative mt-[20px] text-[24px]">
           깨바부의 새로운 소식을 전합니다.
         </p>
       </div>

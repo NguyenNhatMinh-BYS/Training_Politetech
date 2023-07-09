@@ -53,3 +53,20 @@ export interface ContentApi {
   page_size?: string;
   page?: string;
 }
+export interface campaigngApi {
+  author?: string;
+  created_at?: string;
+  description?: string;
+  id?: string;
+  title?: string;
+  updated_at?: string;
+  user_id?: string;
+  video?: string;
+  page_size?: string;
+  page?: string;
+  image?: string;
+  search_value?: string;
+  link?: string;
+  content?: string;
+}
+export interface livingLabeApi extends Notice {}

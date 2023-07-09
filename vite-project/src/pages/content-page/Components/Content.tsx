@@ -6,8 +6,6 @@ import Loading from "@/pages/loading/Loading";
 import { useDispatch } from "react-redux";
 import { activeLoading } from "@/features/loadingSlice/loadingSlice";
 const Content = () => {
-  const [active, isActive] = useState("");
-  const [show, setShow] = useState(true);
   const [colDataCurrent, setColDataCurrent] = useState("0");
   const [dataPageCurrent, setDataPageCurrent] = useState([]);
   const dispath = useDispatch();
@@ -24,28 +22,45 @@ const Content = () => {
     //
     setColDataCurrent(index.toString());
   };
-  const showFull = (id?: string, index?: string) => {
+  const showFull = (
+    id?: string,
+
+    showIcon?: string,
+    hiddenIcon?: string
+  ) => {
+    let idIconShow = document.getElementById(`${showIcon}`);
+    let idIconHidden = document.getElementById(`${hiddenIcon}`);
+    idIconShow?.classList.add(..."opacity-0 pointer-events-none".split(" "));
+    idIconHidden?.classList.remove(
+      ..."opacity-0 pointer-events-none".split(" ")
+    );
     console.log("showFull");
-    isActive(index || "");
-    setShow(false);
+
     let checkHeight = document.getElementById(`${id}`);
     checkHeight?.classList.remove(..."line-clamp-4 h-[110px]".split(" "));
     const height = checkHeight?.offsetHeight;
     console.log(height);
 
-    checkHeight?.classList.add(...`h-[${height}px]`.split(" "));
+    checkHeight?.classList.add(...`h-[${height}px] tran`.split(" "));
   };
-  const showShort = (id?: string, index?: string) => {
+  const showShort = (
+    id?: string,
+
+    showIcon?: string,
+    hiddenIcon?: string
+  ) => {
+    let idIconShow = document.getElementById(`${showIcon}`);
+    let idIconHidden = document.getElementById(`${hiddenIcon}`);
+    idIconShow?.classList.remove(..."opacity-0 pointer-events-none".split(" "));
+    idIconHidden?.classList.add(..."opacity-0 pointer-events-none".split(" "));
     console.log("showShort");
-    isActive(index || "");
-    setShow(true);
+
     let checkHeight = document.getElementById(`${id}`);
     const height = checkHeight?.offsetHeight;
     checkHeight?.classList.remove(`h-[${height}px]`);
     checkHeight?.classList.add(..."line-clamp-4 h-[110px]".split(" "));
   };
   const getDataContent = async () => {
-    dispath(activeLoading(true));
     const response = await content({ page: colDataCurrent, page_size: "10" });
 
     setDataPageCurrent(response.data.data.list);
@@ -111,38 +126,45 @@ const Content = () => {
                       {dayjs(item?.updated_at).format("DD-MM-YYYY")}
                     </p>
                   </div>
-                  <div className="mt-[10px] flex items-end transition-all duration-[1000ms] ease-in-out">
-                    <p
-                      className=" text-[16px] bg-[#dfdfdf41] pt-[10px] pb-[5px] px-[10px] line-clamp-4 w-full  h-[110px] transition-all duration-[1000ms] ease-in-out"
-                      id={`${item.title}`}
-                      dangerouslySetInnerHTML={{
-                        __html: item?.description || "",
-                      }}
-                    ></p>
-                    {item.description && item.description?.length > 120 ? (
-                      <div className=" bg-gradient-to-b from-blue-700 to-blue-400 inline-block py-[8px] px-[12px] text-white  relative w-[36px] h-[40px] transition-all duration-200 ease-in-out">
-                        {active !== index.toString() ? (
+                  <div className="flex items-end relative">
+                    <div className="mt-[10px] flex items-end transition-all duration-[1000ms] ease-in-out w-full bg-[#dfdfdf41] ">
+                      <p
+                        className=" text-[16px] bg-[#dfdfdf41] pt-[10px] pb-[5px] px-[10px] line-clamp-4 w-full  h-[110px] transition-all duration-[1s] ease-in-out"
+                        id={`${item.title}`}
+                        dangerouslySetInnerHTML={{
+                          __html: item?.description || "",
+                        }}
+                      ></p>
+                    </div>
+                    {item.description && item.description?.length > 340 ? (
+                      <div className="absolute bg-gradient-to-b from-blue-700 to-blue-400 inline-block py-[8px] px-[12px] text-white right-[-38px]  w-[36px] h-[40px] transition-all duration-200 ease-in-out">
+                        <div>
                           <i
+                            id={`${item.description}down`}
                             onClick={() =>
-                              showFull(item.title, index.toString())
+                              showFull(
+                                item.title,
+
+                                `${item.description}down`,
+                                `${item.description}up`
+                              )
                             }
                             className="bi bi-chevron-down text-[20px]  absolute top-[6px] right-[8px] transition-all duration-200 ease-in-out"
                           ></i>
-                        ) : show ? (
+
                           <i
+                            id={`${item.description}up`}
                             onClick={() =>
-                              showFull(item.title, index.toString())
+                              showShort(
+                                item.title,
+
+                                `${item.description}down`,
+                                `${item.description}up`
+                              )
                             }
-                            className="bi bi-chevron-down text-[20px]  absolute top-[6px] right-[8px] transition-all duration-200 ease-in-out"
+                            className="bi bi-chevron-up text-[20px] opacity-0 pointer-events-none  absolute top-[6px] right-[8px] transition-all duration-200 ease-in-out"
                           ></i>
-                        ) : (
-                          <i
-                            onClick={() =>
-                              showShort(item.title, index.toString())
-                            }
-                            className="bi bi-chevron-up text-[20px]  absolute top-[6px] right-[8px] transition-all duration-200 ease-in-out"
-                          ></i>
-                        )}
+                        </div>
                       </div>
                     ) : (
                       ""

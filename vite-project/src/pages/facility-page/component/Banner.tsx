@@ -28,7 +28,7 @@ const Banner = () => {
             alt="banner img "
           />
         </div>
-        <p className="text-center text-white relative w-full  mt-[20px]">
+        <p className="text-center text-white relative mt-[20px] text-[24px]">
           깨끗한 바다 산을 위해 각 지역별 쓰레기 수거현황을 전합니다.
         </p>
       </div>

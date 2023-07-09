@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { activeLoading } from "@/features/loadingSlice/loadingSlice";
 interface Prop {
   colorText: string;
 }
@@ -14,6 +16,7 @@ const Nav = ({ colorText }: Prop) => {
   const navIconOpen = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const shadow = useRef("");
+  const dispath = useDispatch();
   useEffect(() => {
     if (colorText === "text-black") shadow.current = "shadow-lg";
     // console.log(shadow.current);
@@ -74,6 +77,7 @@ const Nav = ({ colorText }: Prop) => {
       navIconClose.current.classList.remove(...addClassListNav.split(" "));
   };
   const handleClickCloseNav = () => {
+    // dispath(activeLoading(true));
     document.body.style.overflow = "scroll";
     const addClass =
       "max-[1279px]:right-10 max-[1279px]:translate-x-full max-[1279px]:opacity-0 max-[1279px]:pointer-events-none";
@@ -155,7 +159,7 @@ const Nav = ({ colorText }: Prop) => {
             </NavLink>
             <NavLink
               onClick={handleClickCloseNav}
-              to="page6"
+              to="/living-lab"
               className={({ isActive }) =>
                 isActive ? "text-main font-semibold sm:mt-9" : "sm:mt-9"
               }
@@ -164,7 +168,7 @@ const Nav = ({ colorText }: Prop) => {
             </NavLink>
             <NavLink
               onClick={handleClickCloseNav}
-              to="page7"
+              to="/campaign"
               className={({ isActive }) =>
                 isActive ? "text-main font-semibold sm:mt-9" : "sm:mt-9"
               }

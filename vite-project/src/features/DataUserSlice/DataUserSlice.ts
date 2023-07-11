@@ -1,23 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import { dataUser } from "model/Auth.model";
-let initialState: dataUser = {
-  created_at: "",
-  email: "",
-  full_name: "",
-  id: "",
-  phone_number: "",
-  role: "",
-  token: "",
-  updated_at: "",
-  username: "",
+
+interface InfoState {
+  userInfo: dataUser | null;
+}
+
+const initialState: InfoState = {
+  userInfo: null,
 };
 export const dataUserSlice = createSlice({
   name: "dataUser",
   initialState,
   reducers: {
     getDataUser: (state, action) => {
-      state = { ...action.payload };
+      state.userInfo = action.payload;
     },
   },
 });

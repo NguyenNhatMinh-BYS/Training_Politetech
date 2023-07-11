@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getDataUser } from "features/DataUserSlice/dataUserSlice";
 import { User } from "model/Auth.model";
-import { getToken } from "features/DataUserSlice/authSlice";
+import { setToken } from "features/DataUserSlice/authSlice";
 
 const FormLogin = () => {
   const checkBox = useRef<HTMLInputElement>(null);
@@ -25,11 +25,17 @@ const FormLogin = () => {
 
       if (response.data?.success) {
         //save token to local storage
+        console.log(response.data.data.user);
+
         localStorage.setItem("token", response.data.data?.user.token);
+        localStorage.setItem(
+          "dataUser",
+          JSON.stringify(response.data.data?.user)
+        );
 
         //save tokent redux
         dispatch(
-          getToken({
+          setToken({
             userToken: response.data.data?.user.token,
           })
         );

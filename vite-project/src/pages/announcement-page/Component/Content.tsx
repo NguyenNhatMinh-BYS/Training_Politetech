@@ -1,13 +1,15 @@
 import { useEffect, useRef } from "react";
 import { useState } from "react";
-import { notice } from "@/services/apiNotice";
-import { DataNotice } from "@/model/Auth.model";
+import { delNotice, notice } from "@/services/apiNotice";
+import { DataNotice, Notice } from "@/model/Auth.model";
 import dayjs from "dayjs";
-import { useLocation } from "react-router-dom";
+import { generatePath, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Loading from "@/pages/loading/Loading";
 import { useDispatch } from "react-redux";
 import { activeLoading } from "@/features/loadingSlice/loadingSlice";
+import NoticeErrorEdit from "./NoticeTitle";
+
 const Content = () => {
   const [placeholder, setPlaceholder] = useState("제목");
   const listItem = useRef<HTMLDivElement>(null);
@@ -17,10 +19,14 @@ const Content = () => {
   const [colDataCurrent, setColDataCurrent] = useState("0");
   const [maxMinListData, setMaxMinListData] = useState<string[]>([]);
   const [inputSearch, setInputSearch] = useState("");
+  const [isAdmin, setIsadmin] = useState(false);
   const [inputSearchBy, setInputSearchBy] = useState("title");
   const dispath = useDispatch();
-
+  const [itemChecked, setItemChechecked] = useState<DataNotice[]>([]);
   const navigate = useNavigate();
+  const [noticeEdit, setNoticeEdit] = useState(false);
+
+  const [isDelete, setIsDelete] = useState(false);
   //set data
   const setData = async () => {
     dispath(activeLoading(true));
@@ -56,6 +62,13 @@ const Content = () => {
   };
   //get api
   useEffect(() => {
+    let dataUser = localStorage.getItem("dataUser");
+    if (dataUser) {
+      if (JSON.parse(dataUser).role === "Admin") {
+        setIsadmin(true);
+      }
+    }
+
     (async () => {
       try {
         setData();
@@ -85,13 +98,81 @@ const Content = () => {
   };
   //handle click index list
   const handleClickIndexList = (index: number) => {
-    // console.log(index);
-    //
     setColDataCurrent(index.toString());
   };
   //handle sreach
   const handleClickSearch = () => {
     setData();
+    //handle click checkbox
+  };
+  // click checkbox
+  const handleClickCheckBox = (
+    item: string,
+    event: React.ChangeEvent<HTMLInputElement>,
+    content: string,
+    title: string
+  ) => {
+    if (event.target.checked) {
+      setItemChechecked([
+        ...itemChecked,
+        { id: item, content: content, title: title },
+      ]);
+    } else {
+      const filter = itemChecked.filter((value) => value.id !== item);
+      console.log(filter);
+
+      setItemChechecked([...filter]);
+    }
+  };
+  // click button edit
+  const handleClickEdit = () => {
+    if (itemChecked.length === 1) {
+      navigate(`/announcement/edit/${itemChecked[0].id}`, {
+        state: { infor: itemChecked[0] },
+      });
+    } else if (itemChecked.length > 1) {
+      setNoticeEdit(true);
+    }
+  };
+  const handleShowDetail = (id: string) => {
+    dispath(activeLoading(true));
+    navigate(generatePath(`/announcement/:id`, { id }), {
+      state: {
+        search_by: inputSearchBy,
+        search_value: inputSearch,
+      },
+    });
+  };
+
+  // handle set NoticeEdit
+  const handleCloseNoticeEdit = () => {
+    setNoticeEdit(false);
+    setIsDelete(false);
+  };
+
+  const handleDelete = () => {
+    if (itemChecked.length >= 1) {
+      setNoticeEdit(true);
+      setIsDelete(true);
+    }
+  };
+  const handleAcceptDelete = () => {
+    const token = localStorage.getItem("token") || " ";
+    const ids = itemChecked.map((item) => {
+      return item.id;
+    });
+    try {
+      (async () => {
+        const response = await delNotice(ids, token);
+        console.log(response);
+      })();
+    } catch (e) {}
+    setNoticeEdit(false);
+  };
+  const handleCreate = () => {
+    navigate(`/announcement/create`, {
+      state: { infor: { id: "", title: "", content: "" } },
+    });
   };
   return (
     <div
@@ -104,6 +185,16 @@ const Content = () => {
     >
       {" "}
       <Loading />
+      {noticeEdit ? (
+        <NoticeErrorEdit
+          isDeleted={isDelete}
+          sizeCheckItem={itemChecked.length}
+          handleCloseNoticeEdit={handleCloseNoticeEdit}
+          handleAcceptDelete={handleAcceptDelete}
+        />
+      ) : (
+        " "
+      )}
       {/* search */}
       <div className="max-[1024px]:flex-col max-[1024px]:items-start my-[60px] flex justify-between  w-3/4 px-[40px] items-center">
         <div>
@@ -197,99 +288,141 @@ const Content = () => {
         <div>
           {listData &&
             listData.map((item: DataNotice, index) => (
-              <div
-                onClick={() => {
-                  dispath(activeLoading(true));
-                  navigate(`/announcement/${item.id}`, {
-                    state: {
-                      search_by: inputSearchBy,
-                      search_value: inputSearch,
-                    },
-                  });
-                }}
-                key={index}
-                className=" flex  py-[10px] border-b-[1px] border-solid"
-              >
-                <p className=" py-[10px] w-[100px] text-center ">
-                  {item.index}
-                </p>
-                <div className="  w-[780px]">
-                  <p className=" py-[10px] px-[20px]  w-full break-words ">
-                    {item.title}
+              <div key={index}>
+                <div
+                  onClick={() => {
+                    handleShowDetail(item.id);
+                  }}
+                  className=" flex  my-[10px] border-b-[1px] border-solid"
+                >
+                  <div className="w-[100px] py-[10px] relative flex items-center max-[1260px]:flex-col justify-around max-[1260px]:items-center">
+                    {isAdmin ? (
+                      <input
+                        id={`${item.id}`}
+                        onChange={(e) =>
+                          handleClickCheckBox(
+                            item.id,
+                            e,
+                            item.content,
+                            item.title
+                          )
+                        }
+                        type="checkbox"
+                        className=" top-[6px] left-0  w-[20px] h-[30px]  checked:accent-[#0066C1] inline-block rounded-none outline-none"
+                      />
+                    ) : (
+                      ""
+                    )}
+                    <p className="  xl:mr-[30px] text-center  ">{item.index}</p>
+                  </div>
+                  <div className="  w-[780px]">
+                    <p className=" py-[10px] px-[20px]  w-full break-words ">
+                      {item.title}
+                    </p>
+                    <p className="max-[1024px]:block min-[1024px]:hidden px-[20px] opacity-50 ">
+                      {dayjs(item.updated_at).format("YYYY-MM-DD")}
+                    </p>
+                  </div>
+
+                  <p className="max-[1024px]:hidden py-[10px] w-[180px] text-center ">
+                    {item.author}
                   </p>
-                  <p className="max-[1024px]:block min-[1024px]:hidden px-[20px] opacity-50 ">
+                  <p className="max-[1024px]:hidden py-[10px] w-[180px] text-center">
                     {dayjs(item.updated_at).format("YYYY-MM-DD")}
                   </p>
                 </div>
-
-                <p className="max-[1024px]:hidden py-[10px] w-[180px] text-center ">
-                  {item.author}
-                </p>
-                <p className="max-[1024px]:hidden py-[10px] w-[180px] text-center">
-                  {dayjs(item.updated_at).format("YYYY-MM-DD")}
-                </p>
               </div>
             ))}
         </div>
         {/* footer list contents */}
-        <div className="my-[60px] flex justify-center">
-          {maxMinListData[0] !== colDataCurrent ? (
-            <>
-              <span
-                onClick={() => setColDataCurrent(maxMinListData[0])}
-                className=" bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid border-[#CCCCCC]  mx-[6px] cursor-pointer hover:bg-[#a5d5ffa7]"
+        <div className="my-[60px] relative">
+          <div className="flex justify-center">
+            {maxMinListData[0] !== colDataCurrent ? (
+              <>
+                <span
+                  onClick={() => setColDataCurrent(maxMinListData[0])}
+                  className=" bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid border-[#CCCCCC]  mx-[6px] cursor-pointer hover:bg-[#a5d5ffa7]"
+                >
+                  <i className="bi bi-chevron-double-left"></i>
+                </span>
+                <span
+                  onClick={() =>
+                    setColDataCurrent((Number(colDataCurrent) - 1).toString())
+                  }
+                  className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid border-[#CCCCCC]  mx-[6px] cursor-pointer hover:bg-[#a5d5ffa7]"
+                >
+                  <i className="bi bi-chevron-left"></i>
+                </span>
+              </>
+            ) : (
+              ""
+            )}
+
+            {totalListData &&
+              totalListData.map((item, index) => (
+                <a
+                  href="#search"
+                  key={index}
+                  onClick={() => handleClickIndexList(index)}
+                  className="p-[8px] px-[14px]  border-[1px] text-black border-solid border-[#CCCCCC]  mx-[6px]"
+                  style={{
+                    backgroundColor:
+                      colDataCurrent === index.toString() ? "#0066C1" : "",
+                    color: colDataCurrent === index.toString() ? "white" : "",
+                  }}
+                >
+                  {index + 1}
+                </a>
+              ))}
+
+            {maxMinListData[1] !== colDataCurrent ? (
+              <>
+                <span
+                  onClick={() =>
+                    setColDataCurrent((Number(colDataCurrent) + 1).toString())
+                  }
+                  className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid mx-[6px] border-[#CCCCCC] cursor-pointer hover:bg-[#a5d5ffa7]"
+                >
+                  <i className="bi bi-chevron-right"></i>
+                </span>
+                <span
+                  onClick={() => setColDataCurrent(maxMinListData[1])}
+                  className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid mx-[6px] border-[#CCCCCC] cursor-pointer hover:bg-[#a5d5ffa7]"
+                >
+                  <i className="bi bi-chevron-double-right"></i>
+                </span>
+              </>
+            ) : (
+              " "
+            )}
+          </div>
+          {isAdmin ? (
+            <div className="flex justify-center mt-[20px] xl:absolute xl:right-0 xl:bottom-[4px] cursor-pointer">
+              {/* put  */}
+              <p
+                className="py-[6px] px-[20px] border-[1px] border-solid border-[#969696]"
+                onClick={() => handleClickEdit()}
               >
-                <i className="bi bi-chevron-double-left"></i>
-              </span>
-              <span
-                onClick={() =>
-                  setColDataCurrent((Number(colDataCurrent) - 1).toString())
-                }
-                className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid border-[#CCCCCC]  mx-[6px] cursor-pointer hover:bg-[#a5d5ffa7]"
+                수정
+              </p>
+              {/* delete  */}
+              <p
+                className="py-[6px] px-[20px] border-[1px] border-solid border-[#969696] mx-[12px] bg-[#d1d1d16b]"
+                onClick={handleDelete}
               >
-                <i className="bi bi-chevron-left"></i>
-              </span>
-            </>
+                삭제
+              </p>
+              {/* create */}
+              <div
+                className="py-[6px] px-[20px] flex bg-[#0066C1] text-white"
+                onClick={handleCreate}
+              >
+                <i className="bi bi-pencil mx-[6px]"></i>
+                <p>글쓰기</p>
+              </div>
+            </div>
           ) : (
             ""
-          )}
-
-          {totalListData &&
-            totalListData.map((item, index) => (
-              <a
-                href="#search"
-                key={index}
-                onClick={() => handleClickIndexList(index)}
-                className="p-[8px] px-[14px]  border-[1px] text-black border-solid border-[#CCCCCC]  mx-[6px]"
-                style={{
-                  backgroundColor:
-                    colDataCurrent === index.toString() ? "#0066C1" : "",
-                  color: colDataCurrent === index.toString() ? "white" : "",
-                }}
-              >
-                {index + 1}
-              </a>
-            ))}
-
-          {maxMinListData[1] !== colDataCurrent ? (
-            <>
-              <span
-                onClick={() =>
-                  setColDataCurrent((Number(colDataCurrent) + 1).toString())
-                }
-                className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid mx-[6px] border-[#CCCCCC] cursor-pointer hover:bg-[#a5d5ffa7]"
-              >
-                <i className="bi bi-chevron-right"></i>
-              </span>
-              <span
-                onClick={() => setColDataCurrent(maxMinListData[1])}
-                className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid mx-[6px] border-[#CCCCCC] cursor-pointer hover:bg-[#a5d5ffa7]"
-              >
-                <i className="bi bi-chevron-double-right"></i>
-              </span>
-            </>
-          ) : (
-            " "
           )}
         </div>
       </div>

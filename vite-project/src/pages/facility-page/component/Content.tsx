@@ -25,7 +25,7 @@ const Content = () => {
               <span className="text-blue-700">부산</span>
               <span>수거사각지대</span>
             </div>
-            <div className="mt-[40px] w-full h-[560px] overflow-auto border-[1px] border-black border-solid rounded-sm ">
+            <div className="mt-[40px] w-full h-[560px]  border-[1px] border-black border-solid rounded-sm ">
               <div className="hover:bg-[#b8d4ff79] w-full">
                 <div className="mx-[20px] py-[4px] border-b-[1px] border-solid border-[#b5b5b5cc] ">
                   <h1 className=" font-bold text-[20px]">서방파제</h1>

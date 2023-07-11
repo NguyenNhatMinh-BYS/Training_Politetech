@@ -92,14 +92,7 @@ const AnnouncementDetail = () => {
               )}
               {/* back */}
               <div
-                onClick={() =>
-                  navigate("/announcement", {
-                    state: {
-                      search_value: state.search_value,
-                      search_by: state.search_by,
-                    },
-                  })
-                }
+                onClick={() => navigate(-1)}
                 className="mx-[20px] bg-gradient-to-r from-blue-700 to-blue-400 px-[20px] py-[10px] text-white cursor-pointer"
               >
                 목록으로

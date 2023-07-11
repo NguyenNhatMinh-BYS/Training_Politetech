@@ -154,7 +154,7 @@ const Content = () => {
         </div>
       </div>
       <div className="w-4/5  ">
-        <div className="flex flex-wrap px-[50px] max-[1024px]:flex-col lg:justify-center ">
+        <div className=" px-[50px] grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 w-full">
           {listData &&
             listData.map((item: campaigngApi, index: number) => (
               <div
@@ -162,7 +162,7 @@ const Content = () => {
                   navigate(`/campaign/${item.id}`);
                 }}
                 key={index}
-                className="cursor-pointer border-solid border-[1px] max-[1024px]:w-full lg:w-[40%]  xl:w-[20%] bg-[#D4E9FC] mx-[27px] mt-[60px] hover:bg-[#0066C1] hover:text-white hover:border-[#0066C1] transition-all ease-in-out duration-200 rounded-sm"
+                className=" cursor-pointer border-solid border-[1px]  bg-[#D4E9FC] mx-[27px] mt-[60px] hover:bg-[#0066C1] hover:text-white hover:border-[#0066C1] transition-all ease-in-out duration-200 rounded-sm"
               >
                 <img
                   className="object-cover h-[300px] w-full bg-white"

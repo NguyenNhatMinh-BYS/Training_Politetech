@@ -1,11 +1,12 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import logo from "assets/img/logo@2x.png";
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+
+import { setToken } from "@/features/DataUserSlice/authSlice";
 import { useDispatch } from "react-redux";
-import { activeLoading } from "@/features/loadingSlice/loadingSlice";
 interface Prop {
   colorText: string;
 }
@@ -14,17 +15,21 @@ const Nav = ({ colorText }: Prop) => {
   const navIcon = useRef<HTMLDivElement>(null);
   const navIconClose = useRef<HTMLDivElement>(null);
   const navIconOpen = useRef<HTMLDivElement>(null);
+  const [isLogin, setIsLogin] = useState<Boolean>(false);
   const navigate = useNavigate();
-  const shadow = useRef("");
   const dispath = useDispatch();
+  const shadow = useRef("");
+
   useEffect(() => {
+    const dataUser = localStorage.getItem("dataUser");
+    if (dataUser) {
+      setIsLogin(true);
+    }
+
     if (colorText === "text-black") shadow.current = "shadow-lg";
-    // console.log(shadow.current);
 
     function handleScroll() {
       let scrollY = window.scrollY;
-      // const innerHeight = window.innerHeight;
-      // const targetElement = document.querySelector("scrollY");
 
       const classesToAdd = "bg-white shadow-black-400 shadow-lg text-black";
       if (scrollY > 0) {
@@ -78,7 +83,7 @@ const Nav = ({ colorText }: Prop) => {
   };
   const handleClickCloseNav = () => {
     // dispath(activeLoading(true));
-    document.body.style.overflow = "scroll";
+    document.body.style.overflow = "auto";
     const addClass =
       "max-[1279px]:right-10 max-[1279px]:translate-x-full max-[1279px]:opacity-0 max-[1279px]:pointer-events-none";
     navIcon &&
@@ -89,6 +94,12 @@ const Nav = ({ colorText }: Prop) => {
     navIconClose &&
       navIconClose.current &&
       navIconClose.current.classList.add(...addClassListNav.split(" "));
+  };
+  //logout
+  const Logout = () => {
+    dispath(setToken({ userToken: null }));
+    localStorage.clear();
+    handleClickCloseNav();
   };
   return (
     <div>
@@ -122,7 +133,7 @@ const Nav = ({ colorText }: Prop) => {
             </NavLink>
             <NavLink
               onClick={handleClickCloseNav}
-              to="/contact"
+              to="/introduce"
               className={({ isActive }) =>
                 isActive ? "text-main font-semibold sm:mt-9" : "sm:mt-9"
               }
@@ -185,6 +196,20 @@ const Nav = ({ colorText }: Prop) => {
               {" "}
               <span className="m-2.5 text-xl sm:mt-4">자유게시판</span>
             </NavLink>
+            {isLogin ? (
+              <NavLink
+                onClick={Logout}
+                to="/login"
+                className={({ isActive }) =>
+                  isActive ? "text-main font-semibold sm:mt-9" : "sm:mt-9"
+                }
+              >
+                {" "}
+                <span className="m-2.5 text-xl sm:mt-4">로그아웃</span>
+              </NavLink>
+            ) : (
+              ""
+            )}
           </div>
 
           <div onClick={handleClickOpenNav}>

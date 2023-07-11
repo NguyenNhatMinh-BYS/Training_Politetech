@@ -8,9 +8,9 @@ const Loading = () => {
   useEffect(() => {
     if (selector.isActive) {
       window.scrollBy({ top: 0 });
-      document.body.style.overflow = "hidden";
+      // document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "scroll";
+      // document.body.style.overflow = "scroll";
     }
   });
   return (

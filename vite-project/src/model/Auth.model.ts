@@ -1,10 +1,10 @@
 export type dataUser = {
   created_at?: string;
-  email: string;
-  full_name: string;
-  id: string;
-  phone_number: string;
-  role: string;
+  email?: string;
+  full_name?: string;
+  id?: string;
+  phone_number?: string;
+  role?: string;
   token?: string;
   updated_at: string;
   username: string;
@@ -24,15 +24,19 @@ export interface FormValueRegister {
 export type DataNotice = {
   index?: number;
   author?: string;
-  content?: string;
+  content: string;
   created_at?: string;
-  id?: string;
-  title?: string;
+  id: string;
+  title: string;
   updated_at?: string;
   user_id?: string;
   previous?: string;
   next?: string;
 };
+export interface PostNotice{
+  title:string,
+  content:string
+}
 export interface Notice {
   id?: string;
   page_size?: string;

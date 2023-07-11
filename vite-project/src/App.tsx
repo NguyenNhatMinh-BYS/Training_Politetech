@@ -14,6 +14,8 @@ import Campaign from "./pages/campaign-page/Campaign";
 import CampainDetail from "./pages/campaign-detail/CampainDetail";
 import LivingLabPage from "./pages/living-lab-page/LivingLabPage";
 import LivingLabDetail from "./pages/living-lab-detail/LivingLabDetail";
+import Introduce from "./pages/introduce-page/Introduce";
+import AnnouncementEdit from "./pages/announcement-edit/AnnouncementEdit";
 function App() {
   return (
     <div>
@@ -21,8 +23,17 @@ function App() {
         <Route>
           <Route path="/">
             <Route path="" element={<LandingPage />}></Route>
+            <Route path="/introduce" element={<Introduce />}></Route>
             <Route path="/announcement" element={<AnnouncementPage />}></Route>
             <Route path="/announcement/:id" element={<NoticeDetail />}></Route>
+            <Route
+              path="/announcement/edit/:id"
+              element={<AnnouncementEdit />}
+            ></Route>
+            <Route
+              path="/announcement/create"
+              element={<AnnouncementEdit />}
+            ></Route>
             <Route path="/facility" element={<FacilityPage />}></Route>
             <Route path="/living-lab" element={<LivingLabPage />}></Route>
             <Route path="/living-lab/:id" element={<LivingLabDetail />}></Route>

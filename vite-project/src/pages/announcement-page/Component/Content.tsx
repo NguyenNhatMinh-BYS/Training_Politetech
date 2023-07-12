@@ -8,27 +8,29 @@ import { useNavigate } from "react-router-dom";
 import Loading from "@/pages/loading/Loading";
 import { useDispatch } from "react-redux";
 import { activeLoading } from "@/features/loadingSlice/loadingSlice";
-import NoticeErrorEdit from "./NoticeTitle";
+import NoticeTitle from "./NoticeTitle";
+import { toast } from "react-toastify";
+import HeaderSearch from "@/component/HeaderSearch/HeaderSearch";
 
 const Content = () => {
-  const [placeholder, setPlaceholder] = useState("제목");
   const listItem = useRef<HTMLDivElement>(null);
   const clickButton = useRef<HTMLDivElement>(null);
   const [listData, setListData] = useState([]);
   const [totalListData, setTotalListData] = useState<string[]>([]);
   const [colDataCurrent, setColDataCurrent] = useState("0");
   const [maxMinListData, setMaxMinListData] = useState<string[]>([]);
-  const [inputSearch, setInputSearch] = useState("");
+  const [searchValue, setSearchValue] = useState("");
   const [isAdmin, setIsadmin] = useState(false);
   const [inputSearchBy, setInputSearchBy] = useState("title");
   const dispath = useDispatch();
-  const [itemChecked, setItemChechecked] = useState<DataNotice[]>([]);
+  const itemChecked = useRef<string[]>([]);
   const navigate = useNavigate();
   const [noticeEdit, setNoticeEdit] = useState(false);
-
+  const [totalChecked, setTotalChecked] = useState<string[]>([]);
   const [isDelete, setIsDelete] = useState(false);
   //set data
-  const setData = async () => {
+  const setData = async (placeholder?: string, inputSearch?: string) => {
+    setSearchValue(inputSearch || "");
     dispath(activeLoading(true));
     const search_by = placeholder === "제목" ? "title" : "author";
     setInputSearchBy(search_by);
@@ -79,58 +81,36 @@ const Content = () => {
     })();
   }, [colDataCurrent]);
   //css input
-  const autoResizeInput = (input: HTMLInputElement) => {
-    setPlaceholder(input.value);
-    if (input.value.length > 7 && input.value.length <= 30) {
-      input.style.width = (input.value.length + "ch") as string;
-      input.style.height = "auto";
-      input.style.margin = "none";
-    } else {
-      input.style.width = "80px";
-    }
-  };
 
-  const handleClickSelect = () => {
-    listItem.current?.classList.toggle("hidden");
-    const addClass = "border-[#0075DC]";
-
-    clickButton.current?.classList.toggle(addClass);
-  };
   //handle click index list
   const handleClickIndexList = (index: number) => {
     setColDataCurrent(index.toString());
   };
   //handle sreach
-  const handleClickSearch = () => {
-    setData();
-    //handle click checkbox
-  };
-  // click checkbox
-  const handleClickCheckBox = (
+
+  // change checkbox
+  const handleChangeCheckBox = (
     item: string,
-    event: React.ChangeEvent<HTMLInputElement>,
-    content: string,
-    title: string
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (event.target.checked) {
-      setItemChechecked([
-        ...itemChecked,
-        { id: item, content: content, title: title },
-      ]);
+      itemChecked.current = [...itemChecked.current, item];
+      setTotalChecked(itemChecked.current);
     } else {
-      const filter = itemChecked.filter((value) => value.id !== item);
-      console.log(filter);
+      const filter = itemChecked.current.filter((value) => value !== item);
 
-      setItemChechecked([...filter]);
+      itemChecked.current = [...filter];
+      setTotalChecked(itemChecked.current);
     }
   };
+
   // click button edit
   const handleClickEdit = () => {
-    if (itemChecked.length === 1) {
-      navigate(`/announcement/edit/${itemChecked[0].id}`, {
-        state: { infor: itemChecked[0] },
+    if (itemChecked.current.length === 1) {
+      navigate(`/announcement/edit/${itemChecked}`, {
+        state: { infor: itemChecked.current },
       });
-    } else if (itemChecked.length > 1) {
+    } else if (itemChecked.current.length > 1) {
       setNoticeEdit(true);
     }
   };
@@ -139,7 +119,7 @@ const Content = () => {
     navigate(generatePath(`/announcement/:id`, { id }), {
       state: {
         search_by: inputSearchBy,
-        search_value: inputSearch,
+        search_value: searchValue,
       },
     });
   };
@@ -151,27 +131,29 @@ const Content = () => {
   };
 
   const handleDelete = () => {
-    if (itemChecked.length >= 1) {
+    if (itemChecked.current.length >= 1) {
       setNoticeEdit(true);
       setIsDelete(true);
     }
   };
   const handleAcceptDelete = () => {
     const token = localStorage.getItem("token") || " ";
-    const ids = itemChecked.map((item) => {
-      return item.id;
+    const ids = itemChecked.current.map((item) => {
+      return item;
     });
     try {
       (async () => {
-        const response = await delNotice(ids, token);
-        console.log(response);
+        await delNotice(ids, token);
+        itemChecked.current = [];
+        setData();
+        toast.success("Delete successfully");
       })();
     } catch (e) {}
     setNoticeEdit(false);
   };
   const handleCreate = () => {
     navigate(`/announcement/create`, {
-      state: { infor: { id: "", title: "", content: "" } },
+      state: { infor: "" },
     });
   };
   return (
@@ -186,9 +168,9 @@ const Content = () => {
       {" "}
       <Loading />
       {noticeEdit ? (
-        <NoticeErrorEdit
+        <NoticeTitle
           isDeleted={isDelete}
-          sizeCheckItem={itemChecked.length}
+          sizeCheckItem={itemChecked.current.length}
           handleCloseNoticeEdit={handleCloseNoticeEdit}
           handleAcceptDelete={handleAcceptDelete}
         />
@@ -196,79 +178,13 @@ const Content = () => {
         " "
       )}
       {/* search */}
-      <div className="max-[1024px]:flex-col max-[1024px]:items-start my-[60px] flex justify-between  w-3/4 px-[40px] items-center">
-        <div>
-          {" "}
-          <h1 className="font-semibold text-[24px] pl-[10px] border-l-[4px] border-solid border-[#0075DC]">
-            공지사항
-          </h1>
-        </div>
-        <div className="flex items-center max-[1024px]:mt-[28px] max-[1024px]:w-full min-[100px]:flex-col min-[100px]:items-start min-[1024px]:flex-row min-[1024px]:items-center ">
-          <div className="max-[1024px]:mx-0  cursor-pointer relative flex  mx-[8px] ">
-            <div
-              onClick={(e) => {
-                handleClickSelect();
-                e.stopPropagation();
-              }}
-              ref={clickButton}
-              className=" border-solid border-[2px] p-[6px]"
-            >
-              <input
-                id="input"
-                maxLength={30}
-                value={placeholder}
-                type="text"
-                className="resize w-[80px] outline-none placeholder-gray-400 cursor-pointer placeholder-shown:border-gray-500"
-                onChange={(e) => autoResizeInput(e.target as HTMLInputElement)}
-              />
-
-              <i className="bi bi-caret-down-fill absolute right-[6px] pointer-events-none"></i>
-            </div>
-            <div
-              ref={listItem}
-              className="hidden absolute bottom-[-80px] left-0 right-0 bg-white shadow-[0_0_5px_2px_rgba(0,0,0,0.1)] rounded-md"
-            >
-              <p
-                className="p-[6px] "
-                onClick={() => {
-                  setPlaceholder("제목");
-                  clickButton.current?.classList.remove("border-[#0075DC]");
-                }}
-              >
-                제목
-              </p>
-              <p
-                className="p-[6px]"
-                onClick={() => {
-                  setPlaceholder("작성자");
-                  clickButton.current?.classList.remove("border-[#0075DC]");
-                }}
-              >
-                작성자
-              </p>
-            </div>
-          </div>
-          <div className="flex min-[100px]:mt-[24px] min-[100px]:w-full min-[1024px]:w-auto min-[1024px]:mt-0">
-            {/* input search */}
-            <input
-              value={inputSearch}
-              onChange={(e) => setInputSearch(e.target.value)}
-              className="p-[6px] px-[8px] border-solid border-[1px] border-[#C0C0C0] outline-none w-[400px] "
-              placeholder="공지사항 검색"
-              type="text"
-            />
-            <div
-              onClick={handleClickSearch}
-              className="cursor-pointer flex bg-[#0066C1] p-[7px] text-white px-[20px] flex-nowrap h-[38px] "
-            >
-              <i className="bi bi-search mr-[8px] "></i>
-              <p className="whitespace-nowrap">검색</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <HeaderSearch
+        setData={setData}
+        listItem={listItem}
+        clickButton={clickButton}
+      />
       {/* list contents */}
-      <div className="w-3/4 px-[40px]">
+      <div className="w-3/4 ">
         {/* header list contents */}
         <div className="flex bg-[#b4dcfff7] py-[10px] rounded-sm">
           <p className="font-semibold py-[10px] w-[100px]  text-center border-r-[2px] border-solid border-[#7DA7CC]">
@@ -287,8 +203,8 @@ const Content = () => {
         {/* body list contents */}
         <div>
           {listData &&
-            listData.map((item: DataNotice, index) => (
-              <div key={index}>
+            listData.map((item: DataNotice) => (
+              <div key={item.id}>
                 <div
                   onClick={() => {
                     handleShowDetail(item.id);
@@ -298,17 +214,20 @@ const Content = () => {
                   <div className="w-[100px] py-[10px] relative flex items-center max-[1260px]:flex-col justify-around max-[1260px]:items-center">
                     {isAdmin ? (
                       <input
+                        checked={totalChecked.includes(item.id)}
                         id={`${item.id}`}
-                        onChange={(e) =>
-                          handleClickCheckBox(
-                            item.id,
-                            e,
-                            item.content,
-                            item.title
-                          )
-                        }
+                        onChange={(e) => {
+                          handleChangeCheckBox(item.id, e);
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // handleChangeCheckBox(
+                          //   item.id,
+                          //   e as unknown as React.ChangeEvent<HTMLInputElement>
+                          // );
+                        }}
                         type="checkbox"
-                        className=" top-[6px] left-0  w-[20px] h-[30px]  checked:accent-[#0066C1] inline-block rounded-none outline-none"
+                        className=" top-[6px] left-0 z-[20] w-[20px] h-[30px]  checked:accent-[#0066C1] inline-block rounded-none outline-none"
                       />
                     ) : (
                       ""

@@ -10,10 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@babel/core": "^7.22.8",
     "@hookform/devtools": "^4.3.1",
     "@hookform/resolvers": "^3.1.1",
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.4.0",
+    "classnames": "^2.3.2",
     "dayjs": "^1.11.9",
     "dotenv": "^16.3.1",
     "react": "^18.2.0",

@@ -16,42 +16,43 @@ import LivingLabPage from "./pages/living-lab-page/LivingLabPage";
 import LivingLabDetail from "./pages/living-lab-detail/LivingLabDetail";
 import Introduce from "./pages/introduce-page/Introduce";
 import AnnouncementEdit from "./pages/announcement-edit/AnnouncementEdit";
+import ContentEdit from "./pages/content-edit/ContentEdit";
 function App() {
   return (
     <div>
       <Routes>
-        <Route>
-          <Route path="/">
-            <Route path="" element={<LandingPage />}></Route>
-            <Route path="/introduce" element={<Introduce />}></Route>
-            <Route path="/announcement" element={<AnnouncementPage />}></Route>
-            <Route path="/announcement/:id" element={<NoticeDetail />}></Route>
-            <Route
-              path="/announcement/edit/:id"
-              element={<AnnouncementEdit />}
-            ></Route>
-            <Route
-              path="/announcement/create"
-              element={<AnnouncementEdit />}
-            ></Route>
-            <Route path="/facility" element={<FacilityPage />}></Route>
-            <Route path="/living-lab" element={<LivingLabPage />}></Route>
-            <Route path="/living-lab/:id" element={<LivingLabDetail />}></Route>
-            <Route path="/content" element={<ContentPage />}></Route>
-            <Route path="/campaign" element={<Campaign />}></Route>
-            <Route path="/campaign/:id" element={<CampainDetail />}></Route>
-            <Route path="/login" element={<Login />}></Route>
-            <Route path="/register" element={<Register />}></Route>
-          </Route>
+        <Route path="/">
+          <Route path="" element={<LandingPage />}></Route>
+          <Route path="/introduce" element={<Introduce />}></Route>
+          <Route path="/announcement" element={<AnnouncementPage />}></Route>
+          <Route path="/announcement/:id" element={<NoticeDetail />}></Route>
+          <Route
+            path="/announcement/edit/:id"
+            element={<AnnouncementEdit />}
+          ></Route>
+          <Route
+            path="/announcement/create"
+            element={<AnnouncementEdit />}
+          ></Route>
+          <Route path="/facility" element={<FacilityPage />}></Route>
+          <Route path="/living-lab" element={<LivingLabPage />}></Route>
+          <Route path="/living-lab/:id" element={<LivingLabDetail />}></Route>
+          <Route path="/content" element={<ContentPage />}></Route>
+          <Route path="/content/edit/:id" element={<ContentEdit />}></Route>
+          <Route path="/content/create" element={<ContentEdit />}></Route>
+          <Route path="/campaign" element={<Campaign />}></Route>
+          <Route path="/campaign/:id" element={<CampainDetail />}></Route>
+          <Route path="/login" element={<Login />}></Route>
+          <Route path="/register" element={<Register />}></Route>
+        </Route>
 
-          {/* PrivateRoute */}
-          {/* <Route path="" element={<PrivateRoute />}>
+        {/* PrivateRoute */}
+        {/* <Route path="" element={<PrivateRoute />}>
             <Route path="/" element={<Nav colorText="text-white" />}></Route>
             <Route path="/" element={<Nav colorText="text-black" />}>
               <Route path="announcement" element={<AnnouncementPage />}></Route>
             </Route>
           </Route> */}
-        </Route>
       </Routes>
     </div>
   );

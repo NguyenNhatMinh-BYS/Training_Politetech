@@ -18,22 +18,38 @@ export const notice = (data: Notice) => {
 };
 
 export const noticeDetail = (data: Notice) => {
-  return instance.get(
-    `/notice/${data.id}?search_value=${data.search_value}&search_by=${data.search_by}`
-  );
+  console.log(data);
+
+  let x = "",
+    y = "";
+  if (data.search_by) {
+    x = `search_by=${data.search_by}`;
+  }
+  if (data.search_value) {
+    y = `search_value=${data.search_value}&`;
+  }
+
+  return instance.get(`/notice/${data.id}?${y}${x}`);
 };
 
 export const putNotice = (data: DataNotice, token: string) => {
+  console.log(data);
+
   return instance.put(`/notice`, data, Config(token));
 };
 
 export const delNotice = (data: any, token: string) => {
-  return instance.delete(`/notice`, data);
+  console.log({ data });
+
+  return instance.delete(`/notice`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    data: { ids: data },
+  });
 };
 
 export const postNotice = (data: PostNotice, token: string) => {
-  console.log(data);
-
   return instance.post(`/notice`, data, Config(token));
 };
 export const other = (url: string) => {

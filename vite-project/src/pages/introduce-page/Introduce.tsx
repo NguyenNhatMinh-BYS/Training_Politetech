@@ -11,8 +11,7 @@ const Introduce = () => {
   const mainSmooth = useRef<HTMLDivElement>(null);
   useEffect(() => {
     function onScroll() {
-      console.log(window.scrollY);
-      if (window.scrollY >=  220) {
+      if (window.scrollY >= 220) {
         mainSmooth.current?.classList.remove(
           ..."opacity-0 mt-[300px]".split(" ")
         );

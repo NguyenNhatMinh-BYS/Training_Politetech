@@ -8,7 +8,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { postNotice, putNotice } from "@/services/apiNotice";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { noticeDetail } from "@/services/apiNotice";
 interface Title {
   title: string;
 }
@@ -17,7 +18,7 @@ const schema = yub.object().shape({
 });
 const AnnouncementEdit = () => {
   const { infor } = useLocation().state;
-  const [contentt, setContent] = useState(infor.content);
+  const [contentt, setContent] = useState("");
   const navigate = useNavigate();
 
   const {
@@ -25,13 +26,28 @@ const AnnouncementEdit = () => {
     handleSubmit,
     control,
     formState: { errors },
+    setValue,
   } = useForm<Title>({
     mode: "onChange",
     defaultValues: {
-      title: infor.title,
+      title: "",
     },
     resolver: yupResolver(schema),
   });
+
+  useEffect(() => {
+    if (infor !== "") {
+      (async () => {
+        try {
+          const response = await noticeDetail({ id: infor.toString() });
+          setContent(response.data.data.content);
+          setValue("title", response.data.data.title);
+        } catch (e) {
+          console.log(e);
+        }
+      })();
+    }
+  }, []);
 
   const createNotice = (data: Title, token: string) => {
     try {
@@ -53,16 +69,17 @@ const AnnouncementEdit = () => {
 
   const onSubmit = (data: Title) => {
     const token = localStorage.getItem("token") || "";
-    if (infor.id === "") createNotice(data, token);
+    if (infor === "") createNotice(data, token);
     else {
       try {
         (async () => {
           const response = await putNotice(
             {
-              id: infor.id,
+              id: infor.toString(),
               title: data.title,
               content: contentt,
             },
+
             token
           );
           console.log(response);
@@ -76,8 +93,6 @@ const AnnouncementEdit = () => {
   };
 
   const handleChangeContent = (value: string) => {
-    console.log(value);
-
     setContent(value);
   };
 

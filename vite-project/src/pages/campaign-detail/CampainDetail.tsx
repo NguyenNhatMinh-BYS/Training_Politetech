@@ -20,7 +20,6 @@ const CampainDetail = () => {
     } catch (e) {
       console.log(e);
     }
-    
   }, []);
   return (
     <div className=" pt-[100px]  ">
@@ -32,13 +31,13 @@ const CampainDetail = () => {
               시설현황
             </h1>
           </div>
-          <div className="flex mb-[80px] justify-between max-[2048px]:justify-center max-[1080px]:flex-wrap ">
+          <div className="flex mb-[80px] justify-between max-[2048px]:justify-center max-[1080px]:flex-wrap  ">
             <img
               src={data?.image}
               alt="img"
-              className="mr-[40px] w-[600px] object-contain h-auto"
+              className="mr-[40px] w-1/2 object-cover max-h-[600px] max-[1080px]:w-full max-[1080px]:mr-0"
             />
-            <div className="max-[2048px]:mt-[40px] w-full lg:w-[calc(100%-400px)] xl:min-h-[450px] xl:w-[calc(100%-500px)] 2xl:w-[calc(100%-600px)]">
+            <div className="max-[1080px]:mt-[40px] w-full lg:w-[calc(100%-400px)] xl:min-h-[450px] xl:w-[calc(100%-500px)] 2xl:w-[calc(100%-600px)]">
               <h1 className="bg-[#D4E9FC] text-[20px] font-bold px-[20px] py-[10px]">
                 {data?.title}
               </h1>

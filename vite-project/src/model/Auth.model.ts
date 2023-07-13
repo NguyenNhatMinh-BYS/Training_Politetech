@@ -33,9 +33,10 @@ export type DataNotice = {
   previous?: string;
   next?: string;
 };
-export interface PostNotice{
-  title:string,
-  content:string
+
+export interface PostNotice {
+  title: string;
+  content: string;
 }
 export interface Notice {
   id?: string;
@@ -72,5 +73,18 @@ export interface campaigngApi {
   search_value?: string;
   link?: string;
   content?: string;
+  image_name?: string;
 }
 export interface livingLabeApi extends Notice {}
+export interface FreeBoard {
+  author?: string;
+  created_at?: string;
+  description?: string;
+  id?: string;
+  title?: string;
+  updated_at?: string;
+  user_id?: string;
+  content?: string;
+  page_size?: string;
+  page?: string;
+}

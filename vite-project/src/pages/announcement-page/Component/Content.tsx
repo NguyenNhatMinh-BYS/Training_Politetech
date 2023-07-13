@@ -107,7 +107,7 @@ const Content = () => {
   // click button edit
   const handleClickEdit = () => {
     if (itemChecked.current.length === 1) {
-      navigate(`/announcement/edit/${itemChecked}`, {
+      navigate(`/announcement/edit/${itemChecked.current}`, {
         state: { infor: itemChecked.current },
       });
     } else if (itemChecked.current.length > 1) {

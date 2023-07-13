@@ -13,35 +13,30 @@ const Pagination: React.FC<DataPagination> = ({
   sizePage,
 }) => {
   const firstPage = useRef("");
-  const lastPage = useRef<number>();
-  const totalColData = useRef<number[]>([]);
+  const lastPage = useRef("");
+  const totalColData = useRef<string[]>([]);
 
   useEffect(() => {
     firstPage.current = "0";
-    lastPage.current = Math.ceil(totalList / sizePage);
+    lastPage.current = Math.ceil(totalList / sizePage).toString();
     totalColData.current = lastPage.current
-      ? Array(lastPage.current).fill(1)
+      ? Array(parseInt(lastPage.current)).fill("1")
       : [];
-    console.log(
-      firstPage.current,
-      lastPage.current,
-      totalColData.current.length
-    );
   }, [totalList, sizePage]);
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center flex-wrap w-[500px]">
       {firstPage.current !== page ? (
         <>
           <span
             onClick={() => setColDataCurrent(firstPage.current)}
-            className=" bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid border-[#CCCCCC]  mx-[6px] cursor-pointer hover:bg-[#a5d5ffa7]"
+            className=" my-[4px] bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid border-[#CCCCCC]  mx-[6px] cursor-pointer hover:bg-[#a5d5ffa7]"
           >
             <i className="bi bi-chevron-double-left"></i>
           </span>
           <span
             onClick={() => setColDataCurrent((Number(page) - 1).toString())}
-            className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid border-[#CCCCCC]  mx-[6px] cursor-pointer hover:bg-[#a5d5ffa7]"
+            className="my-[4px] bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid border-[#CCCCCC]  mx-[6px] cursor-pointer hover:bg-[#a5d5ffa7]"
           >
             <i className="bi bi-chevron-left"></i>
           </span>
@@ -63,7 +58,7 @@ const Pagination: React.FC<DataPagination> = ({
               href="#search"
               key={index}
               onClick={() => setColDataCurrent(index.toString())}
-              className="p-[8px] px-[14px]  border-[1px] text-black border-solid border-[#CCCCCC]  mx-[6px]"
+              className="my-[4px] p-[8px] px-[14px]  border-[1px] text-black border-solid border-[#CCCCCC]  mx-[6px]"
               style={{
                 backgroundColor: page === index.toString() ? "#0066C1" : "",
                 color: page === index.toString() ? "white" : "",
@@ -81,7 +76,7 @@ const Pagination: React.FC<DataPagination> = ({
               href="#search"
               key={index}
               onClick={() => setColDataCurrent(index.toString())}
-              className="p-[8px] px-[14px]  border-[1px] text-black border-solid border-[#CCCCCC]  mx-[6px]"
+              className="my-[4px] p-[8px] px-[14px]  border-[1px] text-black border-solid border-[#CCCCCC]  mx-[6px]"
               style={{
                 backgroundColor: page === index.toString() ? "#0066C1" : "",
                 color: page === index.toString() ? "white" : "",
@@ -93,19 +88,21 @@ const Pagination: React.FC<DataPagination> = ({
         }
       })}
 
-      {lastPage.current?.toString() !== page ? (
+      {(parseInt(lastPage.current) - 1).toString() !== page ? (
         <>
           <span
             onClick={() => setColDataCurrent((Number(page) + 1).toString())}
-            className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid mx-[6px] border-[#CCCCCC] cursor-pointer hover:bg-[#a5d5ffa7]"
+            className="my-[4px] bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid mx-[6px] border-[#CCCCCC] cursor-pointer hover:bg-[#a5d5ffa7]"
           >
             <i className="bi bi-chevron-right"></i>
           </span>
           <span
             onClick={() =>
-              setColDataCurrent(lastPage.current?.toString() || "")
+              setColDataCurrent(
+                (parseInt(lastPage.current) - 1).toString() || ""
+              )
             }
-            className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid mx-[6px] border-[#CCCCCC] cursor-pointer hover:bg-[#a5d5ffa7]"
+            className="my-[4px] bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid mx-[6px] border-[#CCCCCC] cursor-pointer hover:bg-[#a5d5ffa7]"
           >
             <i className="bi bi-chevron-double-right"></i>
           </span>

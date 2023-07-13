@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Nav from "@/component/Navigate/Nav";
 import Footer from "@/component/Footter/Footer";
-import ContentQuill from "./ContentQuill";
+import FreeBroadQuill from "./FreeBroadQuill";
 import { Controller, useForm } from "react-hook-form";
 import * as yub from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -9,65 +9,54 @@ import { postNotice, putNotice } from "@/services/apiNotice";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { activeLoading } from "@/features/loadingSlice/loadingSlice";
-import Loading from "../loading/Loading";
-import { contentDetail, postContent, putContent } from "@/services/apiContent";
+import { noticeDetail } from "@/services/apiNotice";
+import { freeBoardDetail, putFreeBoard } from "@/services/apiFreeBroad";
 interface Title {
   title: string;
-  video: string;
 }
 const schema = yub.object().shape({
   title: yub.string().required("입력하세요"),
-  video: yub.string().required("입력하세요"),
 });
-const AnnouncementEdit = () => {
+const FreeBroadEdit = () => {
   const { infor } = useLocation().state;
   const [contentt, setContent] = useState("");
   const navigate = useNavigate();
-  const dispath = useDispatch();
+
   const {
     register,
     handleSubmit,
     control,
-
     formState: { errors },
     setValue,
   } = useForm<Title>({
     mode: "onChange",
     defaultValues: {
       title: "",
-      video: "",
     },
     resolver: yupResolver(schema),
   });
 
   useEffect(() => {
-    dispath(activeLoading(true));
     if (infor !== "") {
       (async () => {
         try {
-          const response = await contentDetail({ id: infor.toString() });
-
-          setContent(response.data.data.description);
+          const response = await freeBoardDetail({ id: infor.toString() });
+          setContent(response.data.data.content);
           setValue("title", response.data.data.title);
-          setValue("video", response.data.data.video);
         } catch (e) {
           console.log(e);
         }
       })();
     }
-    dispath(activeLoading(false));
   }, []);
 
   const createNotice = (data: Title, token: string) => {
     try {
       (async () => {
-        await postContent(
+        await postNotice(
           {
             title: data.title,
-            description: contentt,
-            video: data.video,
+            content: contentt,
           },
           token
         );
@@ -85,15 +74,14 @@ const AnnouncementEdit = () => {
     else {
       try {
         (async () => {
-          const response = await putContent(
+          const response = await putFreeBoard(
             {
-              id: infor.toString(),
               title: data.title,
-              description: contentt,
-              video: data.video,
+              content: contentt,
             },
 
-            token
+            token,
+            infor[0]
           );
           console.log(response);
         })();
@@ -104,12 +92,13 @@ const AnnouncementEdit = () => {
       }
     }
   };
+
   const handleChangeContent = (value: string) => {
     setContent(value);
   };
+
   return (
     <div className=" pt-[100px] ">
-      <Loading />
       <Nav colorText="text-black" />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full flex justify-center ">
@@ -130,7 +119,7 @@ const AnnouncementEdit = () => {
                     <input
                       className=" outline-none pl-[20px] w-full"
                       type="text"
-                      placeholder="제목을 입력하세요. (공백포함 50자이내)"
+                      placeholder="제목을 입력해주세요."
                       {...register("title")}
                     />
 
@@ -141,39 +130,16 @@ const AnnouncementEdit = () => {
                 )}
               />
             </div>
-            <div className="flex w-full  relative  bg-white border-[2px] border-solid mt-[26px]">
-              <h1 className="  grow-[3] text-[18px] font-bold text-center bg-[#b9e0ff] py-[14px]">
-                링크
-              </h1>
 
-              <Controller
-                control={control}
-                name="video"
-                render={({ field: { onChange } }) => (
-                  <div className="grow-[7]  flex ">
-                    <input
-                      className=" outline-none pl-[20px] w-full"
-                      type="text"
-                      placeholder="제목을 입력해주세요."
-                      {...register("video")}
-                    />
-
-                    <p className="text-red-500 absolute bottom-[-30px] left-0">
-                      {errors.video?.message}
-                    </p>
-                  </div>
-                )}
-              />
-            </div>
             <div className="mt-[40px]">
-              <ContentQuill
+              <FreeBroadQuill
                 content={contentt}
                 handleChangeContent={handleChangeContent}
               />
             </div>
           </div>
         </div>
-        <div className="flex justify-end w-4/5 mb-[20px]">
+        <div className="flex justify-end w-4/5 mb-[20px] cursor-pointer">
           <button
             type="submit"
             className="mr-[20px] from-blue-700 to-blue-400 bg-gradient-to-r px-[40px] py-[10px] text-white"
@@ -193,4 +159,4 @@ const AnnouncementEdit = () => {
   );
 };
 
-export default AnnouncementEdit;
+export default FreeBroadEdit;

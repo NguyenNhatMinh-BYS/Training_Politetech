@@ -7,7 +7,10 @@ const Config = (token: string) => {
     },
   };
 };
-
+export const contentDetail = ({ id }: ContentApi) => {
+  console.log(id);
+  return instance.get(`/content/${id}`);
+};
 export const content = (data: ContentApi) => {
   console.log(data);
 

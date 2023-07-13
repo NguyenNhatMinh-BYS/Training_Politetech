@@ -276,7 +276,7 @@ const Nav = ({ colorText }: Prop) => {
               </NavLink>
               <NavLink
                 onClick={handleClickCloseNav}
-                to="page8"
+                to="/freeboard"
                 className={({ isActive }) =>
                   isActive && role === "Admin"
                     ? "text-white font-semibold sm:mt-9"

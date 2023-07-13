@@ -17,6 +17,9 @@ import LivingLabDetail from "./pages/living-lab-detail/LivingLabDetail";
 import Introduce from "./pages/introduce-page/Introduce";
 import AnnouncementEdit from "./pages/announcement-edit/AnnouncementEdit";
 import ContentEdit from "./pages/content-edit/ContentEdit";
+import CampaignEdit from "./pages/campaign-edit/CampaignEdit";
+import Freebroad from "./pages/freebroad-page/Freebroad";
+import FreeBroadEdit from "./pages/freebroad-edit/FreeBroadEdit";
 function App() {
   return (
     <div>
@@ -42,6 +45,11 @@ function App() {
           <Route path="/content/create" element={<ContentEdit />}></Route>
           <Route path="/campaign" element={<Campaign />}></Route>
           <Route path="/campaign/:id" element={<CampainDetail />}></Route>
+          <Route path="/campaign/edit/:id" element={<CampaignEdit />}></Route>
+          <Route path="/campaign/create" element={<CampaignEdit />}></Route>
+          <Route path="/freeboard" element={<Freebroad />}></Route>
+          <Route path="/freebroad/edit/:id" element={<FreeBroadEdit />}></Route>
+          <Route path="/freeboard/create" element={<FreeBroadEdit />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/register" element={<Register />}></Route>
         </Route>

@@ -11,7 +11,7 @@ const ContentPage = () => {
     if (dataUser) {
       setRole(JSON.parse(dataUser).role);
     }
-  });
+  }); 
   return (
     <div className=" pt-[100px]" >
       <Nav colorText="text-black" />

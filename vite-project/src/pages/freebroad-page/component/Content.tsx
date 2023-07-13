@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Loading from "@/pages/loading/Loading";
 import { activeLoading } from "@/features/loadingSlice/loadingSlice";
+import { delFreeBoard, freeBoard } from "@/services/apiFreeBroad";
 const ContentAdmin = () => {
   const listItem = useRef<HTMLDivElement>(null);
   const clickButton = useRef<HTMLDivElement>(null);
@@ -25,7 +26,7 @@ const ContentAdmin = () => {
   const dispatch = useDispatch();
   const getData = async () => {
     dispatch(activeLoading(true));
-    const response = await content({
+    const response = await freeBoard({
       page_size: "10",
       page: page,
     });
@@ -69,6 +70,15 @@ const ContentAdmin = () => {
 
     setPage(pageChange);
   };
+  const handleClickEdit = () => {
+    if (itemChecked.current.length === 1) {
+      navigate(`/freebroad/edit/${itemChecked.current}`, {
+        state: { infor: itemChecked.current },
+      });
+    } else if (itemChecked.current.length > 1) {
+      setNoticeEdit(true);
+    }
+  };
   const handleAcceptDelete = () => {
     dispatch(activeLoading(true));
     const token = localStorage.getItem("token") || " ";
@@ -77,7 +87,7 @@ const ContentAdmin = () => {
     });
     try {
       (async () => {
-        await delContent(ids, token);
+        await delFreeBoard(ids, token);
         itemChecked.current = [];
         getData();
         toast.success("Delete successfully");
@@ -86,15 +96,6 @@ const ContentAdmin = () => {
     setNoticeEdit(false);
     dispatch(activeLoading(false));
   };
-  const handleClickEdit = () => {
-    if (itemChecked.current.length === 1) {
-      navigate(`/content/edit/${itemChecked.current}`, {
-        state: { infor: itemChecked.current },
-      });
-    } else if (itemChecked.current.length > 1) {
-      setNoticeEdit(true);
-    }
-  };
   const handleDelete = () => {
     if (itemChecked.current.length >= 1) {
       setNoticeEdit(true);
@@ -102,7 +103,7 @@ const ContentAdmin = () => {
     }
   };
   const handleCreate = () => {
-    navigate(`/content/create`, {
+    navigate(`/freebroad/create`, {
       state: { infor: "" },
     });
   };

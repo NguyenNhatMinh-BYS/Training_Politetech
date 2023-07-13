@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Loading from "@/pages/loading/Loading";
 import { activeLoading } from "@/features/loadingSlice/loadingSlice";
+import { campaign, delCampaign } from "@/services/apiCampaign";
 const ContentAdmin = () => {
   const listItem = useRef<HTMLDivElement>(null);
   const clickButton = useRef<HTMLDivElement>(null);
@@ -25,11 +26,13 @@ const ContentAdmin = () => {
   const dispatch = useDispatch();
   const getData = async () => {
     dispatch(activeLoading(true));
-    const response = await content({
+    const response = await campaign({
       page_size: "10",
       page: page,
     });
+
     let data = response.data.data?.list;
+
     const totalData = response.data.data?.total;
     for (
       let i = 10 * Number(page), x = 0;
@@ -77,7 +80,7 @@ const ContentAdmin = () => {
     });
     try {
       (async () => {
-        await delContent(ids, token);
+        await delCampaign(ids, token);
         itemChecked.current = [];
         getData();
         toast.success("Delete successfully");
@@ -88,7 +91,7 @@ const ContentAdmin = () => {
   };
   const handleClickEdit = () => {
     if (itemChecked.current.length === 1) {
-      navigate(`/content/edit/${itemChecked.current}`, {
+      navigate(`/campaign/edit/${itemChecked.current}`, {
         state: { infor: itemChecked.current },
       });
     } else if (itemChecked.current.length > 1) {
@@ -102,7 +105,7 @@ const ContentAdmin = () => {
     }
   };
   const handleCreate = () => {
-    navigate(`/content/create`, {
+    navigate(`/campaign/create`, {
       state: { infor: "" },
     });
   };
@@ -167,7 +170,11 @@ const ContentAdmin = () => {
           <tbody>
             {dataList &&
               dataList.map((item: DataNotice, index: number) => (
-                <tr key={item?.id} className="border-b-[1px] border-solid ">
+                <tr
+                  key={item?.id}
+                  className="border-b-[1px] border-solid "
+                  onClick={() => navigate(`/campaign/${item?.id}`)}
+                >
                   <th className="py-[20px] w-[4%] font-normal">
                     {isAdmin ? (
                       <input
@@ -175,6 +182,9 @@ const ContentAdmin = () => {
                         id={`${item.id}`}
                         onChange={(e) => {
                           handleChangeCheckBox(item.id, e);
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
                         }}
                         type="checkbox"
                         className=" top-[6px] left-0 z-[20] w-[20px] h-[30px]  checked:accent-[#0066C1] inline-block rounded-none outline-none"
@@ -204,7 +214,7 @@ const ContentAdmin = () => {
               ))}
           </tbody>
         </table>
-        <div className="my-[40px] relative  z-40 w-full flex justify-center">
+        <div className="mt-[60px] mb-[20px] relative  z-40 w-full flex justify-center">
           <Pagination
             totalList={totalList}
             page={page}
@@ -213,7 +223,7 @@ const ContentAdmin = () => {
           />
         </div>
         {isAdmin ? (
-          <div className="flex justify-center xl:mt-[20px] xl:absolute xl:right-0 xl:bottom-[28px] cursor-pointer z-40 max-[1200px]:mb-[20px]">
+          <div className="flex justify-center xl:mt-[20px] xl:absolute xl:right-0 xl:bottom-[28px] cursor-pointer z-40 max-[1200px]:mb-[20px] ">
             {/* put  */}
             <p
               className="py-[6px] px-[20px] border-[1px] border-solid border-[#969696]"

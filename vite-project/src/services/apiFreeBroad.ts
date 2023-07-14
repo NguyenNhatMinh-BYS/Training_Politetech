@@ -71,3 +71,6 @@ export const deleteFreeBoardPost = (id: string, password: string) => {
     data: { password: password },
   });
 };
+export const  editFreeBroad = (id:string,data:UserPostFreeBoard)=>{
+  return instance.put(`/free-board/${id}`,data);
+}

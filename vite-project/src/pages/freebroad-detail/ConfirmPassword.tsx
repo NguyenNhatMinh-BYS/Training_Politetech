@@ -7,11 +7,12 @@ interface Validate {
   CloseConfirmPW: () => void;
   isDeleted: boolean;
   idItem: string;
+  editIteam:(password:string)=>void;
 }
 const ConfirmPassword: React.FC<Validate> = ({
   CloseConfirmPW,
   isDeleted,
-  idItem,
+  idItem,editIteam
 }) => {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState(false);
@@ -26,10 +27,11 @@ const ConfirmPassword: React.FC<Validate> = ({
       const response = await validateAuthor(idItem, password);
       console.log(response);
 
-      if (response.status === 200) {
+      if (response.status === 200 && isDeleted) {
         setIsTrue(true);
-      } else {
-        toast.error("Password validation failed");
+      }
+      else if(response.status ===200 && !isDeleted) {
+        editIteam(password);
       }
     } catch (e) {
       toast.error("Password validation failed");

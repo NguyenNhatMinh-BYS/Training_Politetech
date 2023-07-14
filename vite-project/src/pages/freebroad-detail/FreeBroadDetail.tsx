@@ -22,6 +22,7 @@ const FreeBroadDetail = () => {
   const [data, setData] = useState<DataNotice>();
   const [id, setId] = useState(param.id);
   const [showInputPassword, setShowInputPassword] = useState(false);
+  
   const getDataAnnouncementDetail = async () => {
     dispath(activeLoading(true));
     try {
@@ -42,6 +43,10 @@ const FreeBroadDetail = () => {
   const CloseConfirmPW = () => {
     setShowInputPassword(false);
   };
+  const editIteam = (password:string)=>{
+    setShowInputPassword(false);
+    navigate(`/freebroad/edit/${id}`,{state:{infor:id,password:password}});
+  }
   return (
     <div className="h-screen relative">
       {showInputPassword ? (
@@ -49,6 +54,7 @@ const FreeBroadDetail = () => {
           CloseConfirmPW={CloseConfirmPW}
           isDeleted={isDeleted}
           idItem={id||""}
+          editIteam={editIteam}
         />
       ) : (
         ""

@@ -94,9 +94,9 @@ export interface FreeBoard {
   page?: string;
 }
 export interface UserPostFreeBoard {
-  author: string;
-  password: string;
-  title: string;
+  author?: string;
+  password?: string;
+  title?: string;
   content?: string;
 }
 export interface ValidateAuthor {

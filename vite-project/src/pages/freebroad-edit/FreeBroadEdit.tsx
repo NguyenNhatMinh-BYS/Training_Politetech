@@ -5,12 +5,13 @@ import FreeBroadQuill from "./FreeBroadQuill";
 import { Controller, useForm } from "react-hook-form";
 import * as yub from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { postNotice, putNotice } from "@/services/apiNotice";
+
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useEffect, useState } from "react";
-import { noticeDetail } from "@/services/apiNotice";
+import { useEffect, useRef, useState } from "react";
+
 import {
+  editFreeBroad,
   freeBoardDetail,
   postFreeBoard,
   putFreeBoard,
@@ -22,10 +23,10 @@ const schema = yub.object().shape({
   title: yub.string().required("입력하세요"),
 });
 const FreeBroadEdit = () => {
-  const { infor } = useLocation().state;
+  const { infor, password } = useLocation().state;
   const [contentt, setContent] = useState("");
   const navigate = useNavigate();
-
+  const author = useRef("");
   const {
     register,
     handleSubmit,
@@ -45,6 +46,8 @@ const FreeBroadEdit = () => {
       (async () => {
         try {
           const response = await freeBoardDetail({ id: infor.toString() });
+          if (password) author.current = response.data.data.author;
+
           setContent(response.data.data.content);
           setValue("title", response.data.data.title);
         } catch (e) {
@@ -72,12 +75,26 @@ const FreeBroadEdit = () => {
     }
   };
 
-  const onSubmit = (data: Title) => {
-    const token = localStorage.getItem("token") || "";
-    if (infor === "") createNotice(data, token);
-    else {
+  const onSubmit = async (data: Title) => {
+    if (password) {
       try {
-        (async () => {
+        const response = await editFreeBroad(infor, {
+          password: password,
+          title: data.title,
+          content: contentt,
+        });
+        console.log(response);
+
+        navigate("/freeboard");
+        toast.success(" Edit successfully");
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      const token = localStorage.getItem("token") || "";
+      if (infor === "") createNotice(data, token);
+      else {
+        try {
           const response = await putFreeBoard(
             {
               title: data.title,
@@ -87,12 +104,12 @@ const FreeBroadEdit = () => {
             token,
             infor[0]
           );
-          console.log(response);
-        })();
-        navigate(-1);
-        toast.success("Created Edit successfully");
-      } catch (e) {
-        console.log(e);
+
+          navigate(-1);
+          toast.success("Created Edit successfully");
+        } catch (e) {
+          console.log(e);
+        }
       }
     }
   };
@@ -110,8 +127,36 @@ const FreeBroadEdit = () => {
             <h1 className=" mt-[60px] mb-[20px] text-transparent text-[28px] font-black bg-gradient-to-r from-blue-700 to-blue-400 bg-clip-text inline-block">
               부산 전체보기
             </h1>
-            <div className="flex w-full  relative  bg-white border-[2px] border-solid">
-              <h1 className="  grow-[3] text-[18px] font-bold text-center bg-[#b9e0ff] py-[14px]">
+            {password ? (
+              <div className="w-full flex overflow-hidden mb-[40px]">
+                <div className="flex w-1/2 flex-1">
+                  <h1 className=" text-[18px] font-bold text-center bg-[#b9e0ff] py-[14px] min-w-[160px]">
+                    제목
+                  </h1>
+                  <input
+                    className=" outline-none pl-[20px]  block grow-[7]"
+                    type="text"
+                    value={author.current}
+                    disabled
+                  />
+                </div>
+                <div className="flex w-1/2 flex-1">
+                  <h1 className=" text-[18px] font-bold text-center bg-[#b9e0ff] py-[14px] min-w-[160px]">
+                    제목
+                  </h1>
+                  <input
+                    className=" outline-none pl-[20px] grow-[7]"
+                    type="password"
+                    value={password}
+                    disabled
+                  />
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
+            <div className="flex w-full  relative  bg-white border-[2px] border-solid ">
+              <h1 className="   text-[18px] font-bold text-center bg-[#b9e0ff] py-[14px] min-w-[160px]">
                 제목
               </h1>
 
@@ -119,9 +164,9 @@ const FreeBroadEdit = () => {
                 control={control}
                 name="title"
                 render={({ field: { onChange } }) => (
-                  <div className="grow-[7]  flex ">
+                  <div className="  flex grow-[7]">
                     <input
-                      className=" outline-none pl-[20px] w-full"
+                      className=" outline-none pl-[20px] "
                       type="text"
                       placeholder="제목을 입력해주세요."
                       {...register("title")}

@@ -19,9 +19,9 @@ const Content = () => {
   const [totalListData, setTotalListData] = useState<string[]>([]);
   const [colDataCurrent, setColDataCurrent] = useState("0");
   const [maxMinListData, setMaxMinListData] = useState<string[]>([]);
-  const [searchValue, setSearchValue] = useState("");
   const [isAdmin, setIsadmin] = useState(false);
-  const [inputSearchBy, setInputSearchBy] = useState("title");
+  const searchValue = useRef("");
+  const inputSearchBy = useRef("title");
   const dispath = useDispatch();
   const itemChecked = useRef<string[]>([]);
   const navigate = useNavigate();
@@ -29,16 +29,16 @@ const Content = () => {
   const [totalChecked, setTotalChecked] = useState<string[]>([]);
   const [isDelete, setIsDelete] = useState(false);
   //set data
-  const setData = async (placeholder?: string, inputSearch?: string) => {
-    setSearchValue(inputSearch || "");
+  const getData = async (placeholder?: string, inputSearch?: string) => {
+    inputSearchBy.current = placeholder || "";
+    searchValue.current = inputSearch || "";
     dispath(activeLoading(true));
-    const search_by = placeholder === "제목" ? "title" : "author";
-    setInputSearchBy(search_by);
+
     const response = await notice({
       page_size: "10",
       page: colDataCurrent,
       search_value: inputSearch,
-      search_by: search_by,
+      search_by: placeholder,
     });
 
     let data = response.data.data?.list;
@@ -73,7 +73,7 @@ const Content = () => {
 
     (async () => {
       try {
-        setData();
+        getData(inputSearchBy.current, searchValue.current);
       } catch (err) {
         console.log(err);
         dispath(activeLoading(false));
@@ -145,7 +145,7 @@ const Content = () => {
       (async () => {
         await delNotice(ids, token);
         itemChecked.current = [];
-        setData();
+        getData();
         toast.success("Delete successfully");
       })();
     } catch (e) {}
@@ -179,7 +179,8 @@ const Content = () => {
       )}
       {/* search */}
       <HeaderSearch
-        setData={setData}
+        searchAuthor={true}
+        getData={getData}
         listItem={listItem}
         clickButton={clickButton}
       />

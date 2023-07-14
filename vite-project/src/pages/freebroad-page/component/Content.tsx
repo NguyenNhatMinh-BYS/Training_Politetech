@@ -24,12 +24,19 @@ const ContentAdmin = () => {
   const itemChecked = useRef<string[]>([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const getData = async () => {
+  const inputSearchBy = useRef("title");
+  const searchValue = useRef("");
+  const getData = async (search_by?: string, search_value?: string) => {
     dispatch(activeLoading(true));
+    inputSearchBy.current = search_by || "";
+    searchValue.current = search_value || "";
     const response = await freeBoard({
       page_size: "10",
       page: page,
+      search_by: search_by,
+      search_value: search_value,
     });
+
     let data = response.data.data?.list;
     const totalData = response.data.data?.total;
     for (
@@ -59,7 +66,7 @@ const ContentAdmin = () => {
     }
     try {
       (async () => {
-        getData();
+        getData(inputSearchBy.current, searchValue.current);
       })();
     } catch (e) {
       console.log(e);
@@ -103,7 +110,9 @@ const ContentAdmin = () => {
     }
   };
   const handleCreate = () => {
-    navigate(`/freebroad/create`, {
+    
+
+    navigate(`/freebroad/create_user`, {
       state: { infor: "" },
     });
   };
@@ -120,6 +129,15 @@ const ContentAdmin = () => {
       itemChecked.current = [...filter];
       setTotalChecked(itemChecked.current);
     }
+  };
+  const handleDetail = (id: string) => {
+    navigate(`/freebroad/detail/${id}`, {
+      state: {
+        id: id,
+        search_by: inputSearchBy.current,
+        search_value: searchValue.current,
+      },
+    });
   };
   return (
     <div
@@ -141,7 +159,12 @@ const ContentAdmin = () => {
       ) : (
         " "
       )}
-      <HeaderSearch listItem={listItem} clickButton={clickButton} />
+      <HeaderSearch
+        searchAuthor={true}
+        listItem={listItem}
+        clickButton={clickButton}
+        getData={getData}
+      />
       <div className="w-3/4 relative">
         <table className="w-full">
           <thead className="bg-[#b4dcfff7] text-[14px]">
@@ -168,7 +191,13 @@ const ContentAdmin = () => {
           <tbody>
             {dataList &&
               dataList.map((item: DataNotice, index: number) => (
-                <tr key={item?.id} className="border-b-[1px] border-solid ">
+                <tr
+                  key={item?.id}
+                  className="border-b-[1px] border-solid "
+                  onClick={() => {
+                    handleDetail(item?.id);
+                  }}
+                >
                   <th className="py-[20px] w-[4%] font-normal">
                     {isAdmin ? (
                       <input
@@ -214,7 +243,7 @@ const ContentAdmin = () => {
           />
         </div>
         {isAdmin ? (
-          <div className="flex justify-center xl:mt-[20px] xl:absolute xl:right-0 xl:bottom-[28px] cursor-pointer z-40 max-[1200px]:mb-[20px]">
+          <div className="flex justify-center xl:mt-[20px] xl:absolute xl:right-0 xl:bottom-[48px] cursor-pointer z-40 max-[1200px]:mb-[20px]">
             {/* put  */}
             <p
               className="py-[6px] px-[20px] border-[1px] border-solid border-[#969696]"
@@ -241,7 +270,13 @@ const ContentAdmin = () => {
             </div>
           </div>
         ) : (
-          ""
+          <div
+            className="py-[6px] px-[20px] flex bg-[#0066C1] text-white w-[120px] justify-around absolute right-0 bottom-[48px] z-40"
+            onClick={handleCreate}
+          >
+            <i className="bi bi-pencil mx-[6px]"></i>
+            <p>글쓰기</p>
+          </div>
         )}
       </div>
     </div>

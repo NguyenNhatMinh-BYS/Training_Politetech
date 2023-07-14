@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRef } from "react";
 interface DataPagination {
   page: string;
@@ -12,24 +12,18 @@ const Pagination: React.FC<DataPagination> = ({
   setColDataCurrent,
   sizePage,
 }) => {
-  const firstPage = useRef("");
-  const lastPage = useRef("");
-  const totalColData = useRef<string[]>([]);
-
-  useEffect(() => {
-    firstPage.current = "0";
-    lastPage.current = Math.ceil(totalList / sizePage).toString();
-    totalColData.current = lastPage.current
-      ? Array(parseInt(lastPage.current)).fill("1")
-      : [];
-  }, [totalList, sizePage]);
+  const firstPage = "0";
+  const lastPage = parseInt(Math.ceil(totalList / sizePage).toString());
+  const totalColData = Array(
+    parseInt(Math.ceil(totalList / sizePage).toString())
+  ).fill("1");
 
   return (
     <div className="flex justify-center flex-wrap w-[500px]">
-      {firstPage.current !== page ? (
+      {firstPage !== page && totalList != 0 ? (
         <>
           <span
-            onClick={() => setColDataCurrent(firstPage.current)}
+            onClick={() => setColDataCurrent(firstPage)}
             className=" my-[4px] bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid border-[#CCCCCC]  mx-[6px] cursor-pointer hover:bg-[#a5d5ffa7]"
           >
             <i className="bi bi-chevron-double-left"></i>
@@ -45,10 +39,10 @@ const Pagination: React.FC<DataPagination> = ({
         ""
       )}
 
-      {totalColData.current.map((item, index: number) => {
+      {totalColData.map((item, index: number) => {
         if (
           index === 0 ||
-          index === totalColData.current.length - 1 ||
+          index === totalColData.length - 1 ||
           page === index.toString() ||
           page === (index - 1).toString() ||
           page === (index + 1).toString()
@@ -88,7 +82,7 @@ const Pagination: React.FC<DataPagination> = ({
         }
       })}
 
-      {(parseInt(lastPage.current) - 1).toString() !== page ? (
+      {(lastPage - 1).toString() !== page && totalList != 0 ? (
         <>
           <span
             onClick={() => setColDataCurrent((Number(page) + 1).toString())}
@@ -97,11 +91,7 @@ const Pagination: React.FC<DataPagination> = ({
             <i className="bi bi-chevron-right"></i>
           </span>
           <span
-            onClick={() =>
-              setColDataCurrent(
-                (parseInt(lastPage.current) - 1).toString() || ""
-              )
-            }
+            onClick={() => setColDataCurrent((lastPage - 1).toString() || "")}
             className="my-[4px] bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid mx-[6px] border-[#CCCCCC] cursor-pointer hover:bg-[#a5d5ffa7]"
           >
             <i className="bi bi-chevron-double-right"></i>

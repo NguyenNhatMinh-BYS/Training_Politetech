@@ -24,11 +24,16 @@ const ContentAdmin = () => {
   const itemChecked = useRef<string[]>([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const getData = async () => {
+  const searchValue = useRef("");
+
+  const getData = async (search_by?: string, search_value?: string) => {
     dispatch(activeLoading(true));
+    searchValue.current = search_value || "";
     const response = await campaign({
       page_size: "10",
       page: page,
+
+      search_value: search_value,
     });
 
     let data = response.data.data?.list;
@@ -61,7 +66,7 @@ const ContentAdmin = () => {
     }
     try {
       (async () => {
-        getData();
+        getData("", searchValue.current);
       })();
     } catch (e) {
       console.log(e);
@@ -143,7 +148,12 @@ const ContentAdmin = () => {
       ) : (
         " "
       )}
-      <HeaderSearch listItem={listItem} clickButton={clickButton} />
+      <HeaderSearch
+        searchAuthor={false}
+        listItem={listItem}
+        clickButton={clickButton}
+        getData={getData}
+      />
       <div className="w-3/4 relative">
         <table className="w-full">
           <thead className="bg-[#b4dcfff7] text-[14px]">

@@ -8,12 +8,14 @@ const Config = (token: string) => {
   };
 };
 export const campaign = (data: campaigngApi) => {
+  console.log(data);
+
   let x = "";
   if (data.search_value) {
     x = `&search_value=${data.search_value}`;
   }
   return instance.get(
-    `/campaign?search_by=title${x}&page_size=${data.page_size}&page=${data.page}`
+    `/campaign?page=${data.page}&search_by=title${x}&page_size=${data.page_size}`
   );
 };
 export const campaignDetail = (data: campaigngApi) => {

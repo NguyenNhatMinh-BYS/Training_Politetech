@@ -13,9 +13,16 @@ export const contentDetail = ({ id }: ContentApi) => {
 };
 export const content = (data: ContentApi) => {
   console.log(data);
-
+  let x = "",
+    y = "";
+  if (data.search_by) {
+    x = `&search_by=${data.search_by}`;
+  }
+  if (data.search_value) {
+    y = `&search_value=${data.search_value}`;
+  }
   return instance.get(
-    `/content?page_size=${data.page_size}&page=${data.page}&user_id=c1c3255e-247a-4c39-96ab-b7f65903b7ba`
+    `/content?page_size=${data.page_size}&page=${data.page}${x}${y}&user_id=c1c3255e-247a-4c39-96ab-b7f65903b7ba`
   );
 };
 export const putContent = (data: ContentApi, token: string) => {

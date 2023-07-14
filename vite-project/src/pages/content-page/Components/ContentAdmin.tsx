@@ -20,17 +20,25 @@ const ContentAdmin = () => {
   const [totalChecked, setTotalChecked] = useState<string[]>([]);
   const [noticeEdit, setNoticeEdit] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
+  const inputSearchBy = useRef("title");
+  const searchValue = useRef("");
   const itemChecked = useRef<string[]>([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const getData = async () => {
+  const getData = async (search_by?: string, search_value?: string) => {
     dispatch(activeLoading(true));
+    inputSearchBy.current = search_by || "";
+    searchValue.current = search_value || "";
     const response = await content({
       page_size: "10",
       page: page,
+      search_by: search_by,
+      search_value: search_value,
     });
+
     let data = response.data.data?.list;
     const totalData = response.data.data?.total;
+
     for (
       let i = 10 * Number(page), x = 0;
       i <= 10 * Number(page) + 10 && x < 10;
@@ -43,6 +51,7 @@ const ContentAdmin = () => {
       }
     }
     setDataList(data);
+    console.log(totalData);
 
     setTotalList(totalData);
     dispatch(activeLoading(false));
@@ -58,7 +67,7 @@ const ContentAdmin = () => {
     }
     try {
       (async () => {
-        getData();
+        getData(inputSearchBy.current, searchValue.current);
       })();
     } catch (e) {
       console.log(e);
@@ -140,7 +149,12 @@ const ContentAdmin = () => {
       ) : (
         " "
       )}
-      <HeaderSearch listItem={listItem} clickButton={clickButton} />
+      <HeaderSearch
+        searchAuthor={true}
+        listItem={listItem}
+        clickButton={clickButton}
+        getData={getData}
+      />
       <div className="w-3/4 relative">
         <table className="w-full">
           <thead className="bg-[#b4dcfff7] text-[14px]">

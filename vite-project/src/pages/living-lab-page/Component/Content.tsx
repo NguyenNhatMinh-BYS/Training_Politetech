@@ -3,35 +3,42 @@ import { useState } from "react";
 import { notice } from "@/services/apiNotice";
 import { DataNotice } from "@/model/Auth.model";
 import dayjs from "dayjs";
-import { useLocation } from "react-router-dom";
+import NoticeTitle from "@/pages/announcement-page/Component/NoticeTitle";
 import { useNavigate } from "react-router-dom";
 import Loading from "@/pages/loading/Loading";
 import { useDispatch } from "react-redux";
 import { activeLoading } from "@/features/loadingSlice/loadingSlice";
-import { livingLab } from "@/services/apiLivingLab";
+import { delLivingLab, livingLab } from "@/services/apiLivingLab";
+import HeaderSearch from "@/component/HeaderSearch/HeaderSearch";
+import Pagination from "@/component/Pagination/Pagination";
+import { toast } from "react-toastify";
 const Content = () => {
-  const [placeholder, setPlaceholder] = useState("제목");
   const listItem = useRef<HTMLDivElement>(null);
   const clickButton = useRef<HTMLDivElement>(null);
   const [listData, setListData] = useState([]);
-  const [totalListData, setTotalListData] = useState<string[]>([]);
+  const [totalListData, setTotalListData] = useState(10);
   const [colDataCurrent, setColDataCurrent] = useState("0");
-  const [maxMinListData, setMaxMinListData] = useState<string[]>([]);
-  const [inputSearch, setInputSearch] = useState("");
-  const [inputSearchBy, setInputSearchBy] = useState("title");
+  const [isAdmin, setIsadmin] = useState(false);
   const dispath = useDispatch();
-
+  const searchValue = useRef("");
+  const inputSearchBy = useRef("title");
+  const itemChecked = useRef<string[]>([]);
   const navigate = useNavigate();
+  const [noticeEdit, setNoticeEdit] = useState(false);
+  const [totalChecked, setTotalChecked] = useState<string[]>([]);
+  const [isDelete, setIsDelete] = useState(false);
   //set data
-  const setData = async () => {
+  const getData = async (placeholder?: string, inputSearch?: string) => {
     dispath(activeLoading(true));
-    const search_by = placeholder === "제목" ? "title" : "author";
-    setInputSearchBy(search_by);
+
+    inputSearchBy.current = placeholder || "";
+    searchValue.current = inputSearch || "";
+
     const response = await livingLab({
       page_size: "10",
       page: colDataCurrent,
       search_value: inputSearch,
-      search_by: search_by,
+      search_by: placeholder,
     });
 
     let data = response.data.data?.list;
@@ -51,48 +58,83 @@ const Content = () => {
         break;
       }
     }
-    setTotalListData(Array(Math.ceil(totalData / 10)).fill(""));
-    setMaxMinListData(["0", (Math.ceil(totalData / 10) - 1).toString()]);
+    setTotalListData(totalData);
+
     dispath(activeLoading(false));
     return data;
   };
   //get api
   useEffect(() => {
+    let dataUser = localStorage.getItem("dataUser");
+    if (dataUser) {
+      if (JSON.parse(dataUser).role === "Admin") {
+        setIsadmin(true);
+      }
+    }
     (async () => {
       try {
-        setData();
+        getData(inputSearchBy.current, searchValue.current);
       } catch (err) {
         console.log(err);
         dispath(activeLoading(false));
       }
     })();
   }, [colDataCurrent]);
-  //css input
-  const autoResizeInput = (input: HTMLInputElement) => {
-    setPlaceholder(input.value);
-    if (input.value.length > 7 && input.value.length <= 30) {
-      input.style.width = (input.value.length + "ch") as string;
-      input.style.height = "auto";
-      input.style.margin = "none";
-    } else {
-      input.style.width = "80px";
+
+  const handleClickEdit = () => {
+    if (itemChecked.current.length === 1) {
+      navigate(`/living-lab/edit/${itemChecked.current}`, {
+        state: { infor: itemChecked.current },
+      });
+    } else if (itemChecked.current.length > 1) {
+      setNoticeEdit(true);
     }
   };
+  const handleChangeCheckBox = (
+    item: string,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (event.target.checked) {
+      itemChecked.current = [...itemChecked.current, item];
+      setTotalChecked(itemChecked.current);
+    } else {
+      const filter = itemChecked.current.filter((value) => value !== item);
 
-  const handleClickSelect = () => {
-    listItem.current?.classList.toggle("hidden");
-
-    clickButton.current?.classList.add("border-[#0075DC]");
+      itemChecked.current = [...filter];
+      setTotalChecked(itemChecked.current);
+    }
   };
-  //handle click index list
-  const handleClickIndexList = (index: number) => {
-    // console.log(index);
-    //
-    setColDataCurrent(index.toString());
+  const handleCloseNoticeEdit = () => {
+    setNoticeEdit(false);
+    setIsDelete(false);
   };
-  //handle sreach
-  const handleClickSearch = () => {
-    setData();
+  const handleAcceptDelete = () => {
+    const token = localStorage.getItem("token") || " ";
+    const ids = itemChecked.current.map((item) => {
+      return item;
+    });
+    try {
+      (async () => {
+        await delLivingLab(ids, token);
+        toast.success("Delete successfully");
+        itemChecked.current = [];
+        getData(inputSearchBy.current, searchValue.current);
+      })();
+    } catch (e) {
+      toast.error("Error");
+    }
+    setNoticeEdit(false);
+  };
+  const handleDelete = () => {
+    if (itemChecked.current.length >= 1) {
+      setNoticeEdit(true);
+      setIsDelete(true);
+    }
+  };
+  const handleCreate = () => {
+    navigate(`/living-lab/create`, {
+      state: { infor: "" },
+    });
   };
   return (
     <div
@@ -105,80 +147,27 @@ const Content = () => {
     >
       {" "}
       <Loading />
+      {noticeEdit ? (
+        <NoticeTitle
+          isDeleted={isDelete}
+          sizeCheckItem={itemChecked.current.length}
+          handleCloseNoticeEdit={handleCloseNoticeEdit}
+          handleAcceptDelete={handleAcceptDelete}
+        />
+      ) : (
+        " "
+      )}
       {/* search */}
-      <div className="max-[1024px]:flex-col max-[1024px]:items-start my-[60px] flex justify-between  w-3/4 px-[40px] items-center">
-        <div>
-          {" "}
-          <h1 className="font-semibold text-[24px] pl-[10px] border-l-[4px] border-solid border-[#0075DC]">
-            공지사항
-          </h1>
-        </div>
-        <div className="flex items-center max-[1024px]:mt-[28px] max-[1024px]:w-full min-[100px]:flex-col min-[100px]:items-start min-[1024px]:flex-row min-[1024px]:items-center ">
-          <div className="max-[1024px]:mx-0  cursor-pointer relative flex  mx-[8px] ">
-            <div
-              ref={clickButton}
-              className=" border-solid border-[2px] p-[6px]"
-            >
-              <input
-                onClick={(e) => {
-                  handleClickSelect();
-                  e.stopPropagation();
-                }}
-                id="input"
-                maxLength={30}
-                value={placeholder}
-                type="text"
-                className="resize w-[80px] outline-none placeholder-gray-400 cursor-pointer placeholder-shown:border-gray-500"
-                onChange={(e) => autoResizeInput(e.target as HTMLInputElement)}
-              />
-
-              <i className="bi bi-caret-down-fill absolute right-[6px] pointer-events-none"></i>
-            </div>
-            <div
-              ref={listItem}
-              className="hidden z-30 absolute bottom-[-80px] left-0 right-0 bg-white shadow-[0_0_5px_2px_rgba(0,0,0,0.1)] rounded-md"
-            >
-              <p
-                className="p-[6px] "
-                onClick={() => {
-                  setPlaceholder("제목");
-                  clickButton.current?.classList.remove("border-[#0075DC]");
-                }}
-              >
-                제목
-              </p>
-              <p
-                className="p-[6px]"
-                onClick={() => {
-                  setPlaceholder("작성자");
-                  clickButton.current?.classList.remove("border-[#0075DC]");
-                }}
-              >
-                작성자
-              </p>
-            </div>
-          </div>
-          <div className="flex min-[100px]:mt-[24px] min-[100px]:w-full min-[1024px]:w-auto min-[1024px]:mt-0">
-            {/* input search */}
-            <input
-              value={inputSearch}
-              onChange={(e) => setInputSearch(e.target.value)}
-              className="p-[6px] px-[8px] border-solid border-[1px] border-[#C0C0C0] outline-none w-[400px] "
-              placeholder="공지사항 검색"
-              type="text"
-            />
-            <div
-              onClick={handleClickSearch}
-              className="cursor-pointer flex bg-[#0066C1] p-[7px] text-white px-[20px] flex-nowrap h-[38px] "
-            >
-              <i className="bi bi-search mr-[8px] "></i>
-              <p className="whitespace-nowrap">검색</p>
-            </div>
-          </div>
-        </div>
+      <div className="flex justify-center w-full px-[10px]">
+        <HeaderSearch
+          searchAuthor={true}
+          getData={getData}
+          listItem={listItem}
+          clickButton={clickButton}
+        />
       </div>
       {/* list contents */}
-      <div className="w-3/4 px-[40px]">
+      <div className="w-4/5 px-[40px] relative">
         {/* header list contents */}
         <div className="flex bg-[#b4dcfff7] py-[10px] rounded-sm">
           <p className="font-semibold py-[10px] w-[100px]  text-center border-r-[2px] border-solid border-[#7DA7CC]">
@@ -203,17 +192,37 @@ const Content = () => {
                   dispath(activeLoading(true));
                   navigate(`/living-lab/${item.id}`, {
                     state: {
-                      search_by: inputSearchBy,
-                      search_value: inputSearch,
+                      search_by: inputSearchBy.current,
+                      search_value: searchValue.current,
                     },
                   });
                 }}
                 key={index}
                 className=" flex  py-[10px] border-b-[1px] border-solid"
               >
-                <p className=" py-[10px] w-[100px] text-center ">
-                  {item.index}
-                </p>
+                <div className="w-[100px] py-[10px] relative flex items-center max-[1260px]:flex-col justify-around max-[1260px]:items-center">
+                  {isAdmin ? (
+                    <input
+                      checked={totalChecked.includes(item.id)}
+                      id={`${item.id}`}
+                      onChange={(e) => {
+                        handleChangeCheckBox(item.id, e);
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // handleChangeCheckBox(
+                        //   item.id,
+                        //   e as unknown as React.ChangeEvent<HTMLInputElement>
+                        // );
+                      }}
+                      type="checkbox"
+                      className=" top-[6px] left-0 z-[20] w-[20px] h-[30px]  checked:accent-[#0066C1] inline-block rounded-none outline-none"
+                    />
+                  ) : (
+                    ""
+                  )}
+                  <p className="  xl:mr-[30px] text-center  ">{item.index}</p>
+                </div>
                 <div className="  w-[780px]">
                   <p className=" py-[10px] px-[20px]  w-full break-words ">
                     {item.title}
@@ -233,66 +242,42 @@ const Content = () => {
             ))}
         </div>
         {/* footer list contents */}
-        <div className="my-[60px] flex justify-center">
-          {maxMinListData[0] !== colDataCurrent ? (
-            <>
-              <span
-                onClick={() => setColDataCurrent(maxMinListData[0])}
-                className=" bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid border-[#CCCCCC]  mx-[6px] cursor-pointer hover:bg-[#a5d5ffa7]"
-              >
-                <i className="bi bi-chevron-double-left"></i>
-              </span>
-              <span
-                onClick={() =>
-                  setColDataCurrent((Number(colDataCurrent) - 1).toString())
-                }
-                className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid border-[#CCCCCC]  mx-[6px] cursor-pointer hover:bg-[#a5d5ffa7]"
-              >
-                <i className="bi bi-chevron-left"></i>
-              </span>
-            </>
-          ) : (
-            ""
-          )}
-
-          {totalListData &&
-            totalListData.map((item, index) => (
-              <a
-                href="#search"
-                key={index}
-                onClick={() => handleClickIndexList(index)}
-                className="p-[8px] px-[14px]  border-[1px] text-black border-solid border-[#CCCCCC]  mx-[6px]"
-                style={{
-                  backgroundColor:
-                    colDataCurrent === index.toString() ? "#0066C1" : "",
-                  color: colDataCurrent === index.toString() ? "white" : "",
-                }}
-              >
-                {index + 1}
-              </a>
-            ))}
-
-          {maxMinListData[1] !== colDataCurrent ? (
-            <>
-              <span
-                onClick={() =>
-                  setColDataCurrent((Number(colDataCurrent) + 1).toString())
-                }
-                className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid mx-[6px] border-[#CCCCCC] cursor-pointer hover:bg-[#a5d5ffa7]"
-              >
-                <i className="bi bi-chevron-right"></i>
-              </span>
-              <span
-                onClick={() => setColDataCurrent(maxMinListData[1])}
-                className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid mx-[6px] border-[#CCCCCC] cursor-pointer hover:bg-[#a5d5ffa7]"
-              >
-                <i className="bi bi-chevron-double-right"></i>
-              </span>
-            </>
-          ) : (
-            " "
-          )}
+        <div className="w-full flex justify-center my-[40px]">
+          <Pagination
+            totalList={totalListData}
+            page={colDataCurrent}
+            setColDataCurrent={setColDataCurrent}
+            sizePage={10}
+          />
         </div>
+        {isAdmin ? (
+          <div className="flex justify-center mt-[20px] xl:absolute xl:right-0 xl:bottom-[48px] cursor-pointer max-[1280px]:mb-[20px] ">
+            {/* put  */}
+            <p
+              className="py-[6px] px-[20px] border-[1px] border-solid border-[#969696]"
+              onClick={() => handleClickEdit()}
+            >
+              수정
+            </p>
+            {/* delete  */}
+            <p
+              className="py-[6px] px-[20px] border-[1px] border-solid border-[#969696] mx-[12px] bg-[#d1d1d16b]"
+              onClick={handleDelete}
+            >
+              삭제
+            </p>
+            {/* create */}
+            <div
+              className="py-[6px] px-[20px] flex bg-[#0066C1] text-white"
+              onClick={handleCreate}
+            >
+              <i className="bi bi-pencil mx-[6px]"></i>
+              <p>글쓰기</p>
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );

@@ -8,12 +8,16 @@ const Config = (token: string) => {
   };
 };
 export const notice = (data: Notice) => {
+  console.log(data);
+
   let x = "",
-    y = "";
+    y = "",
+    z = "";
   if (data.search_value) x = `search_value=${data.search_value}&`;
   if (data.page_size) y = `page_size=${data.page_size}&`;
+  if (data.search_by) z = `&search_by=${data.search_by}`;
   return instance.get(
-    `/notice?${x}${y}page=${data.page}&user_id=867a7ae9-7783-4876-a8b6-11448b35770e&search_by=${data.search_by}`
+    `/notice?${x}${y}page=${data.page}${z}&user_id=867a7ae9-7783-4876-a8b6-11448b35770e`
   );
 };
 
@@ -33,7 +37,7 @@ export const noticeDetail = (data: Notice) => {
 };
 
 export const putNotice = (data: DataNotice, token: string) => {
-  console.log(data);
+  console.log(data, token);
 
   return instance.put(`/notice`, data, Config(token));
 };

@@ -1,5 +1,12 @@
 import instance from "./api";
-import { DataNotice, FreeBoard, Notice, PostNotice } from "@/model/Auth.model";
+import {
+  DataNotice,
+  FreeBoard,
+  Notice,
+  PostNotice,
+  UserPostFreeBoard,
+  ValidateAuthor,
+} from "@/model/Auth.model";
 const Config = (token: string) => {
   return {
     headers: {
@@ -8,6 +15,8 @@ const Config = (token: string) => {
   };
 };
 export const freeBoard = (data: Notice) => {
+  console.log(data);
+
   let x = "",
     y = "",
     z = "";
@@ -45,9 +54,20 @@ export const delFreeBoard = (data: any, token: string) => {
   });
 };
 
-export const postFreeBoard = (data: PostNotice, token: string) => {
-  return instance.post(`/free-board`, data, Config(token));
+export const postFreeBoard = (data: FreeBoard, token: string) => {
+  return instance.post(`/free-board/admin`, data, Config(token));
 };
-export const other = (url: string) => {
-  return instance.get(`${url}`);
+export const postFreeBoardUser = (data: UserPostFreeBoard) => {
+  return instance.post(`/free-board`, data);
+};
+
+export const validateAuthor = (id: string, password: string) => {
+  console.log(id, { password: password });
+
+  return instance.post(`/free-board/${id}`, { password: password });
+};
+export const deleteFreeBoardPost = (id: string, password: string) => {
+  return instance.delete(`/free-board/${id}`, {
+    data: { password: password },
+  });
 };

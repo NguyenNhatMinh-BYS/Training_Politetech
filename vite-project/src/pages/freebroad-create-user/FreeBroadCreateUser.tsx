@@ -1,27 +1,30 @@
 import { useNavigate } from "react-router-dom";
 import Nav from "@/component/Navigate/Nav";
 import Footer from "@/component/Footter/Footer";
-import FreeBroadQuill from "./FreeBroadQuill";
+import FreeBroadQuill from "../freebroad-edit/FreeBroadQuill";
 import { Controller, useForm } from "react-hook-form";
 import * as yub from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { postNotice, putNotice } from "@/services/apiNotice";
+
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import { noticeDetail } from "@/services/apiNotice";
+
 import {
   freeBoardDetail,
   postFreeBoard,
+  postFreeBoardUser,
   putFreeBoard,
 } from "@/services/apiFreeBroad";
-interface Title {
-  title: string;
-}
+import { UserPostFreeBoard } from "@/model/Auth.model";
+import ConfirmPassword from "../freebroad-detail/ConfirmPassword";
+
 const schema = yub.object().shape({
   title: yub.string().required("입력하세요"),
+  password: yub.string().required("입력하세요"),
+  author: yub.string().required("입력하세요"),
 });
-const FreeBroadEdit = () => {
+const FreeBroadCreateUser = () => {
   const { infor } = useLocation().state;
   const [contentt, setContent] = useState("");
   const navigate = useNavigate();
@@ -32,10 +35,12 @@ const FreeBroadEdit = () => {
     control,
     formState: { errors },
     setValue,
-  } = useForm<Title>({
+  } = useForm<UserPostFreeBoard>({
     mode: "onChange",
     defaultValues: {
       title: "",
+      author: "",
+      password: "",
     },
     resolver: yupResolver(schema),
   });
@@ -54,46 +59,20 @@ const FreeBroadEdit = () => {
     }
   }, []);
 
-  const createNotice = (data: Title, token: string) => {
+  const onSubmit = (data: UserPostFreeBoard) => {
     try {
       (async () => {
-        await postFreeBoard(
-          {
-            title: data.title,
-            content: contentt,
-          },
-          token
-        );
-        navigate(-1);
-        toast.success("Created notice successfully");
+        await postFreeBoardUser({
+          title: data.title,
+          author: data.author,
+          password: data.password,
+          content: contentt,
+        });
       })();
+      navigate(-1);
+      toast.success("Created Edit successfully");
     } catch (e) {
       console.log(e);
-    }
-  };
-
-  const onSubmit = (data: Title) => {
-    const token = localStorage.getItem("token") || "";
-    if (infor === "") createNotice(data, token);
-    else {
-      try {
-        (async () => {
-          const response = await putFreeBoard(
-            {
-              title: data.title,
-              content: contentt,
-            },
-
-            token,
-            infor[0]
-          );
-          console.log(response);
-        })();
-        navigate(-1);
-        toast.success("Created Edit successfully");
-      } catch (e) {
-        console.log(e);
-      }
     }
   };
 
@@ -103,6 +82,7 @@ const FreeBroadEdit = () => {
 
   return (
     <div className=" pt-[100px] ">
+      
       <Nav colorText="text-black" />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full flex justify-center ">
@@ -110,8 +90,56 @@ const FreeBroadEdit = () => {
             <h1 className=" mt-[60px] mb-[20px] text-transparent text-[28px] font-black bg-gradient-to-r from-blue-700 to-blue-400 bg-clip-text inline-block">
               부산 전체보기
             </h1>
+            <div className="flex  mb-[40px] max-[1280px]:flex-col">
+              <div className="flex grow-[1] relative border-[2px] border-solid">
+                <h1 className="w-[200px] text-[18px] font-bold text-center bg-[#b9e0ff] py-[14px]">
+                  작성자 이름
+                </h1>
+                <Controller
+                  control={control}
+                  name="author"
+                  render={({ field: { onChange } }) => (
+                    <div className="  flex ">
+                      <input
+                        className=" outline-none pl-[20px] w-full"
+                        type="text"
+                        placeholder="제목을 입력해주세요."
+                        {...register("author")}
+                      />
+
+                      <p className="text-red-500 absolute bottom-[-30px] left-0">
+                        {errors.author?.message}
+                      </p>
+                    </div>
+                  )}
+                />
+              </div>
+              <div className="flex grow-[1] relative border-[2px] border-solid max-[1280px]:mt-[40px]">
+                <h1 className="w-[200px] text-[18px] font-bold text-center bg-[#b9e0ff] py-[14px]">
+                  비밀번호
+                </h1>
+                <Controller
+                  control={control}
+                  name="password"
+                  render={({ field: { onChange } }) => (
+                    <div className="  flex ">
+                      <input
+                        className=" outline-none pl-[20px] w-full"
+                        type="text"
+                        placeholder="제목을 입력해주세요."
+                        {...register("password")}
+                      />
+
+                      <p className="text-red-500 absolute bottom-[-30px] left-0">
+                        {errors.password?.message}
+                      </p>
+                    </div>
+                  )}
+                />
+              </div>
+            </div>
             <div className="flex w-full  relative  bg-white border-[2px] border-solid">
-              <h1 className="  grow-[3] text-[18px] font-bold text-center bg-[#b9e0ff] py-[14px]">
+              <h1 className="  w-[200px] text-[18px] font-bold text-center bg-[#b9e0ff] py-[14px]">
                 제목
               </h1>
 
@@ -163,4 +191,4 @@ const FreeBroadEdit = () => {
   );
 };
 
-export default FreeBroadEdit;
+export default FreeBroadCreateUser;

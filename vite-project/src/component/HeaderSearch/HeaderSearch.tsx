@@ -1,10 +1,16 @@
 import React, { useRef, useState } from "react";
 interface Props {
-  setData?: (inputSearch: string, placeholder: string) => void;
+  getData: (inputSearch: string, placeholder: string) => void;
   listItem?: React.RefObject<HTMLDivElement>;
   clickButton?: React.RefObject<HTMLDivElement>;
+  searchAuthor?: Boolean;
 }
-const HeaderSearch: React.FC<Props> = ({ setData, listItem, clickButton }) => {
+const HeaderSearch: React.FC<Props> = ({
+  getData,
+  listItem,
+  clickButton,
+  searchAuthor,
+}) => {
   const [inputSearch, setInputSearch] = useState("");
   const [placeholder, setPlaceholder] = useState("제목");
 
@@ -25,7 +31,8 @@ const HeaderSearch: React.FC<Props> = ({ setData, listItem, clickButton }) => {
     }
   };
   const handleClickSearch = () => {
-    if (setData) setData(placeholder, inputSearch);
+    if (placeholder === "제목") getData("title", inputSearch);
+    else getData("author", inputSearch);
   };
   return (
     <div className="max-[1024px]:flex-col max-[1024px]:items-start my-[60px] flex justify-between  w-3/4  items-center">
@@ -58,7 +65,8 @@ const HeaderSearch: React.FC<Props> = ({ setData, listItem, clickButton }) => {
           </div>
           <div
             ref={listItem}
-            className="hidden absolute bottom-[-80px] left-0 right-0 bg-white shadow-[0_0_5px_2px_rgba(0,0,0,0.1)] rounded-md"
+            className="hidden z-30 absolute bottom-[-40px] left-0 right-0 bg-white shadow-[0_0_5px_2px_rgba(0,0,0,0.1)] rounded-md"
+            style={searchAuthor ? { bottom: "-80px" } : { bottom: "-40px" }}
           >
             <p
               className="p-[6px] "
@@ -70,16 +78,20 @@ const HeaderSearch: React.FC<Props> = ({ setData, listItem, clickButton }) => {
             >
               제목
             </p>
-            <p
-              className="p-[6px]"
-              onClick={() => {
-                setPlaceholder("작성자");
-                clickButton &&
-                  clickButton.current?.classList.remove("border-[#0075DC]");
-              }}
-            >
-              작성자
-            </p>
+            {searchAuthor ? (
+              <p
+                className="p-[6px]"
+                onClick={() => {
+                  setPlaceholder("작성자");
+                  clickButton &&
+                    clickButton.current?.classList.remove("border-[#0075DC]");
+                }}
+              >
+                작성자
+              </p>
+            ) : (
+              ""
+            )}
           </div>
         </div>
         <div className="flex min-[100px]:mt-[24px] min-[100px]:w-full min-[1024px]:w-auto min-[1024px]:mt-0">

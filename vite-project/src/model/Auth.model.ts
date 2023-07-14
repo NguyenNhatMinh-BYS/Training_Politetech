@@ -56,6 +56,8 @@ export interface ContentApi {
   user_id?: string;
   video?: string;
   page_size?: string;
+  search_value?: string;
+  search_by?: string;
   page?: string;
 }
 export interface campaigngApi {
@@ -75,7 +77,10 @@ export interface campaigngApi {
   content?: string;
   image_name?: string;
 }
-export interface livingLabeApi extends Notice {}
+export interface livingLabeApi extends Notice {
+  content?: string;
+  title?: string;
+}
 export interface FreeBoard {
   author?: string;
   created_at?: string;
@@ -87,4 +92,14 @@ export interface FreeBoard {
   content?: string;
   page_size?: string;
   page?: string;
+}
+export interface UserPostFreeBoard {
+  author: string;
+  password: string;
+  title: string;
+  content?: string;
+}
+export interface ValidateAuthor {
+  id: string;
+  password: string;
 }

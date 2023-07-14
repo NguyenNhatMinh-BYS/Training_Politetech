@@ -20,6 +20,9 @@ import ContentEdit from "./pages/content-edit/ContentEdit";
 import CampaignEdit from "./pages/campaign-edit/CampaignEdit";
 import Freebroad from "./pages/freebroad-page/Freebroad";
 import FreeBroadEdit from "./pages/freebroad-edit/FreeBroadEdit";
+import LivingLabEdit from "./pages/living-lab-edit/LivingLabEdit";
+import FreeBroadDetail from "./pages/freebroad-detail/FreeBroadDetail";
+import FreeBroadCreateUser from "./pages/freebroad-create-user/FreeBroadCreateUser";
 function App() {
   return (
     <div>
@@ -40,6 +43,11 @@ function App() {
           <Route path="/facility" element={<FacilityPage />}></Route>
           <Route path="/living-lab" element={<LivingLabPage />}></Route>
           <Route path="/living-lab/:id" element={<LivingLabDetail />}></Route>
+          <Route
+            path="/living-lab/edit/:id"
+            element={<LivingLabEdit />}
+          ></Route>
+          <Route path="/living-lab/create" element={<LivingLabEdit />}></Route>
           <Route path="/content" element={<ContentPage />}></Route>
           <Route path="/content/edit/:id" element={<ContentEdit />}></Route>
           <Route path="/content/create" element={<ContentEdit />}></Route>
@@ -48,8 +56,16 @@ function App() {
           <Route path="/campaign/edit/:id" element={<CampaignEdit />}></Route>
           <Route path="/campaign/create" element={<CampaignEdit />}></Route>
           <Route path="/freeboard" element={<Freebroad />}></Route>
+          <Route
+            path="/freebroad/detail/:id"
+            element={<FreeBroadDetail />}
+          ></Route>
           <Route path="/freebroad/edit/:id" element={<FreeBroadEdit />}></Route>
-          <Route path="/freeboard/create" element={<FreeBroadEdit />}></Route>
+          <Route path="/freebroad/create" element={<FreeBroadEdit />}></Route>
+          <Route
+            path="/freebroad/create_user"
+            element={<FreeBroadCreateUser />}
+          ></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/register" element={<Register />}></Route>
         </Route>

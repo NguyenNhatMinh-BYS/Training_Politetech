@@ -1,27 +1,30 @@
+import React from "react";
+
 import { useNavigate } from "react-router-dom";
 import Nav from "@/component/Navigate/Nav";
 import Footer from "@/component/Footter/Footer";
-import FreeBroadQuill from "./FreeBroadQuill";
+import LivingLabQuill from "./LivingLabQuill";
 import { Controller, useForm } from "react-hook-form";
 import * as yub from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { postNotice, putNotice } from "@/services/apiNotice";
+
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import { noticeDetail } from "@/services/apiNotice";
+
 import {
   freeBoardDetail,
   postFreeBoard,
   putFreeBoard,
 } from "@/services/apiFreeBroad";
+import { livingLabDetail, postLivingLab, putLivingLab } from "@/services/apiLivingLab";
 interface Title {
   title: string;
 }
 const schema = yub.object().shape({
   title: yub.string().required("입력하세요"),
 });
-const FreeBroadEdit = () => {
+const LivingLabEdit = () => {
   const { infor } = useLocation().state;
   const [contentt, setContent] = useState("");
   const navigate = useNavigate();
@@ -44,7 +47,9 @@ const FreeBroadEdit = () => {
     if (infor !== "") {
       (async () => {
         try {
-          const response = await freeBoardDetail({ id: infor.toString() });
+          const response = await livingLabDetail({ id: infor.toString() });
+          console.log(response);
+
           setContent(response.data.data.content);
           setValue("title", response.data.data.title);
         } catch (e) {
@@ -57,7 +62,7 @@ const FreeBroadEdit = () => {
   const createNotice = (data: Title, token: string) => {
     try {
       (async () => {
-        await postFreeBoard(
+        await postLivingLab(
           {
             title: data.title,
             content: contentt,
@@ -74,18 +79,20 @@ const FreeBroadEdit = () => {
 
   const onSubmit = (data: Title) => {
     const token = localStorage.getItem("token") || "";
+    console.log(data.title);
+
     if (infor === "") createNotice(data, token);
     else {
       try {
         (async () => {
-          const response = await putFreeBoard(
+          const response = await putLivingLab(
             {
+              id: infor[0],
               title: data.title,
               content: contentt,
             },
 
-            token,
-            infor[0]
+            token
           );
           console.log(response);
         })();
@@ -136,7 +143,7 @@ const FreeBroadEdit = () => {
             </div>
 
             <div className="mt-[40px]">
-              <FreeBroadQuill
+              <LivingLabQuill
                 content={contentt}
                 handleChangeContent={handleChangeContent}
               />
@@ -163,4 +170,4 @@ const FreeBroadEdit = () => {
   );
 };
 
-export default FreeBroadEdit;
+export default LivingLabEdit;

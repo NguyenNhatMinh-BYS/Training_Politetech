@@ -1,17 +1,17 @@
 import React, { useEffect, useRef } from "react";
 interface NoticeError {
-  handleAcceptDelete:()=>void
+  handleAcceptDelete: () => void;
   handleCloseNoticeEdit: () => void;
   isDeleted: boolean;
-  
-  sizeCheckItem: number;
+
+  sizeCheckItem?: number;
 }
 const NoticeTitle: React.FC<NoticeError> = ({
   handleCloseNoticeEdit,
   isDeleted,
-  
+
   sizeCheckItem,
-  handleAcceptDelete
+  handleAcceptDelete,
 }) => {
   const show = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -29,7 +29,9 @@ const NoticeTitle: React.FC<NoticeError> = ({
         ></i>
         <div className="grow-[9] flex items-center justify-center mx-[20px] text-center font-bold">
           {isDeleted
-            ? `${sizeCheckItem} 건의 게시글을 삭제 하시겠습니까?`
+            ? `${
+                sizeCheckItem ? sizeCheckItem : ""
+              } 건의 게시글을 삭제 하시겠습니까?`
             : "한 번에 하나의 게시글만 수정가능합니다. 하나의 게시글만 선택해주세요."}
         </div>
         <div className="grow-[1] flex items-center justify-center  w-full text-center">
@@ -46,7 +48,7 @@ const NoticeTitle: React.FC<NoticeError> = ({
           <p
             className="bg-gradient-to-r from-blue-700 to-blue-400 text-white  h-full flex justify-center items-center"
             style={isDeleted ? { width: "50%" } : { width: "100%" }}
-            onClick={isDeleted?handleAcceptDelete:handleCloseNoticeEdit}
+            onClick={isDeleted ? handleAcceptDelete : handleCloseNoticeEdit}
           >
             확인
           </p>

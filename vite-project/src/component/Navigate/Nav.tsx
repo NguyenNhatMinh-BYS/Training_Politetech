@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
+import "./style.css";
 import { setToken } from "@/features/DataUserSlice/authSlice";
 import { useDispatch } from "react-redux";
 interface Prop {
@@ -20,8 +20,9 @@ const Nav = ({ colorText }: Prop) => {
   const dispath = useDispatch();
   const shadow = useRef("");
   const [role, setRole] = useState("");
-  const [bg, setBg] = useState("bg-white");
+  const [bg, setBg] = useState("");
   const [textNav, setTextNav] = useState(colorText);
+  const active = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const getLocalstorage = localStorage.getItem("dataUser");
 
@@ -75,6 +76,10 @@ const Nav = ({ colorText }: Prop) => {
           }
         }
         navIconOpen.current?.classList.remove("max-[1279px]:text-white");
+      }
+
+      if (scrollY === 0) {
+        scrollYElement.current?.classList.remove(...classesToAdd.split(" "));
       }
       if (scrollY === 0 && colorText !== "text-black") {
         if (dataUser && dataUser.role === "Normal") {
@@ -149,6 +154,9 @@ const Nav = ({ colorText }: Prop) => {
     dispath(setToken({ userToken: null }));
     localStorage.clear();
     handleClickCloseNav();
+  };
+  const handleClickList = () => {
+    active.current?.classList.add(..."font-bold text-white".split(" "));
   };
   return (
     <div>
@@ -248,19 +256,61 @@ const Nav = ({ colorText }: Prop) => {
                 {" "}
                 <span className="m-2.5 text-xl sm:mt-4">콘텐츠</span>
               </NavLink>
-              <NavLink
-                onClick={handleClickCloseNav}
-                to="/living-lab"
-                className={({ isActive }) =>
-                  isActive && role === "Admin"
-                    ? "text-white font-semibold sm:mt-9"
-                    : isActive
-                    ? "text-main font-semibold sm:mt-9"
-                    : "sm:mt-9"
-                }
-              >
-                <span className="m-2.5 text-xl sm:mt-4">리빙랩</span>
-              </NavLink>
+              {role === "Admin" ? (
+                <div className="inline-block relative  parent">
+                  <span className="m-2.5 text-xl sm:mt-4" ref={active}>
+                    리빙랩
+                  </span>
+                  <div className="   absolute w-[160px] h-auto bg-white text-black border-[1px] border-[black] left-0 right-0  child  ">
+                    <NavLink
+                      to="/living-lab"
+                      className={({ isActive }) =>
+                        isActive ? "font-semibold bg-[#9e9e9e94]" : ""
+                      }
+                    >
+                      <div
+                        className="py-[10px] px-[18px] text-xl  text-center hover:bg-[#9e9e9e94]"
+                        onClick={(e) => {
+                          handleClickList();
+                          // e.stopPropagation();
+                        }}
+                      >
+                        게시글 관리
+                      </div>
+                    </NavLink>
+                    <NavLink
+                      to="/manager-user"
+                      className={({ isActive }) =>
+                        isActive ? "font-semibold bg-[#9e9e9e94]" : ""
+                      }
+                    >
+                      <div
+                        className="py-[10px] px-[18px] text-xl  text-center hover:bg-[#9e9e9e94] "
+                        onClick={(e) => {
+                          handleClickList();
+                          // e.stopPropagation();
+                        }}
+                      >
+                        회원 관리
+                      </div>
+                    </NavLink>
+                  </div>
+                </div>
+              ) : (
+                <NavLink
+                  onClick={handleClickCloseNav}
+                  to="/living-lab"
+                  className={({ isActive }) =>
+                    isActive && role === "Admin"
+                      ? "text-white font-semibold sm:mt-9"
+                      : isActive
+                      ? "text-main font-semibold sm:mt-9"
+                      : "sm:mt-9"
+                  }
+                >
+                  <span className="m-2.5 text-xl sm:mt-4">캠페인</span>
+                </NavLink>
+              )}
               <NavLink
                 onClick={handleClickCloseNav}
                 to="/campaign"
@@ -272,8 +322,10 @@ const Nav = ({ colorText }: Prop) => {
                     : "sm:mt-9"
                 }
               >
+                {" "}
                 <span className="m-2.5 text-xl sm:mt-4">캠페인</span>
               </NavLink>
+
               <NavLink
                 onClick={handleClickCloseNav}
                 to="/freeboard"
@@ -315,25 +367,31 @@ const Nav = ({ colorText }: Prop) => {
             ""
           )}
 
-          <div onClick={handleClickOpenNav}>
-            <i
-              className={`bi bi-list  xl:hidden max-[1279px]:block max-[1279px]:text-4xl max-[1279px]:${colorText}`}
-              ref={navIconOpen}
-            ></i>
-          </div>
-          <div
-            ref={navIconClose}
-            onClick={handleClickCloseNav}
-            className="max-[1279px]:flex max-[1279px]:justify-between max-[1279px]:w-full max-[1279px]:transform max-[1279px]:transition-all max-[1279px]:duration-100 max-[1279px]:linear absolute max-[1279px]:opacity-0 max-[1279px]:pointer-events-none z-20 right-20 xl:hidden"
-          >
-            {" "}
-            <img
-              src={logo}
-              alt="logo"
-              className="max-[1279px]:relative min-[640px]:left-44  w-56 cursor-pointer min-[180px]:left-32"
-            />
-            <i className="bi bi-x-lg  max-[1279px]:text-3xl max-[1279px]:text-nav "></i>
-          </div>
+          {role !== "Normal" ? (
+            <div>
+              <div onClick={handleClickOpenNav}>
+                <i
+                  className={`bi bi-list  xl:hidden max-[1279px]:block max-[1279px]:text-4xl max-[1279px]:${colorText}`}
+                  ref={navIconOpen}
+                ></i>
+              </div>
+              <div
+                ref={navIconClose}
+                onClick={handleClickCloseNav}
+                className="max-[1279px]:flex max-[1279px]:justify-between max-[1279px]:w-full max-[1279px]:transform max-[1279px]:transition-all max-[1279px]:duration-100 max-[1279px]:linear absolute max-[1279px]:opacity-0 max-[1279px]:pointer-events-none z-20 right-20 xl:hidden"
+              >
+                {" "}
+                <img
+                  src={logo}
+                  alt="logo"
+                  className="max-[1279px]:relative min-[640px]:left-44  w-56 cursor-pointer min-[180px]:left-32"
+                />
+                <i className="bi bi-x-lg  max-[1279px]:text-3xl max-[1279px]:text-nav "></i>
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
         </header>
       </div>
       <div>

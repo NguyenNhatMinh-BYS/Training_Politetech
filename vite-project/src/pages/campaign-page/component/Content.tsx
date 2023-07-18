@@ -27,38 +27,38 @@ const Content = () => {
     clickButton.current?.classList.toggle(addClass);
   };
   const setData = async () => {
-    const response = await campaign({
-      page: colDataCurrent,
-      page_size: pageSize,
-      search_value: inputSearch,
-    });
-    let data = response.data.data?.list;
-
-    const totalData = response.data.data?.total;
-
-    setListData(data);
-    for (
-      let i = 12 * Number(colDataCurrent), x = 0;
-      i <= 12 * Number(colDataCurrent) + 12 && x < 12;
-      i++, x++
-    ) {
-      if (data[x]) {
-        data[x].index = totalData - i;
-      } else {
-        break;
-      }
-    }
-    setTotalListData(Array(Math.ceil(totalData / 10)).fill(""));
-    setMaxMinListData(["0", (Math.ceil(totalData / 10) - 1).toString()]);
-    // dispath(activeLoading(false));
-    dispath(activeLoading(false));
-  };
-  useEffect(() => {
     try {
-      setData();
+      const response = await campaign({
+        page: colDataCurrent,
+        page_size: pageSize,
+        search_value: inputSearch,
+      });
+      let data = response.data.data?.list;
+
+      const totalData = response.data.data?.total;
+
+      setListData(data);
+      for (
+        let i = 12 * Number(colDataCurrent), x = 0;
+        i <= 12 * Number(colDataCurrent) + 12 && x < 12;
+        i++, x++
+      ) {
+        if (data[x]) {
+          data[x].index = totalData - i;
+        } else {
+          break;
+        }
+      }
+      setTotalListData(Array(Math.ceil(totalData / 10)).fill(""));
+      setMaxMinListData(["0", (Math.ceil(totalData / 10) - 1).toString()]);
     } catch (e) {
       console.log(e);
     }
+  };
+  useEffect(() => {
+    dispath(activeLoading(true));
+    setData();
+    dispath(activeLoading(false));
   }, [colDataCurrent]);
   //css input
   const autoResizeInput = (input: HTMLInputElement) => {

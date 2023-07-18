@@ -1,4 +1,4 @@
-import { deleteFreeBoardPost, validateAuthor } from "@/services/apiFreeBroad";
+import { deleteFreeBoardPost, validateAuthor } from "@/services/apiFreeBoard";
 import { useState } from "react";
 import NoticeTitle from "../announcement-page/Component/NoticeTitle";
 import { toast } from "react-toastify";

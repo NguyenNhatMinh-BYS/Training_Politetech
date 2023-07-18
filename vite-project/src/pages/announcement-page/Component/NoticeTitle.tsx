@@ -3,13 +3,13 @@ interface NoticeError {
   handleAcceptDelete: () => void;
   handleCloseNoticeEdit: () => void;
   isDeleted: boolean;
-
+  itemDeleted?: string;
   sizeCheckItem?: number;
 }
 const NoticeTitle: React.FC<NoticeError> = ({
   handleCloseNoticeEdit,
   isDeleted,
-
+  itemDeleted,
   sizeCheckItem,
   handleAcceptDelete,
 }) => {
@@ -18,7 +18,7 @@ const NoticeTitle: React.FC<NoticeError> = ({
     show.current?.classList.remove(..."mt-[400px] opacity-0".split(" "));
   }, []);
   return (
-    <div className="fixed w-screen h-screen bg-[#9f9f9f70] top-0 z-[100] flex justify-center items-center">
+    <div className="fixed w-screen h-screen bg-[#9f9f9f70] top-0 z-[40] flex justify-center items-center">
       <div
         ref={show}
         className="bg-white h-[300px] flex flex-col justify-between w-[400px] relative mt-[400px] opacity-0 transition-all duration-2000 ease-in-out"
@@ -30,7 +30,7 @@ const NoticeTitle: React.FC<NoticeError> = ({
         <div className="grow-[9] flex items-center justify-center mx-[20px] text-center font-bold">
           {isDeleted
             ? `${
-                sizeCheckItem ? sizeCheckItem : ""
+                sizeCheckItem ? sizeCheckItem : itemDeleted ? itemDeleted : ""
               } 건의 게시글을 삭제 하시겠습니까?`
             : "한 번에 하나의 게시글만 수정가능합니다. 하나의 게시글만 선택해주세요."}
         </div>

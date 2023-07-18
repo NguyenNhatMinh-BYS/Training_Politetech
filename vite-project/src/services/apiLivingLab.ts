@@ -26,6 +26,8 @@ export const livingLabDetail = (data: livingLabeApi) => {
     y = "";
   if (data.search_by) x = `?search_by=${data.search_by}`;
   if (data.search_value) y = `&search_value=${data.search_value}`;
+  console.log(x, y);
+
   return instance.get(`/living-lab/${data.id}${x}${y}`);
 };
 

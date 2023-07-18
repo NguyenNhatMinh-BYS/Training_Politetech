@@ -8,6 +8,7 @@ export type dataUser = {
   token?: string;
   updated_at: string;
   username: string;
+  index?: string;
 };
 export type User = {
   username: string;
@@ -17,7 +18,7 @@ export interface FormValueRegister {
   full_name: string;
   username: string;
   password: string;
-  confirmPassword: string;
+  confirmPassword?: string;
   phone_number: string;
   email: string;
 }
@@ -102,4 +103,22 @@ export interface UserPostFreeBoard {
 export interface ValidateAuthor {
   id: string;
   password: string;
+}
+export interface ManageUser extends Notice {}
+export type FacilityData = {
+  address?: string;
+  breadth?: string;
+  depart?: string;
+  district?: string;
+  img?: string;
+  isserviced?: boolean;
+  kinds?: string;
+  length?: string;
+  pollution?: string;
+  spotname?: string;
+};
+
+export enum CommandType {
+  spot = "spot",
+  using = "using",
 }

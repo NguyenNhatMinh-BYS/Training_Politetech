@@ -118,8 +118,8 @@ const Content = () => {
     dispath(activeLoading(true));
     navigate(generatePath(`/announcement/:id`, { id }), {
       state: {
-        search_by: inputSearchBy,
-        search_value: searchValue,
+        search_by: inputSearchBy.current,
+        search_value: searchValue.current,
       },
     });
   };
@@ -183,6 +183,7 @@ const Content = () => {
         getData={getData}
         listItem={listItem}
         clickButton={clickButton}
+        manageUser={false}
       />
       {/* list contents */}
       <div className="w-3/4 ">

@@ -19,13 +19,19 @@ const LivingLabDetail = () => {
   const dispath = useDispatch();
   const [data, setData] = useState<DataNotice>();
   const [id, setId] = useState(param.id);
+  console.log(param);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
   const getDataAnnouncementDetail = async () => {
     dispath(activeLoading(true));
+    console.log(12);
+
     try {
       const response = await livingLabDetail({
-        search_by: state.search_by,
-        search_value: state.search_value,
+        search_by: state ? state.search_by : "",
+        search_value: state ? state.search_value : "",
         id: id,
       });
       setData(response.data.data);

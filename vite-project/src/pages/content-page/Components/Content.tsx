@@ -61,35 +61,37 @@ const Content = () => {
     checkHeight?.classList.add(..."line-clamp-4 h-[110px]".split(" "));
   };
   const getDataContent = async () => {
-    const response = await content({ page: colDataCurrent, page_size: "10" });
-
-    setDataPageCurrent(response.data.data.list);
-    let data = response.data.data?.list;
-
-    const totalData = response.data.data?.total;
-
-    for (
-      let i = 10 * Number(colDataCurrent), x = 0;
-      i <= 10 * Number(colDataCurrent) + 10 && x < 10;
-      i++, x++
-    ) {
-      if (data[x]) {
-        data[x].index = totalData - i;
-      } else {
-        break;
-      }
-    }
-    setTotalListData(Array(Math.ceil(totalData / 10)).fill(""));
-    setMaxMinListData(["0", (Math.ceil(totalData / 10) - 1).toString()]);
-
-    return data;
-  };
-  useEffect(() => {
     try {
-      getDataContent();
+      const response = await content({ page: colDataCurrent, page_size: "10" });
+
+      setDataPageCurrent(response.data.data.list);
+      let data = response.data.data?.list;
+
+      const totalData = response.data.data?.total;
+
+      for (
+        let i = 10 * Number(colDataCurrent), x = 0;
+        i <= 10 * Number(colDataCurrent) + 10 && x < 10;
+        i++, x++
+      ) {
+        if (data[x]) {
+          data[x].index = totalData - i;
+        } else {
+          break;
+        }
+      }
+      setTotalListData(Array(Math.ceil(totalData / 10)).fill(""));
+      setMaxMinListData(["0", (Math.ceil(totalData / 10) - 1).toString()]);
+
+      return data;
     } catch (e) {
       console.log(e);
     }
+  };
+  useEffect(() => {
+    dispath(activeLoading(true));
+    getDataContent();
+
     dispath(activeLoading(false));
   }, [colDataCurrent]);
   return (

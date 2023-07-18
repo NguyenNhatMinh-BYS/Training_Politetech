@@ -1,5 +1,3 @@
-import React from "react";
-
 import { useNavigate } from "react-router-dom";
 import Nav from "@/component/Navigate/Nav";
 import Footer from "@/component/Footter/Footer";
@@ -13,11 +11,10 @@ import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 
 import {
-  freeBoardDetail,
-  postFreeBoard,
-  putFreeBoard,
-} from "@/services/apiFreeBroad";
-import { livingLabDetail, postLivingLab, putLivingLab } from "@/services/apiLivingLab";
+  livingLabDetail,
+  postLivingLab,
+  putLivingLab,
+} from "@/services/apiLivingLab";
 interface Title {
   title: string;
 }
@@ -107,7 +104,9 @@ const LivingLabEdit = () => {
   const handleChangeContent = (value: string) => {
     setContent(value);
   };
-
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
   return (
     <div className=" pt-[100px] ">
       <Nav colorText="text-black" />

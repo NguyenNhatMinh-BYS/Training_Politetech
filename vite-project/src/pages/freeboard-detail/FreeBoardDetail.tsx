@@ -11,9 +11,9 @@ import { useDispatch } from "react-redux";
 import { activeLoading } from "@/features/loadingSlice/loadingSlice";
 import { useLocation } from "react-router-dom";
 import Loading from "../loading/Loading";
-import { freeBoardDetail } from "@/services/apiFreeBroad";
+import { freeBoardDetail } from "@/services/apiFreeBoard";
 import ConfirmPassword from "./ConfirmPassword";
-const FreeBroadDetail = () => {
+const FreeBoardDetail = () => {
   const [isDeleted, setIsDeleted] = useState(false);
   const param = useParams();
   const navigate = useNavigate();
@@ -22,13 +22,15 @@ const FreeBroadDetail = () => {
   const [data, setData] = useState<DataNotice>();
   const [id, setId] = useState(param.id);
   const [showInputPassword, setShowInputPassword] = useState(false);
-  
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
   const getDataAnnouncementDetail = async () => {
     dispath(activeLoading(true));
     try {
       const response = await freeBoardDetail({
-        search_by: state.search_by,
-        search_value: state.search_value,
+        search_by: state ? state.search_by : "",
+        search_value: state ? state.search_value : "",
         id: id,
       });
       setData(response.data.data);
@@ -43,17 +45,19 @@ const FreeBroadDetail = () => {
   const CloseConfirmPW = () => {
     setShowInputPassword(false);
   };
-  const editIteam = (password:string)=>{
+  const editIteam = (password: string) => {
     setShowInputPassword(false);
-    navigate(`/freebroad/edit/${id}`,{state:{infor:id,password:password}});
-  }
+    navigate(`/freeboard/edit/${id}`, {
+      state: { infor: id, password: password },
+    });
+  };
   return (
     <div className="h-screen relative">
       {showInputPassword ? (
         <ConfirmPassword
           CloseConfirmPW={CloseConfirmPW}
           isDeleted={isDeleted}
-          idItem={id||""}
+          idItem={id || ""}
           editIteam={editIteam}
         />
       ) : (
@@ -163,4 +167,4 @@ const FreeBroadDetail = () => {
   );
 };
 
-export default FreeBroadDetail;
+export default FreeBoardDetail;

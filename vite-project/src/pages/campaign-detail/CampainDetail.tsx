@@ -5,11 +5,14 @@ import Nav from "@/component/Navigate/Nav";
 import Footer from "@/component/Footter/Footer";
 import { campaigngApi } from "@/model/Auth.model";
 import "@/index.css";
+
 const CampainDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState<campaigngApi>();
+
   useEffect(() => {
+    window.scrollTo({ top: 0 });
     try {
       (async () => {
         const response = await campaignDetail({ id: id });

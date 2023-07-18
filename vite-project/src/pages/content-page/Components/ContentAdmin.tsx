@@ -154,6 +154,7 @@ const ContentAdmin = () => {
         listItem={listItem}
         clickButton={clickButton}
         getData={getData}
+        manageUser={false}
       />
       <div className="w-3/4 relative">
         <table className="w-full">

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Nav from "@/component/Navigate/Nav";
 import Footer from "@/component/Footter/Footer";
-import FreeBroadQuill from "./FreeBroadQuill";
+import FreeBoardQuill from "./FreeBoardQuill";
 import { Controller, useForm } from "react-hook-form";
 import * as yub from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -11,18 +11,18 @@ import { toast } from "react-toastify";
 import { useEffect, useRef, useState } from "react";
 
 import {
-  editFreeBroad,
+  editFreeBoard,
   freeBoardDetail,
   postFreeBoard,
   putFreeBoard,
-} from "@/services/apiFreeBroad";
+} from "@/services/apiFreeBoard";
 interface Title {
   title: string;
 }
 const schema = yub.object().shape({
   title: yub.string().required("입력하세요"),
 });
-const FreeBroadEdit = () => {
+const FreeBoardEdit = () => {
   const { infor, password } = useLocation().state;
   const [contentt, setContent] = useState("");
   const navigate = useNavigate();
@@ -74,11 +74,13 @@ const FreeBroadEdit = () => {
       console.log(e);
     }
   };
-
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
   const onSubmit = async (data: Title) => {
     if (password) {
       try {
-        const response = await editFreeBroad(infor, {
+        const response = await editFreeBoard(infor, {
           password: password,
           title: data.title,
           content: contentt,
@@ -181,7 +183,7 @@ const FreeBroadEdit = () => {
             </div>
 
             <div className="mt-[40px]">
-              <FreeBroadQuill
+              <FreeBoardQuill
                 content={contentt}
                 handleChangeContent={handleChangeContent}
               />
@@ -208,4 +210,4 @@ const FreeBroadEdit = () => {
   );
 };
 
-export default FreeBroadEdit;
+export default FreeBoardEdit;

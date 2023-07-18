@@ -1,12 +1,5 @@
 import instance from "./api";
-import {
-  DataNotice,
-  FreeBoard,
-  Notice,
-  PostNotice,
-  UserPostFreeBoard,
-  ValidateAuthor,
-} from "@/model/Auth.model";
+import { FreeBoard, Notice, UserPostFreeBoard } from "@/model/Auth.model";
 const Config = (token: string) => {
   return {
     headers: {
@@ -27,6 +20,7 @@ export const freeBoard = (data: Notice) => {
 };
 
 export const freeBoardDetail = (data: Notice) => {
+  
   let x = "",
     y = "";
   if (data.search_by) {
@@ -71,6 +65,6 @@ export const deleteFreeBoardPost = (id: string, password: string) => {
     data: { password: password },
   });
 };
-export const  editFreeBroad = (id:string,data:UserPostFreeBoard)=>{
-  return instance.put(`/free-board/${id}`,data);
-}
+export const editFreeBoard = (id: string, data: UserPostFreeBoard) => {
+  return instance.put(`/free-board/${id}`, data);
+};

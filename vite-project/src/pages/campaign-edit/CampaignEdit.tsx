@@ -68,7 +68,9 @@ const CampaignEdit = () => {
     }
     dispatch(activeLoading(false));
   }, []);
-
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
   const createNotice = (data: Title, token: string) => {
     try {
       (async () => {

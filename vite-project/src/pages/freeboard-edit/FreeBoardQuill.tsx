@@ -7,7 +7,7 @@ interface ChangeContent {
   handleChangeContent: (value: string) => void;
   content: string;
 }
-const FreeBroadQuill: React.FC<ChangeContent> = ({
+const FreeBoardQuill: React.FC<ChangeContent> = ({
   handleChangeContent,
   content,
 }) => {
@@ -43,4 +43,4 @@ const FreeBroadQuill: React.FC<ChangeContent> = ({
   );
 };
 
-export default FreeBroadQuill;
+export default FreeBoardQuill;

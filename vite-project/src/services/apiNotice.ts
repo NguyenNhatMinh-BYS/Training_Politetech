@@ -8,8 +8,6 @@ const Config = (token: string) => {
   };
 };
 export const notice = (data: Notice) => {
-  console.log(data);
-
   let x = "",
     y = "",
     z = "";
@@ -22,8 +20,6 @@ export const notice = (data: Notice) => {
 };
 
 export const noticeDetail = (data: Notice) => {
-  console.log(data);
-
   let x = "",
     y = "";
   if (data.search_by) {

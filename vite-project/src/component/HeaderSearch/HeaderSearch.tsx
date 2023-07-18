@@ -4,15 +4,19 @@ interface Props {
   listItem?: React.RefObject<HTMLDivElement>;
   clickButton?: React.RefObject<HTMLDivElement>;
   searchAuthor?: Boolean;
+  manageUser?: Boolean;
 }
 const HeaderSearch: React.FC<Props> = ({
   getData,
   listItem,
   clickButton,
   searchAuthor,
+  manageUser,
 }) => {
   const [inputSearch, setInputSearch] = useState("");
-  const [placeholder, setPlaceholder] = useState("제목");
+  const [placeholder, setPlaceholder] = useState(
+    manageUser === false ? "제목" : "이름"
+  );
 
   const handleClickSelect = () => {
     listItem && listItem.current?.classList.toggle("hidden");
@@ -31,8 +35,12 @@ const HeaderSearch: React.FC<Props> = ({
     }
   };
   const handleClickSearch = () => {
+    console.log(123);
+
     if (placeholder === "제목") getData("title", inputSearch);
-    else getData("author", inputSearch);
+    else if (placeholder === "작성자") getData("author", inputSearch);
+    else if (placeholder === "이름") getData("name", inputSearch);
+    else getData("email", inputSearch);
   };
   return (
     <div className="max-[1024px]:flex-col max-[1024px]:items-start my-[60px] flex justify-between  w-3/4  items-center">
@@ -68,27 +76,53 @@ const HeaderSearch: React.FC<Props> = ({
             className="hidden z-30 absolute bottom-[-40px] left-0 right-0 bg-white shadow-[0_0_5px_2px_rgba(0,0,0,0.1)] rounded-md"
             style={searchAuthor ? { bottom: "-80px" } : { bottom: "-40px" }}
           >
-            <p
-              className="p-[6px] "
-              onClick={() => {
-                setPlaceholder("제목");
-                clickButton &&
-                  clickButton.current?.classList.remove("border-[#0075DC]");
-              }}
-            >
-              제목
-            </p>
-            {searchAuthor ? (
+            {manageUser === false ? (
               <p
-                className="p-[6px]"
+                className="p-[6px] "
                 onClick={() => {
-                  setPlaceholder("작성자");
+                  setPlaceholder("제목");
                   clickButton &&
                     clickButton.current?.classList.remove("border-[#0075DC]");
                 }}
               >
-                작성자
+                제목
               </p>
+            ) : (
+              <p
+                className="p-[6px] "
+                onClick={() => {
+                  setPlaceholder("이름");
+                  clickButton &&
+                    clickButton.current?.classList.remove("border-[#0075DC]");
+                }}
+              >
+                이름
+              </p>
+            )}
+            {searchAuthor ? (
+              manageUser === false ? (
+                <p
+                  className="p-[6px]"
+                  onClick={() => {
+                    setPlaceholder("작성자");
+                    clickButton &&
+                      clickButton.current?.classList.remove("border-[#0075DC]");
+                  }}
+                >
+                  작성자
+                </p>
+              ) : (
+                <p
+                  className="p-[6px]"
+                  onClick={() => {
+                    setPlaceholder("이메일");
+                    clickButton &&
+                      clickButton.current?.classList.remove("border-[#0075DC]");
+                  }}
+                >
+                  이메일
+                </p>
+              )
             ) : (
               ""
             )}

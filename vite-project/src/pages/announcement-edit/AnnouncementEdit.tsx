@@ -95,7 +95,9 @@ const AnnouncementEdit = () => {
   const handleChangeContent = (value: string) => {
     setContent(value);
   };
-
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
   return (
     <div className=" pt-[100px] ">
       <Nav colorText="text-black" />

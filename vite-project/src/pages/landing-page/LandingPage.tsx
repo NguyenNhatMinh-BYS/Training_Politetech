@@ -7,12 +7,7 @@ import Loading from "../loading/Loading";
 
 const LandingPage = () => {
   useEffect(() => {
-    window.scrollTo(0, 0);
-    window.addEventListener("scroll", () => {
-      if (window.scrollY === 0) {
-        window.scrollBy({ top: 0, behavior: "smooth" });
-      }
-    });
+    window.scrollTo({ top: 0 });
   }, []);
 
   return (

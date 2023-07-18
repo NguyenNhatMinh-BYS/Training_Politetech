@@ -6,9 +6,15 @@ import logo from "assets/img/logo@2x.png";
 import group513 from "assets/img/group513.png";
 import group526 from "assets/img/group526.png";
 import { useRef } from "react";
+import useAuth from "@/hooks/useAuth";
 const Introduce = () => {
+  const { auth } = useAuth();
+  console.log(auth);
   const headerSmooth = useRef<HTMLDivElement>(null);
   const mainSmooth = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
   useEffect(() => {
     function onScroll() {
       if (window.scrollY >= 220) {

@@ -1,6 +1,6 @@
 import HeaderSearch from "@/component/HeaderSearch/HeaderSearch";
 import { useRef, useEffect, useState } from "react";
-import { content, delContent } from "@/services/apiContent";
+
 import { DataNotice } from "@/model/Auth.model";
 import dayjs from "dayjs";
 import Pagination from "@/component/Pagination/Pagination";
@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Loading from "@/pages/loading/Loading";
 import { activeLoading } from "@/features/loadingSlice/loadingSlice";
-import { delFreeBoard, freeBoard } from "@/services/apiFreeBroad";
+import { delFreeBoard, freeBoard } from "@/services/apiFreeBoard";
 const ContentAdmin = () => {
   const listItem = useRef<HTMLDivElement>(null);
   const clickButton = useRef<HTMLDivElement>(null);
@@ -62,7 +62,7 @@ const ContentAdmin = () => {
   useEffect(() => {
     const dataUser = localStorage.getItem("dataUser");
     if (dataUser) {
-      setIsAdmin(JSON.parse(dataUser).role);
+      if (JSON.parse(dataUser).role === "Admin") setIsAdmin(true);
     }
     try {
       (async () => {
@@ -79,7 +79,7 @@ const ContentAdmin = () => {
   };
   const handleClickEdit = () => {
     if (itemChecked.current.length === 1) {
-      navigate(`/freebroad/edit/${itemChecked.current}`, {
+      navigate(`/freeboard/edit/${itemChecked.current}`, {
         state: { infor: itemChecked.current },
       });
     } else if (itemChecked.current.length > 1) {
@@ -110,11 +110,15 @@ const ContentAdmin = () => {
     }
   };
   const handleCreate = () => {
-    
-
-    navigate(`/freebroad/create_user`, {
-      state: { infor: "" },
-    });
+    if (!isAdmin) {
+      navigate(`/freeboard/create_user`, {
+        state: { infor: "" },
+      });
+    } else {
+      navigate(`/freeboard/create`, {
+        state: { infor: "" },
+      });
+    }
   };
   const handleChangeCheckBox = (
     item: string,
@@ -131,7 +135,7 @@ const ContentAdmin = () => {
     }
   };
   const handleDetail = (id: string) => {
-    navigate(`/freebroad/detail/${id}`, {
+    navigate(`/freeboard/${id}`, {
       state: {
         id: id,
         search_by: inputSearchBy.current,
@@ -164,6 +168,7 @@ const ContentAdmin = () => {
         listItem={listItem}
         clickButton={clickButton}
         getData={getData}
+        manageUser={false}
       />
       <div className="w-3/4 relative">
         <table className="w-full">

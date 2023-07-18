@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Nav from "@/component/Navigate/Nav";
 import Footer from "@/component/Footter/Footer";
-import FreeBroadQuill from "../freebroad-edit/FreeBroadQuill";
+import FreeBoardQuill from "../freeboard-edit/FreeBoardQuill";
 import { Controller, useForm } from "react-hook-form";
 import * as yub from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -15,20 +15,21 @@ import {
   postFreeBoard,
   postFreeBoardUser,
   putFreeBoard,
-} from "@/services/apiFreeBroad";
+} from "@/services/apiFreeBoard";
 import { UserPostFreeBoard } from "@/model/Auth.model";
-import ConfirmPassword from "../freebroad-detail/ConfirmPassword";
 
 const schema = yub.object().shape({
   title: yub.string().required("입력하세요"),
   password: yub.string().required("입력하세요"),
   author: yub.string().required("입력하세요"),
 });
-const FreeBroadCreateUser = () => {
+const FreeBoardCreateUser = () => {
   const { infor } = useLocation().state;
   const [contentt, setContent] = useState("");
   const navigate = useNavigate();
-
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
   const {
     register,
     handleSubmit,
@@ -82,7 +83,6 @@ const FreeBroadCreateUser = () => {
 
   return (
     <div className=" pt-[100px] ">
-      
       <Nav colorText="text-black" />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full flex justify-center ">
@@ -164,7 +164,7 @@ const FreeBroadCreateUser = () => {
             </div>
 
             <div className="mt-[40px]">
-              <FreeBroadQuill
+              <FreeBoardQuill
                 content={contentt}
                 handleChangeContent={handleChangeContent}
               />
@@ -191,4 +191,4 @@ const FreeBroadCreateUser = () => {
   );
 };
 
-export default FreeBroadCreateUser;
+export default FreeBoardCreateUser;

@@ -8,12 +8,14 @@ import { useDispatch } from "react-redux";
 import { getDataUser } from "features/DataUserSlice/dataUserSlice";
 import { User } from "model/Auth.model";
 import { setToken } from "features/DataUserSlice/authSlice";
+import useAuth from "@/hooks/useAuth";
 
 const FormLogin = () => {
   const checkBox = useRef<HTMLInputElement>(null);
   const [inputName, setInputName] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const navigate = useNavigate();
+  const { setAuth } = useAuth();
   // const payload = useSelector((state: RootState) => state.dataUser);
   const dispatch = useDispatch();
   //post api
@@ -25,21 +27,23 @@ const FormLogin = () => {
 
       if (response.data?.success) {
         //save token to local storage
-        console.log(response.data.data.user);
+        console.log(response.data.data);
 
         localStorage.setItem("token", response.data.data?.user.token);
         localStorage.setItem(
           "dataUser",
           JSON.stringify(response.data.data?.user)
         );
+        console.log(response.data.data.user.role);
 
+        setAuth(response.data.data.user.role);
         //save tokent redux
         dispatch(
           setToken({
             userToken: response.data.data?.user.token,
           })
         );
-        navigate("/");
+        navigate("/", { replace: true });
       } else {
         toast.error("Not logged in");
       }

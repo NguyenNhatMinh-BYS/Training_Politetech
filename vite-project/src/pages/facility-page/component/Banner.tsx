@@ -3,10 +3,10 @@ import { useEffect, useRef } from "react";
 const Banner = () => {
   const showTitleBanner = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    window.scrollBy({ top: 1 });
+    
     window.addEventListener("scroll", () => {
       if (window.scrollY <= 0) {
-        window.scrollBy({ top: 1 });
+        
       }
     });
     showTitleBanner.current?.classList.remove(

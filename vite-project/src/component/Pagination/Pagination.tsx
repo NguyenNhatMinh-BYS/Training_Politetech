@@ -19,7 +19,7 @@ const Pagination: React.FC<DataPagination> = ({
   ).fill("1");
 
   return (
-    <div className="flex justify-center flex-wrap w-[500px]">
+    <div className="flex justify-center flex-wrap w-[500px] ">
       {firstPage !== page && totalList != 0 ? (
         <>
           <span

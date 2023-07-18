@@ -27,7 +27,7 @@ const ContentList = () => {
       let scrollY = window.scrollY;
       const addClass = "opacity-0 mt-140";
       if (scrollY > 800) {
-        // console.log(scrollY);
+       
         scroller &&
           scroller.current &&
           scroller.current.classList.remove(...addClass.split(" "));
@@ -52,8 +52,8 @@ const ContentList = () => {
         {listCol &&
           listCol.map((item, index: number) => (
             <div key={index} className="lg:w-1/5 mt-8 min-[180px]:w-full ">
-              <ContentDetailHeader title={item.title} />
-              <ChildListContent url={item.url}/>
+              <ContentDetailHeader title={item.title} to={item.url} />
+              <ChildListContent url={item.url} />
             </div>
           ))}
       </div>

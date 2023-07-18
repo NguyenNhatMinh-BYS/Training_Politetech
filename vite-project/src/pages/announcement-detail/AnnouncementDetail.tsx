@@ -36,7 +36,9 @@ const AnnouncementDetail = () => {
   useEffect(() => {
     getDataAnnouncementDetail();
   }, [id]);
-
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
   return (
     <div className="h-screen relative">
       <Loading />

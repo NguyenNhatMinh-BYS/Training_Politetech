@@ -77,10 +77,18 @@ const FormRegister = () => {
       setpolicyConfirmActive(true);
     } else {
       try {
-        await Register({ ...data });
+        await Register({
+          username: data.username,
+          password: data.password,
+          email: data.email,
+          full_name: data.full_name,
+          phone_number: data.phone_number,
+        });
 
         toast.success("Register successfully !");
       } catch (err) {
+        console.log(err);
+
         toast.error("User Conflict !");
       }
     }

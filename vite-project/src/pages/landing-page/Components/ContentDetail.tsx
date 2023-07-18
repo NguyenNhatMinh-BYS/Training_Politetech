@@ -31,24 +31,25 @@ const ContentDetail = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   });
+  const getData = async () => {
+    try {
+      const responsive = await notice({
+        page_size: "4",
+        page: "0",
+
+        search_by: "author",
+      });
+      let data = responsive.data.data?.list;
+      // console.log(responsive.data.data);
+
+      setDataNotice(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   useEffect(() => {
-    (async () => {
-      dispath(activeLoading(true));
-      try {
-        const responsive = await notice({
-          page_size: "4",
-          page: "0",
-
-          search_by: "author",
-        });
-        let data = responsive.data.data?.list;
-        // console.log(responsive.data.data);
-
-        setDataNotice(data);
-      } catch (err) {
-        console.log(err);
-      }
-    })();
+    dispath(activeLoading(true));
+    getData();
     dispath(activeLoading(false));
   }, []);
   return (

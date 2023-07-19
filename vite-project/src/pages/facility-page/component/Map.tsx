@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 
-const Map = ({ updateLocation }: any) => {
+const Map = ({ updateLocation, offFill, handleSelectArea }: any) => {
   const handleClickMap = (id: string) => {
+    handleSelectArea();
     const result = id.split("_")[0];
     console.log(result);
 
@@ -14,7 +15,14 @@ const Map = ({ updateLocation }: any) => {
     });
     active?.classList.add("fill-[#009fe5]");
   };
-
+  useEffect(() => {
+    if (offFill) {
+      const squares = document.querySelectorAll(".mp");
+      squares.forEach((square) => {
+        square.classList.remove("fill-[#009fe5]");
+      });
+    }
+  });
   return (
     <div>
       <svg

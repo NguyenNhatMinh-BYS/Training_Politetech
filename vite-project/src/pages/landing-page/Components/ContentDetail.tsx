@@ -5,16 +5,18 @@ import { notice } from "@/services/apiNotice";
 import { DataNotice } from "model/Auth.model";
 import { useDispatch } from "react-redux";
 import { activeLoading } from "@/features/loadingSlice/loadingSlice";
+import { useNavigate } from "react-router-dom";
 import Loading from "@/pages/loading/Loading";
 const ContentDetail = () => {
   const scroller = useRef<HTMLDivElement>(null);
   const [dataNotice, setDataNotice] = useState([]);
   const dispath = useDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
     function handleScroll() {
       let scrollY = window.scrollY;
       const addClass = "opacity-0 mt-140";
-      if (scrollY > 400) {
+      if (scrollY > 300) {
         // console.log(scrollY);
         scroller &&
           scroller.current &&
@@ -62,7 +64,11 @@ const ContentDetail = () => {
         <ContentDetailHeader title={"공지사항"} to={"/announcement"} />
         <div className="w-full mt-25 flex justify-between flex-wrap ">
           {dataNotice.map((data: DataNotice, index: number) => (
-            <div key={index} className="mt-4 lg:w-1/5 lg:mr-4 w-full ">
+            <div
+              key={index}
+              className="mt-4 lg:w-1/5 lg:mr-4 w-full "
+              onClick={() => navigate(`/announcement/${data.id}`)}
+            >
               <ContentDetailTitle
                 title={data.title}
                 text={data.content}

@@ -23,8 +23,8 @@ const AnnouncementDetail = () => {
     dispath(activeLoading(true));
     try {
       const response = await noticeDetail({
-        search_by: state.search_by,
-        search_value: state.search_value,
+        search_by: state ? state.search_by : "",
+        search_value: state ? state.search_value : "",
         id: id,
       });
       setData(response.data.data);

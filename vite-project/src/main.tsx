@@ -16,15 +16,15 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
           <App />
           <ToastContainer
             position="top-right"
-            autoClose={2000}
-            hideProgressBar={false}
+            autoClose={5000}
+            hideProgressBar
             newestOnTop={false}
             closeOnClick
             rtl={false}
             pauseOnFocusLoss
             draggable
             pauseOnHover
-            theme="light"
+            theme="colored"
           />
         </BrowserRouter>
       </Provider>

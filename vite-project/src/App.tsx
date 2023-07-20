@@ -24,6 +24,7 @@ import FreeBoardDetail from "./pages/freeboard-detail/FreeBoardDetail";
 import FreeBoardCreateUser from "./pages/freeboard-create-user/FreeBoardCreateUser";
 import AdminAuth from "./component/Auth/AdminAuth";
 import ManagerUser from "./pages/manager-user/ManagerUser";
+import NormalAuth from "./component/Auth/NormalAuth";
 function App() {
   return (
     <div>
@@ -53,6 +54,18 @@ function App() {
           ></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/register" element={<Register />}></Route>
+
+          {/* normal  */}
+          <Route element={<NormalAuth />}>
+            <Route
+              path="/living-lab/create"
+              element={<LivingLabEdit />}
+            ></Route>
+            <Route
+              path="/living-lab/edit/:id"
+              element={<LivingLabEdit />}
+            ></Route>
+          </Route>
 
           {/* admin  */}
           <Route element={<AdminAuth />}>

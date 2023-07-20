@@ -117,7 +117,7 @@ const FormLogin = () => {
           <div className="h-5 w-5 relative " onClick={handleClickCheckBox}>
             <input disabled className="h-5 w-5 " type="checkbox" />
             <i
-              className=" text-[#FF4040] bi bi-check2 absolute left-[2px] top-[-2px] opacity-0"
+              className=" text-[#FF4040] bi bi-check2 absolute left-[2px] top-[-2px] opacity-1"
               ref={checkBox}
             ></i>
           </div>

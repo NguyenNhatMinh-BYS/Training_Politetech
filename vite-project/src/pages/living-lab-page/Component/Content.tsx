@@ -27,24 +27,35 @@ const Content = () => {
   const [noticeEdit, setNoticeEdit] = useState(false);
   const [totalChecked, setTotalChecked] = useState<string[]>([]);
   const [isDelete, setIsDelete] = useState(false);
+  const userName = useRef("");
   //set data
   const getData = async (placeholder?: string, inputSearch?: string) => {
     dispath(activeLoading(true));
 
     inputSearchBy.current = placeholder || "";
     searchValue.current = inputSearch || "";
+    let response;
+    if (isAdmin) {
+      response = await livingLab({
+        page_size: "10",
+        page: colDataCurrent,
+        search_value: inputSearch,
+        search_by: placeholder,
+      });
+    } else {
+      console.log(userName);
 
-    const response = await livingLab({
-      page_size: "10",
-      page: colDataCurrent,
-      search_value: inputSearch,
-      search_by: placeholder,
-    });
-
-    let data = response.data.data?.list;
+      response = await livingLab({
+        page_size: "10",
+        page: colDataCurrent,
+        search_value: userName.current,
+        search_by: "author",
+      });
+    }
+    let data = response?.data.data?.list;
     console.log(data);
 
-    const totalData = response.data.data?.total;
+    const totalData = response?.data.data?.total;
 
     setListData(data);
     for (
@@ -69,6 +80,8 @@ const Content = () => {
     if (dataUser) {
       if (JSON.parse(dataUser).role === "Admin") {
         setIsadmin(true);
+      } else {
+        userName.current = JSON.parse(dataUser).username;
       }
     }
     (async () => {
@@ -194,8 +207,10 @@ const Content = () => {
                   dispath(activeLoading(true));
                   navigate(`/living-lab/${item.id}`, {
                     state: {
-                      search_by: inputSearchBy.current,
-                      search_value: searchValue.current,
+                      search_by: isAdmin ? inputSearchBy.current : "author",
+                      search_value: isAdmin
+                        ? searchValue.current
+                        : userName.current,
                     },
                   });
                 }}
@@ -203,7 +218,7 @@ const Content = () => {
                 className=" flex  py-[10px] border-b-[1px] border-solid"
               >
                 <div className="w-[100px] py-[10px] relative flex items-center max-[1260px]:flex-col justify-around max-[1260px]:items-center">
-                  {isAdmin ? (
+                  {isAdmin || userName.current !== "" ? (
                     <input
                       checked={totalChecked.includes(item.id)}
                       id={`${item.id}`}
@@ -252,7 +267,7 @@ const Content = () => {
             sizePage={10}
           />
         </div>
-        {isAdmin ? (
+        {isAdmin || userName.current !== "" ? (
           <div className="flex justify-center mt-[20px] xl:absolute xl:right-0 xl:bottom-[48px] cursor-pointer max-[1280px]:mb-[20px] ">
             {/* put  */}
             <p

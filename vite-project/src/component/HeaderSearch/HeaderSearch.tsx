@@ -5,6 +5,7 @@ interface Props {
   clickButton?: React.RefObject<HTMLDivElement>;
   searchAuthor?: Boolean;
   manageUser?: Boolean;
+  searchBy?: Boolean;
 }
 const HeaderSearch: React.FC<Props> = ({
   getData,
@@ -12,6 +13,7 @@ const HeaderSearch: React.FC<Props> = ({
   clickButton,
   searchAuthor,
   manageUser,
+  searchBy,
 }) => {
   const [inputSearch, setInputSearch] = useState("");
   const [placeholder, setPlaceholder] = useState(
@@ -51,83 +53,91 @@ const HeaderSearch: React.FC<Props> = ({
         </h1>
       </div>
       <div className="flex items-center max-[1024px]:mt-[28px] max-[1024px]:w-full min-[100px]:flex-col min-[100px]:items-start min-[1024px]:flex-row min-[1024px]:items-center ">
-        <div className="max-[1024px]:mx-0  cursor-pointer relative flex  mx-[8px] ">
-          <div
-            onClick={(e) => {
-              handleClickSelect();
-              e.stopPropagation();
-            }}
-            ref={clickButton}
-            className=" border-solid border-[2px] p-[6px]"
-          >
-            <input
-              id="input"
-              maxLength={30}
-              value={placeholder}
-              type="text"
-              className="resize w-[80px] outline-none placeholder-gray-400 cursor-pointer placeholder-shown:border-gray-500"
-              onChange={(e) => autoResizeInput(e.target as HTMLInputElement)}
-            />
+        {searchBy ? (
+          <div className="max-[1024px]:mx-0  cursor-pointer relative flex  mx-[8px] ">
+            <div
+              onClick={(e) => {
+                handleClickSelect();
+                e.stopPropagation();
+              }}
+              ref={clickButton}
+              className=" border-solid border-[2px] p-[6px]"
+            >
+              <input
+                id="input"
+                maxLength={30}
+                value={placeholder}
+                type="text"
+                className="resize w-[80px] outline-none placeholder-gray-400 cursor-pointer placeholder-shown:border-gray-500"
+                onChange={(e) => autoResizeInput(e.target as HTMLInputElement)}
+              />
 
-            <i className="bi bi-caret-down-fill absolute right-[6px] pointer-events-none"></i>
-          </div>
-          <div
-            ref={listItem}
-            className="hidden z-30 absolute bottom-[-40px] left-0 right-0 bg-white shadow-[0_0_5px_2px_rgba(0,0,0,0.1)] rounded-md"
-            style={searchAuthor ? { bottom: "-80px" } : { bottom: "-40px" }}
-          >
-            {manageUser === false ? (
-              <p
-                className="p-[6px] "
-                onClick={() => {
-                  setPlaceholder("제목");
-                  clickButton &&
-                    clickButton.current?.classList.remove("border-[#0075DC]");
-                }}
-              >
-                제목
-              </p>
-            ) : (
-              <p
-                className="p-[6px] "
-                onClick={() => {
-                  setPlaceholder("이름");
-                  clickButton &&
-                    clickButton.current?.classList.remove("border-[#0075DC]");
-                }}
-              >
-                이름
-              </p>
-            )}
-            {searchAuthor ? (
-              manageUser === false ? (
+              <i className="bi bi-caret-down-fill absolute right-[6px] pointer-events-none"></i>
+            </div>
+            <div
+              ref={listItem}
+              className="hidden z-30 absolute bottom-[-40px] left-0 right-0 bg-white shadow-[0_0_5px_2px_rgba(0,0,0,0.1)] rounded-md"
+              style={searchAuthor ? { bottom: "-80px" } : { bottom: "-40px" }}
+            >
+              {manageUser === false ? (
                 <p
-                  className="p-[6px]"
+                  className="p-[6px] "
                   onClick={() => {
-                    setPlaceholder("작성자");
+                    setPlaceholder("제목");
                     clickButton &&
                       clickButton.current?.classList.remove("border-[#0075DC]");
                   }}
                 >
-                  작성자
+                  제목
                 </p>
               ) : (
                 <p
-                  className="p-[6px]"
+                  className="p-[6px] "
                   onClick={() => {
-                    setPlaceholder("이메일");
+                    setPlaceholder("이름");
                     clickButton &&
                       clickButton.current?.classList.remove("border-[#0075DC]");
                   }}
                 >
-                  이메일
+                  이름
                 </p>
-              )
-            ) : (
-              ""
-            )}
+              )}
+              {searchAuthor ? (
+                manageUser === false ? (
+                  <p
+                    className="p-[6px]"
+                    onClick={() => {
+                      setPlaceholder("작성자");
+                      clickButton &&
+                        clickButton.current?.classList.remove(
+                          "border-[#0075DC]"
+                        );
+                    }}
+                  >
+                    작성자
+                  </p>
+                ) : (
+                  <p
+                    className="p-[6px]"
+                    onClick={() => {
+                      setPlaceholder("이메일");
+                      clickButton &&
+                        clickButton.current?.classList.remove(
+                          "border-[#0075DC]"
+                        );
+                    }}
+                  >
+                    이메일
+                  </p>
+                )
+              ) : (
+                ""
+              )}
+            </div>
           </div>
-        </div>
+        ) : (
+          " "
+        )}
         <div className="flex min-[100px]:mt-[24px] min-[100px]:w-full min-[1024px]:w-auto min-[1024px]:mt-0">
           {/* input search */}
           <input

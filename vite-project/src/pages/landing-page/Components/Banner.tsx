@@ -1,14 +1,52 @@
-import banner from "assets/img/AdobeStock_93456281@2x.png";
+import { useState, useEffect } from "react";
+import banner1 from "assets/img/banner1.png";
+import banner2 from "assets/img/banner2.png";
+import banner3 from "assets/img/banner3.png";
+
+import "./style.css";
 
 const Banner = () => {
+  const [imgCurrent, setImgCurrent] = useState(0);
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const allImg = document.querySelectorAll(".slideImg");
+
+      if (imgCurrent === 2) {
+        setImgCurrent(0);
+        allImg[0].classList.remove(..."opacity-0 scale-125".split(" "));
+        allImg[2].classList.add(..."opacity-0 scale-125".split(" "));
+      } else {
+        setImgCurrent(imgCurrent + 1);
+        allImg[imgCurrent + 1].classList.remove(
+          ..."opacity-0 scale-125".split(" ")
+        );
+        allImg[imgCurrent].classList.add(..."opacity-0 scale-125".split(" "));
+      }
+    }, 6000);
+
+    return () => clearInterval(intervalId);
+  });
+
   return (
-    <div className="h-screen w-full relative z-0 ">
-      <img
-        className="h-screen w-full object-cover "
-        src={banner}
-        alt="banner img"
-      />
-      <div className="absolute z-10 top-1/2 left-1/2  translate-y-50 translate-x-50 text-center">
+    <div className="h-screen w-full relative z-0">
+      <div className="absolute">
+        <img
+          className="h-screen left-0 right-0 object-cover fixed z-[1] slideImg transition-all duration-[4s] ease-in-out opacity-1 scale-125"
+          src={banner1}
+          alt="banner img"
+        />
+        <img
+          className="h-screen left-0 right-0 object-cover fixed z-[1] slideImg transition-all duration-[4s] ease-in-out opacity-0 scale-125"
+          src={banner2}
+          alt="banner img"
+        />
+        <img
+          className="h-screen left-0 right-0 object-cover fixed z-[1] slideImg transition-all duration-[4s] ease-in-out opacity-0 scale-125"
+          src={banner3}
+          alt="banner img"
+        />
+      </div>
+      <div className="fixed z-10 top-1/2 left-1/2  translate-y-50 translate-x-50 text-center">
         <h1 className="text-4xl font-bold text-white">함께 하자,</h1>
         <h1 className="text-4xl font-bold text-white">깨끗한 바다 부산으로!</h1>
         <p className="text-xl mt-50 text-white">

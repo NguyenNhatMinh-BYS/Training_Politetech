@@ -30,6 +30,7 @@ function App() {
       <Routes>
         <Route path="/">
           <Route path="" element={<LandingPage />}></Route>
+          <Route path="*" element={<LandingPage />}></Route>
           <Route path="/introduce" element={<Introduce />}></Route>
           <Route path="/announcement" element={<AnnouncementPage />}></Route>
           <Route path="/announcement/:id" element={<NoticeDetail />}></Route>
@@ -44,10 +45,7 @@ function App() {
           <Route path="/campaign/:id" element={<CampainDetail />}></Route>
 
           <Route path="/freeboard" element={<Freeboard />}></Route>
-          <Route
-            path="/freeboard/:id"
-            element={<FreeBoardDetail />}
-          ></Route>
+          <Route path="/freeboard/:id" element={<FreeBoardDetail />}></Route>
 
           <Route
             path="/freeboard/create_user"

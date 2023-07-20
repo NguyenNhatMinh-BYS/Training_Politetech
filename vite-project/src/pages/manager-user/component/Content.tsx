@@ -117,6 +117,7 @@ const Content = () => {
           clickButton={clickButton}
           getData={getData}
           manageUser={true}
+          searchBy={true}
         />
       </div>
       <div className="w-3/4 relative">

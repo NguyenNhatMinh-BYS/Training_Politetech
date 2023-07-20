@@ -43,7 +43,7 @@ const ContentList = () => {
     };
   });
   return (
-    <div className="flex justify-center mt-140 mb-200 ">
+    <div className="flex justify-center mt-140  ">
       <div
         className="w-80 flex justify-between mt-140 opacity-0 duration-500 transition-all flex-wrap"
         ref={scroller}

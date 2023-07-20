@@ -184,6 +184,7 @@ const Content = () => {
         listItem={listItem}
         clickButton={clickButton}
         manageUser={false}
+        searchBy={true}
       />
       {/* list contents */}
       <div className="w-3/4 ">

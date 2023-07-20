@@ -169,6 +169,7 @@ const ContentAdmin = () => {
         clickButton={clickButton}
         getData={getData}
         manageUser={false}
+        searchBy={true}
       />
       <div className="w-3/4 relative">
         <table className="w-full">

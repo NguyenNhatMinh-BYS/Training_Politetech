@@ -14,8 +14,12 @@ const LandingPage = () => {
     <div className="w-full bg-white ">
       <Nav colorText="text-white" />
       <Banner />
-      <Content />
-      <Footer />
+      <div className=" relative z-[10] bg-white pt-[10px]">
+        <Content />
+      </div>
+      <div className=" relative z-[10] bg-white pt-[200px]">
+        <Footer />
+      </div>
     </div>
   );
 };

@@ -17,6 +17,7 @@ const FacilityPage = () => {
   const [totalCount, setTotalCount] = useState(0);
   const { VITE_SOCKET_FACILITY_ENDPOINT } = import.meta.env;
   const [isLoad, setIsload] = useState<Boolean>(false);
+  const [isError,setIsError] = useState<Boolean>(false);
   const { readyState, sendJsonMessage } = useWebSocket(
     VITE_SOCKET_FACILITY_ENDPOINT,
     {
@@ -48,6 +49,7 @@ const FacilityPage = () => {
         console.log("error", e);
         toast.error("Dont Connect to server");
         setIsload(false);
+        setIsError(true);
       },
       filter: () => false,
     }
@@ -76,16 +78,22 @@ const FacilityPage = () => {
   }, []);
 
   return (
-    <div className=" pt-[100px]">
-      <Nav colorText="text-black" />
+    <div className=" pt-[100px] flex flex-col justify-around h-full">
+      <div className="grow-[2] ">
+        <Nav colorText="text-black" />
 
-      <Banner />
-      {role !== "Admin" ? (
-        <Content data={data} isLoad={isLoad} />
-      ) : (
-        <ContentAdmin />
-      )}
-      <Footer />
+        <Banner />
+      </div>
+      <div className="grow-[7] min-h-[600px]">
+        {role !== "Admin" ? (
+          <Content data={data} isLoad={isLoad} isError={isError}/>
+        ) : (
+          <ContentAdmin data={data} isLoad={isLoad} />
+        )}
+      </div>
+      <div className="grow-[1]">
+        <Footer />
+      </div>
     </div>
   );
 };

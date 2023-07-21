@@ -68,7 +68,7 @@ const FreeBoardDetail = () => {
       <div className="h-full flex justify-between flex-col ">
         {/* main  */}
         <div className="w-full flex justify-center mt-[160px] mb-[120px]  ">
-          <div className="w-3/5">
+          <div className="w-4/5">
             {/* title  */}
             <div>
               <h1 className="text-transparent text-[28px] font-black bg-gradient-to-r from-blue-700 to-blue-400 bg-clip-text inline-block ">
@@ -80,17 +80,19 @@ const FreeBoardDetail = () => {
               <h1>{data?.title}</h1>
             </div>
             <div>
-              <div className="flex justify-around">
+              <div className="flex justify-around items-center max-[1024px]:flex-col max-[1024px]:items-start gap-5">
                 {" "}
-                <div className="grow-[2] px-[20px]">
-                  <h1 className="font-bold">작성자</h1>
+                <div className=" px-[20px] flex flex-1 justify-between lg:mr-[100px] mr-0 ">
+                  <h1 className="font-bold pr-[10px]">작성자</h1>
+                  <p className="pl-[20px] border-l-[1px] border-solid border-[#7d7d7dbc]">
+                    {data?.author}
+                  </p>
                 </div>
-                <div className="grow-[6] flex justify-around border-x-[1px] border-neutral-600">
-                  <p>{data?.author}</p>
-                  <h1>작성일</h1>
-                </div>
-                <div className="grow-[2] px-[24px]">
-                  <p>{dayjs(data?.updated_at).format("YYYY-MM-DD")}</p>
+                <div className=" px-[20px] flex flex-1 justify-between  lg:mr-[100px] mr-0">
+                  <h1 className="font-bold pr-[10px]">작성일</h1>
+                  <p className="pl-[20px] border-l-[1px] border-solid border-[#7d7d7dbc]">
+                    {dayjs(data?.updated_at).format("YYYY-MM-DD")}
+                  </p>
                 </div>
               </div>
               {/* content  */}
@@ -102,7 +104,7 @@ const FreeBoardDetail = () => {
               </div>
             </div>
             {/* navigate */}
-            <div className="flex justify-between">
+            <div className="flex justify-between max-[1280px]:flex-col items-center">
               <div className="flex grow-[1] mt-[20px] items-center text-center">
                 {/* edit  */}
                 <div
@@ -125,12 +127,12 @@ const FreeBoardDetail = () => {
                   삭제
                 </div>
               </div>
-              <div className="flex w-full justify-end mt-[20px] grow-[1]">
+              <div className="flex w-full justify-end mt-[20px] grow-[1] items-center max-[1280px]:justify-center">
                 {/* pre  */}
                 {data?.previous ? (
                   <div
                     onClick={() => setId(data.previous)}
-                    className="px-[20px] py-[10px] bg-[#D9D9D9] cursor-pointer"
+                    className="lg:px-[20px] py-[10px] bg-[#D9D9D9] cursor-pointer px-[10px]"
                   >
                     이전 글
                   </div>
@@ -140,7 +142,7 @@ const FreeBoardDetail = () => {
                 {/* back */}
                 <div
                   onClick={() => navigate(-1)}
-                  className="mx-[20px] bg-gradient-to-r from-blue-700 to-blue-400 px-[20px] py-[10px] text-white cursor-pointer"
+                  className="mx-[20px] bg-gradient-to-r from-blue-700 to-blue-400 lg:px-[20px] py-[10px] text-white cursor-pointer px-[10px]"
                 >
                   목록으로
                 </div>
@@ -148,7 +150,7 @@ const FreeBoardDetail = () => {
                 {data?.next ? (
                   <div
                     onClick={() => setId(data.next)}
-                    className="px-[20px] py-[10px] bg-[#D9D9D9] cursor-pointer"
+                    className="lg:px-[20px] py-[10px] bg-[#D9D9D9] cursor-pointer px-[10px]"
                   >
                     다음 글
                   </div>

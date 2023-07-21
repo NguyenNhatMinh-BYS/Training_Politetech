@@ -106,6 +106,7 @@ export interface ValidateAuthor {
 }
 export interface ManageUser extends Notice {}
 export type FacilityData = {
+  index: number;
   address?: string;
   breadth?: string;
   depart?: string;

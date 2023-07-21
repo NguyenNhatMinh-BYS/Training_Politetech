@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Nav from "@/component/Navigate/Nav";
 import Footer from "@/component/Footter/Footer";
-import ContentQuill from "./ContentQuill";
+
 import { Controller, useForm } from "react-hook-form";
 import * as yub from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -13,6 +13,7 @@ import { useDispatch } from "react-redux";
 import { activeLoading } from "@/features/loadingSlice/loadingSlice";
 import Loading from "../loading/Loading";
 import { contentDetail, postContent, putContent } from "@/services/apiContent";
+import Quill from "component/Quill/Quill";
 interface Title {
   title: string;
   video: string;
@@ -167,9 +168,12 @@ const AnnouncementEdit = () => {
               />
             </div>
             <div className="mt-[40px]">
-              <ContentQuill
+              <Quill
                 content={contentt}
                 handleChangeContent={handleChangeContent}
+                module={{
+                  toolbar: false,
+                }}
               />
             </div>
           </div>

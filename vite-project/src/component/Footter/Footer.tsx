@@ -1,7 +1,7 @@
 import logoFooter from "assets/img/logoFooter.png";
 const Footer = () => {
   return (
-    <footer className="w-full h-[158px] bg-footer">
+    <footer className="w-full h-[158px] bg-footer mt-[20px]">
       <div className="lg:w-80 flex items-center h-full  text-textFooter justify-center ">
         <div className="flex w-80 items-center min-[180px]:flex-col min-[100px]:items-start md:items-center md:flex-row ">
           <img

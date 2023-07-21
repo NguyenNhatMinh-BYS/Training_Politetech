@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Nav from "@/component/Navigate/Nav";
 import Footer from "@/component/Footter/Footer";
-import AnnouncementQuill from "./AnnouncementQuill";
+
 import { Controller, useForm } from "react-hook-form";
 import * as yub from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -10,6 +10,7 @@ import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { noticeDetail } from "@/services/apiNotice";
+import Quill from "component/Quill/Quill"
 interface Title {
   title: string;
 }
@@ -133,9 +134,23 @@ const AnnouncementEdit = () => {
             </div>
 
             <div className="mt-[40px]">
-              <AnnouncementQuill
+              <Quill
                 content={contentt}
                 handleChangeContent={handleChangeContent}
+                module={{
+                  toolbar: [
+                    [{ header: [1, 2, false] }],
+
+                    ["bold", "italic", "underline", "blockquote"],
+
+                    [
+                      { list: "ordered" },
+                      { list: "bullet" },
+                      { indent: "-1" },
+                      { indent: "+1" },
+                    ],
+                  ],
+                }}
               />
             </div>
           </div>

@@ -6,16 +6,15 @@ import { useState } from "react";
 interface ChangeContent {
   handleChangeContent: (value: string) => void;
   content: string;
+  module: any;
 }
-const ContentQuill: React.FC<ChangeContent> = ({
+const FreeBoardQuill: React.FC<ChangeContent> = ({
   handleChangeContent,
   content,
+  module,
 }) => {
   const [value, setValue] = useState("");
 
-  const module = {
-    toolbar: false,
-  };
   return (
     <ReactQuill
       modules={module}
@@ -25,10 +24,11 @@ const ContentQuill: React.FC<ChangeContent> = ({
         handleChangeContent(value);
         setValue(value);
       }}
-      className="editor-input"
+      className={`editor-input  `}
+      style={{ height: "400px", marginBottom: "80px" }}
       placeholder="제목을 입력해주세요."
     />
   );
 };
 
-export default ContentQuill;
+export default FreeBoardQuill;

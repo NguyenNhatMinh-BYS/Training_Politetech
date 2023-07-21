@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import Nav from "@/component/Navigate/Nav";
 import Footer from "@/component/Footter/Footer";
-import FreeBoardQuill from "./FreeBoardQuill";
+
 import { Controller, useForm } from "react-hook-form";
 import * as yub from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-
+import Quill from "component/Quill/Quill";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useEffect, useRef, useState } from "react";
@@ -183,9 +183,24 @@ const FreeBoardEdit = () => {
             </div>
 
             <div className="mt-[40px]">
-              <FreeBoardQuill
+              <Quill
                 content={contentt}
                 handleChangeContent={handleChangeContent}
+                module={{
+                  toolbar: [
+                    [{ header: [1, 2, false] }],
+
+                    ["bold", "italic", "underline", "blockquote"],
+
+                    [
+                      { list: "ordered" },
+                      { list: "bullet" },
+                      { indent: "-1" },
+                      { indent: "+1" },
+                    ],
+                    ["link", "image"],
+                  ],
+                }}
               />
             </div>
           </div>

@@ -26,7 +26,7 @@ const Banner = () => {
         );
         allImg[imgCurrent].classList.add(..."opacity-0 scale-125".split(" "));
       }
-    }, 6000);
+    }, 5000);
 
     return () => clearInterval(intervalId);
   });
@@ -35,17 +35,17 @@ const Banner = () => {
     <div className="h-screen w-full relative z-0">
       <div className="absolute">
         <img
-          className="h-screen left-0 right-0 object-cover fixed z-[1] slideImg transition-all duration-[4s] ease-in-out opacity-1 scale-125"
+          className="h-screen left-0 right-0 object-cover fixed z-[1] slideImg transition-all duration-[3s] ease-in-out opacity-1 scale-125"
           src={banner1}
           alt="banner img"
         />
         <img
-          className="h-screen left-0 right-0 object-cover fixed z-[1] slideImg transition-all duration-[4s] ease-in-out opacity-0 scale-125"
+          className="h-screen left-0 right-0 object-cover fixed z-[1] slideImg transition-all duration-[3s] ease-in-out opacity-0 scale-125"
           src={banner2}
           alt="banner img"
         />
         <img
-          className="h-screen left-0 right-0 object-cover fixed z-[1] slideImg transition-all duration-[4s] ease-in-out opacity-0 scale-125"
+          className="h-screen left-0 right-0 object-cover fixed z-[1] slideImg transition-all duration-[3s] ease-in-out opacity-0 scale-125"
           src={banner3}
           alt="banner img"
         />

@@ -212,6 +212,9 @@ const ContentAdmin = () => {
                         onChange={(e) => {
                           handleChangeCheckBox(item.id, e);
                         }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
                         type="checkbox"
                         className=" top-[6px] left-0 z-[20] w-[20px] h-[30px]  checked:accent-[#0066C1] inline-block rounded-none outline-none"
                       />
@@ -277,7 +280,7 @@ const ContentAdmin = () => {
           </div>
         ) : (
           <div
-            className="py-[6px] px-[20px] flex bg-[#0066C1] text-white w-[120px] justify-around absolute right-0 bottom-[48px] z-40"
+            className="py-[10px] lg:w-[100px] sm:w-full  bg-[#0066C1]  text-white flex justify-center lg:mt-[20px] lg:absolute lg:right-0 bottom-[48px] cursor-pointer z-40 max-[1024px]:mb-[20px] lg:mb-[0]"
             onClick={handleCreate}
           >
             <i className="bi bi-pencil mx-[6px]"></i>

@@ -50,7 +50,7 @@ const Content = ({ data, isLoad, isError }: any) => {
   const clearFilter = () => {
     setOffFill(true);
     setPlaceholder("부산");
-    setLocation("")
+    setLocation("");
     isClear.current?.classList.remove(
       ..."bg-white text-[#60a5fa] border-solid border-[1px] border-[#60a5fa]".split(
         " "
@@ -337,7 +337,7 @@ const Content = ({ data, isLoad, isError }: any) => {
                 listData.map((item: FacilityData, index: number) => (
                   <div
                     key={index}
-                    className="hover:bg-[#b8d4ff79] w-full "
+                    className="hover:bg-[#b8d4ff79] w-full cursor-pointer"
                     onClick={() => showDetail(item)}
                   >
                     <div className="mx-[20px] py-[4px] border-b-[1px] border-solid border-[#b5b5b5cc] ">

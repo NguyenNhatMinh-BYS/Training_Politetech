@@ -125,7 +125,7 @@ const DetailFacility: React.FC<FormDetailFacility> = ({
                 ""
               )}
 
-              {isLoading ? (
+              {isLoading && dataDetail.length === 0 ? (
                 <div className="absolute text-center left-0 right-0 py-[20px] text-[16px]">
                   Loading...
                 </div>

@@ -4,8 +4,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import * as yub from "yup";
-import AnnouncementQuill from "../announcement-edit/AnnouncementQuill";
 
+import Quill from "component/Quill/Quill";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -204,9 +204,23 @@ const CampaignEdit = () => {
             </div>
 
             <div className="mt-[20px]">
-              <AnnouncementQuill
+              <Quill
                 content={contentt}
                 handleChangeContent={handleChangeContent}
+                module={{
+                  toolbar: [
+                    [{ header: [1, 2, false] }],
+
+                    ["bold", "italic", "underline", "blockquote"],
+
+                    [
+                      { list: "ordered" },
+                      { list: "bullet" },
+                      { indent: "-1" },
+                      { indent: "+1" },
+                    ],
+                  ],
+                }}
               />
             </div>
             <div className="flex w-full  relative  bg-white border-[2px] border-solid mt-[-42px] mb-[20px]">

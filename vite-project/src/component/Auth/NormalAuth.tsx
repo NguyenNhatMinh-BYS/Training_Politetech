@@ -6,6 +6,8 @@ const NormalAuth = () => {
   const location = useLocation();
   return auth === "Normal" ? (
     <Outlet />
+  ) : auth === "Admin" ? (
+    <Outlet />
   ) : (
     <Navigate to="/" state={{ from: location }} replace />
   );

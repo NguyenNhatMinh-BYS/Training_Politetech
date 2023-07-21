@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Nav from "@/component/Navigate/Nav";
 import Footer from "@/component/Footter/Footer";
-import LivingLabQuill from "./LivingLabQuill";
+import Quill from "component/Quill/Quill";
 import { Controller, useForm } from "react-hook-form";
 import * as yub from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -142,9 +142,24 @@ const LivingLabEdit = () => {
             </div>
 
             <div className="mt-[40px]">
-              <LivingLabQuill
+              <Quill
                 content={contentt}
                 handleChangeContent={handleChangeContent}
+                module={{
+                  toolbar: [
+                    [{ header: [1, 2, false] }],
+
+                    ["bold", "italic", "underline", "strike", "blockquote"],
+
+                    [
+                      { list: "ordered" },
+                      { list: "bullet" },
+                      { indent: "-1" },
+                      { indent: "+1" },
+                    ],
+                    ["clean", "link", "image"],
+                  ],
+                }}
               />
             </div>
           </div>

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Nav from "@/component/Navigate/Nav";
 import Footer from "@/component/Footter/Footer";
-import FreeBoardQuill from "../freeboard-edit/FreeBoardQuill";
+import Quill from "component/Quill/Quill";
 import { Controller, useForm } from "react-hook-form";
 import * as yub from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -26,6 +26,7 @@ const schema = yub.object().shape({
 const FreeBoardCreateUser = () => {
   const { infor } = useLocation().state;
   const [contentt, setContent] = useState("");
+  const [isError, setError] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -61,22 +62,26 @@ const FreeBoardCreateUser = () => {
   }, []);
 
   const onSubmit = (data: UserPostFreeBoard) => {
-    try {
-      (async () => {
-        await postFreeBoardUser({
-          title: data.title,
-          author: data.author,
-          password: data.password,
-          content: contentt,
-        });
-      })();
-      navigate(-1);
-      toast.success("Created Edit successfully");
-    } catch (e) {
-      console.log(e);
+    if (contentt.trim() !== "") {
+      setError(false);
+      try {
+        (async () => {
+          await postFreeBoardUser({
+            title: data.title,
+            author: data.author,
+            password: data.password,
+            content: contentt,
+          });
+        })();
+        navigate(-1);
+        toast.success("Created Edit successfully");
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      setError(true);
     }
   };
-
   const handleChangeContent = (value: string) => {
     setContent(value);
   };
@@ -163,11 +168,31 @@ const FreeBoardCreateUser = () => {
               />
             </div>
 
-            <div className="mt-[40px]">
-              <FreeBoardQuill
+            <div className="mt-[40px] ">
+              <Quill
                 content={contentt}
                 handleChangeContent={handleChangeContent}
+                module={{
+                  toolbar: [
+                    [{ header: [1, 2, false] }],
+
+                    ["bold", "italic", "underline", "blockquote"],
+
+                    [
+                      { list: "ordered" },
+                      { list: "bullet" },
+                      { indent: "-1" },
+                      { indent: "+1" },
+                    ],
+                    ["link", "image"],
+                  ],
+                }}
               />
+              {isError ? (
+                <div className="text-red-400  bottom-0 ">입력하세요</div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
         </div>

@@ -20,7 +20,6 @@ export const freeBoard = (data: Notice) => {
 };
 
 export const freeBoardDetail = (data: Notice) => {
-  
   let x = "",
     y = "";
   if (data.search_by) {
@@ -52,6 +51,8 @@ export const postFreeBoard = (data: FreeBoard, token: string) => {
   return instance.post(`/free-board/admin`, data, Config(token));
 };
 export const postFreeBoardUser = (data: UserPostFreeBoard) => {
+  console.log(data);
+
   return instance.post(`/free-board`, data);
 };
 

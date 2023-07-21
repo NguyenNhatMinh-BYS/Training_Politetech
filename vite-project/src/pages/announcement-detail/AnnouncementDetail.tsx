@@ -54,27 +54,29 @@ const AnnouncementDetail = () => {
               </h1>
             </div>
             {/* information  */}
-            <div className="w-full bg-[#b4dcfff7] my-[40px] px-[20px] py-[10px] font-bold">
+            <div className="w-full bg-[#b4dcfff7] my-[20px] px-[20px] py-[10px] font-bold">
               <h1>{data?.title}</h1>
             </div>
             <div>
-              <div className="flex justify-around">
+              <div className="flex justify-around items-center max-[1024px]:flex-col max-[1024px]:items-start gap-5">
                 {" "}
-                <div className="grow-[2] px-[20px]">
-                  <h1 className="font-bold">작성자</h1>
+                <div className="grow-[2] px-[20px] flex flex-1 justify-between mr-[100px] max-[128px]:mr-0 ">
+                  <h1 className="font-bold pr-[10px]">작성자</h1>
+                  <p className="pl-[20px] border-l-[1px] border-solid border-[#7d7d7dbc]">
+                    {data?.author}
+                  </p>
                 </div>
-                <div className="grow-[6] flex justify-around border-x-[1px] border-neutral-600">
-                  <p>{data?.author}</p>
-                  <h1>작성일</h1>
-                </div>
-                <div className="grow-[2] px-[24px]">
-                  <p>{dayjs(data?.updated_at).format("YYYY-MM-DD")}</p>
+                <div className="grow-[2] px-[20px] flex flex-1 justify-between  mr-[100px] max-[128px]:mr-0">
+                  <h1 className="font-bold pr-[10px]">작성일</h1>
+                  <p className="pl-[20px] border-l-[1px] border-solid border-[#7d7d7dbc]">
+                    {dayjs(data?.updated_at).format("YYYY-MM-DD")}
+                  </p>
                 </div>
               </div>
               {/* content  */}
               <div className="mt-[16px] py-[6px] border-y-[1px] border-neutral-300">
                 <div
-                  className="mx-[20px] px-[10px] ql-editor "
+                  className="  ql-editor "
                   dangerouslySetInnerHTML={{ __html: data?.content || "" }}
                 />
               </div>

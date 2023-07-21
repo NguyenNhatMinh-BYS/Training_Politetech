@@ -122,10 +122,10 @@ const FormRegister = () => {
                 name="full_name"
                 render={({ field: { onChange } }) => (
                   <InputRegister
-                    register={register}
-                    onChange={onChange}
-                    errors={errors}
-                    title="이름"
+                  onChange={onChange}
+                  errors={errors}
+                  title="이름"
+                  register={register}
                     dataInput="full_name"
                   />
                 )}

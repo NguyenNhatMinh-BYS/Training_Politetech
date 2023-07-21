@@ -61,17 +61,19 @@ const LivingLabDetail = () => {
               <h1>{data?.title}</h1>
             </div>
             <div>
-              <div className="flex justify-around">
+              <div className="flex justify-around items-center max-[1024px]:flex-col max-[1024px]:items-start gap-5">
                 {" "}
-                <div className="grow-[2] px-[20px]">
-                  <h1 className="font-bold">작성자</h1>
+                <div className=" px-[20px] flex flex-1 justify-between lg:mr-[100px] mr-0 ">
+                  <h1 className="font-bold pr-[10px]">작성자</h1>
+                  <p className="pl-[20px] border-l-[1px] border-solid border-[#7d7d7dbc]">
+                    {data?.author}
+                  </p>
                 </div>
-                <div className="grow-[6] flex justify-around border-x-[1px] border-neutral-600">
-                  <p>{data?.author}</p>
-                  <h1>작성일</h1>
-                </div>
-                <div className="grow-[2] px-[24px]">
-                  <p>{dayjs(data?.updated_at).format("YYYY-MM-DD")}</p>
+                <div className=" px-[20px] flex flex-1 justify-between  lg:mr-[100px] mr-0">
+                  <h1 className="font-bold pr-[10px]">작성일</h1>
+                  <p className="pl-[20px] border-l-[1px] border-solid border-[#7d7d7dbc]">
+                    {dayjs(data?.updated_at).format("YYYY-MM-DD")}
+                  </p>
                 </div>
               </div>
               {/* content  */}

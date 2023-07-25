@@ -16,7 +16,7 @@ const Loading = () => {
   return (
     <>
       {selector.isActive ? (
-        <div className="w-screen h-screen bg-[#8787876c]  flex justify-center items-center fixed top-0 z-50">
+        <div className="w-screen h-screen bg-[#8787876c]  flex justify-center items-center fixed top-0 z-[102]">
           <img
             src={loading}
             alt="loading"

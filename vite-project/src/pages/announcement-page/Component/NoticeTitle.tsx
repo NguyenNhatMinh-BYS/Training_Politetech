@@ -14,11 +14,9 @@ const NoticeTitle: React.FC<NoticeError> = ({
   handleAcceptDelete,
 }) => {
   const show = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    show.current?.classList.remove(..."mt-[400px] opacity-0".split(" "));
-  }, []);
+  
   return (
-    <div className="fixed w-screen h-screen bg-[#9f9f9f70] top-0 z-[40] flex justify-center items-center">
+    <div className="fixed w-screen h-screen bg-[#9f9f9f70] top-0 z-[101] flex justify-center items-center">
       <div
         ref={show}
         className="bg-white h-[300px] flex flex-col justify-between w-[400px] relative mt-[400px] opacity-0 transition-all duration-2000 ease-in-out"

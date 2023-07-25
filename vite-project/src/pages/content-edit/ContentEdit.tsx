@@ -44,7 +44,7 @@ const AnnouncementEdit = () => {
   });
 
   useEffect(() => {
-    window.scrollTo({ top: 0 });
+    
     dispath(activeLoading(true));
     if (infor !== "") {
       (async () => {

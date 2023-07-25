@@ -155,7 +155,6 @@ const ContentAdmin = () => {
         getData={getData}
         manageUser={false}
         searchBy={true}
-        
       />
       <div className="w-3/4 relative">
         <table className="w-full">
@@ -227,7 +226,7 @@ const ContentAdmin = () => {
               ))}
           </tbody>
         </table>
-        <div className="mt-[60px] mb-[20px] relative  z-40 w-full flex justify-center">
+        <div className="mt-[60px] mb-[20px] relative z-40 w-full flex justify-center">
           <Pagination
             totalList={totalList}
             page={page}

@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import logo from "assets/img/logo@2x.png";
 import { useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "./style.css";
@@ -23,7 +23,19 @@ const Nav = ({ colorText }: Prop) => {
   const [bg, setBg] = useState("");
   const [textNav, setTextNav] = useState(colorText);
   const active = useRef<HTMLDivElement>(null);
+  const location = useLocation();
   useEffect(() => {
+    window.scroll({ top: 0, behavior: "smooth" });
+  }, []);
+  useEffect(() => {
+    if (
+      location.pathname === "/living-lab" ||
+      location.pathname === "/manager-user"
+    ) {
+      console.log(123);
+      active.current?.classList.add(..."text-white font-bold".split(" "));
+    }
+
     const getLocalstorage = localStorage.getItem("dataUser");
 
     if (getLocalstorage) {
@@ -135,7 +147,7 @@ const Nav = ({ colorText }: Prop) => {
       navIconClose.current.classList.remove(...addClassListNav.split(" "));
   };
   const handleClickCloseNav = () => {
-    window.scrollBy({ top: 0 });
+    // window.scrollBy({ top: 0 });
     // dispath(activeLoading(true));
     document.body.style.overflow = "auto";
     const addClass =
@@ -155,9 +167,10 @@ const Nav = ({ colorText }: Prop) => {
     localStorage.clear();
     handleClickCloseNav();
   };
-  const handleClickList = () => {
-    active.current?.classList.add(..."font-bold text-white".split(" "));
+  const handleClickList = (to: string) => {
+    navigate(to);
   };
+
   return (
     <div>
       <div
@@ -188,7 +201,7 @@ const Nav = ({ colorText }: Prop) => {
           {role !== "Normal" ? (
             <div
               ref={navIcon}
-              className={` xl:pt-8 xl:sm:backdrop-blur-0 xl:block xl:h-full xl:w-full xl:right-0 xl:translate-y-2 xl:text-end xl:leading-3  xl:static xl:bg-transparent xl:translate-x-0 xl:opacity-100  xl:pointer-events-auto  sm:transform sm:transition-all sm:duration-100 sm:linear max-[1279px]:flex max-[1279px]:flex-col max-[1279px]:absolute max-[1279px]:top-0 max-[1279px]:bg-nav max-[1279px]:p-6  max-[1279px]:w-full max-[1279px]:h-screen max-[1279px]:right-0  max-[1279px]:right-10 max-[1279px]:backdrop-blur-md max-[1279px]:translate-x-full max-[1279px]:opacity-0 max-[1279px]:pointer-events-none max-[1279px]:text-end max-[1279px]:pt-20 max-[1279px]:pr-16 ${textNav} `}
+              className={` xl:pt-8 xl:sm:backdrop-blur-0  xl:block xl:h-full xl:w-full xl:right-0 xl:translate-y-2 xl:text-end xl:leading-3  xl:static xl:bg-transparent xl:translate-x-0 xl:opacity-100  xl:pointer-events-auto  sm:transform sm:transition-all sm:duration-100 sm:linear max-[1279px]:flex max-[1279px]:flex-col max-[1279px]:absolute max-[1279px]:top-0 max-[1279px]:bg-nav max-[1279px]:p-6  max-[1279px]:w-full max-[1279px]:h-screen max-[1279px]:right-0  max-[1279px]:right-10 max-[1279px]:backdrop-blur-md sm:bg-[#7d7d7d90] max-[1279px]:translate-x-full max-[1279px]:opacity-0 max-[1279px]:pointer-events-none max-[1279px]:text-end max-[1279px]:pt-20 max-[1279px]:pr-16 ${textNav} `}
             >
               <NavLink
                 onClick={handleClickCloseNav}
@@ -201,7 +214,12 @@ const Nav = ({ colorText }: Prop) => {
                     : "sm:mt-9"
                 }
               >
-                <span className="m-2.5 text-xl   ">홈</span>
+                <span
+                  className="m-2.5 text-xl   "
+                  onClick={() => window.scroll({ top: 0, behavior: "smooth" })}
+                >
+                  홈
+                </span>
               </NavLink>
               <NavLink
                 onClick={handleClickCloseNav}
@@ -214,7 +232,12 @@ const Nav = ({ colorText }: Prop) => {
                     : "sm:mt-9"
                 }
               >
-                <span className="m-2.5 text-xl sm:mt-4">소개</span>
+                <span
+                  className="m-2.5 text-xl sm:mt-4"
+                  onClick={() => window.scroll({ top: 0, behavior: "smooth" })}
+                >
+                  소개
+                </span>
               </NavLink>
               <NavLink
                 onClick={handleClickCloseNav}
@@ -227,7 +250,12 @@ const Nav = ({ colorText }: Prop) => {
                     : "sm:mt-9"
                 }
               >
-                <span className="m-2.5 text-xl sm:mt-4">공지사항</span>
+                <span
+                  className="m-2.5 text-xl sm:mt-4"
+                  onClick={() => window.scroll({ top: 0, behavior: "smooth" })}
+                >
+                  공지사항
+                </span>
               </NavLink>
               <NavLink
                 onClick={handleClickCloseNav}
@@ -240,7 +268,12 @@ const Nav = ({ colorText }: Prop) => {
                     : "sm:mt-9"
                 }
               >
-                <span className="m-2.5 text-xl sm:mt-4">시설현황</span>
+                <span
+                  className="m-2.5 text-xl sm:mt-4"
+                  onClick={() => window.scroll({ top: 0, behavior: "smooth" })}
+                >
+                  시설현황
+                </span>
               </NavLink>
               <NavLink
                 onClick={handleClickCloseNav}
@@ -254,46 +287,42 @@ const Nav = ({ colorText }: Prop) => {
                 }
               >
                 {" "}
-                <span className="m-2.5 text-xl sm:mt-4">콘텐츠</span>
+                <span
+                  className="m-2.5 text-xl sm:mt-4"
+                  onClick={() => window.scroll({ top: 0, behavior: "smooth" })}
+                >
+                  콘텐츠
+                </span>
               </NavLink>
               {role === "Admin" ? (
-                <div className="inline-block relative  parent">
-                  <span className="m-2.5 text-xl sm:mt-4" ref={active}>
+                <div className="inline-block relative  parent sm:mt-[28px] xl:mt-0 ">
+                  <span
+                    className="m-2.5 text-xl sm:mt-4"
+                    onClick={() =>
+                      window.scroll({ top: 0, behavior: "smooth" })
+                    }
+                    ref={active}
+                  >
                     리빙랩
                   </span>
-                  <div className="   absolute w-[160px] h-auto bg-white text-black border-[1px] border-[black] left-0 right-0  child  ">
-                    <NavLink
-                      to="/living-lab"
-                      className={({ isActive }) =>
-                        isActive ? "font-semibold bg-[#9e9e9e94]" : ""
-                      }
+                  <div className="  sm:right-[40px]  absolute w-[160px] h-auto bg-white text-black border-[1px] border-[black] xl:left-0 xl:right-0  child  ">
+                    <div
+                      className="py-[10px] px-[18px] text-lg font-normal text-center hover:bg-[#9e9e9e94]"
+                      onClick={(e) => {
+                        handleClickList("/living-lab");
+                      }}
                     >
-                      <div
-                        className="py-[10px] px-[18px] text-xl  text-center hover:bg-[#9e9e9e94]"
-                        onClick={(e) => {
-                          handleClickList();
-                          // e.stopPropagation();
-                        }}
-                      >
-                        게시글 관리
-                      </div>
-                    </NavLink>
-                    <NavLink
-                      to="/manager-user"
-                      className={({ isActive }) =>
-                        isActive ? "font-semibold bg-[#9e9e9e94]" : ""
-                      }
+                      게시글 관리
+                    </div>
+
+                    <div
+                      className="py-[10px] px-[18px] text-lg font-normal text-center hover:bg-[#9e9e9e94] "
+                      onClick={(e) => {
+                        handleClickList("/manager-user");
+                      }}
                     >
-                      <div
-                        className="py-[10px] px-[18px] text-xl  text-center hover:bg-[#9e9e9e94] "
-                        onClick={(e) => {
-                          handleClickList();
-                          // e.stopPropagation();
-                        }}
-                      >
-                        회원 관리
-                      </div>
-                    </NavLink>
+                      회원 관리
+                    </div>
                   </div>
                 </div>
               ) : (
@@ -308,7 +337,14 @@ const Nav = ({ colorText }: Prop) => {
                       : "sm:mt-9"
                   }
                 >
-                  <span className="m-2.5 text-xl sm:mt-4">캠페인</span>
+                  <span
+                    className="m-2.5 text-xl sm:mt-4"
+                    onClick={() =>
+                      window.scroll({ top: 0, behavior: "smooth" })
+                    }
+                  >
+                    캠페인
+                  </span>
                 </NavLink>
               )}
               <NavLink
@@ -323,7 +359,12 @@ const Nav = ({ colorText }: Prop) => {
                 }
               >
                 {" "}
-                <span className="m-2.5 text-xl sm:mt-4">캠페인</span>
+                <span
+                  className="m-2.5 text-xl sm:mt-4"
+                  onClick={() => window.scroll({ top: 0, behavior: "smooth" })}
+                >
+                  캠페인
+                </span>
               </NavLink>
 
               <NavLink
@@ -338,7 +379,12 @@ const Nav = ({ colorText }: Prop) => {
                 }
               >
                 {" "}
-                <span className="m-2.5 text-xl sm:mt-4">자유게시판</span>
+                <span
+                  className="m-2.5 text-xl sm:mt-4"
+                  onClick={() => window.scroll({ top: 0, behavior: "smooth" })}
+                >
+                  자유게시판
+                </span>
               </NavLink>
               {isLogin ? (
                 <NavLink
@@ -353,7 +399,14 @@ const Nav = ({ colorText }: Prop) => {
                   }
                 >
                   {" "}
-                  <span className="m-2.5 text-xl sm:mt-4">로그아웃</span>
+                  <span
+                    className="m-2.5 text-xl sm:mt-4"
+                    onClick={() =>
+                      window.scroll({ top: 0, behavior: "smooth" })
+                    }
+                  >
+                    로그아웃
+                  </span>
                 </NavLink>
               ) : (
                 ""

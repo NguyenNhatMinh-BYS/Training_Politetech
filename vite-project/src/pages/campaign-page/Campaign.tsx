@@ -12,9 +12,7 @@ const Campaign = () => {
       setRole(JSON.parse(dataUser).role);
     }
   });
-  useEffect(() => {
-    window.scrollTo({ top: 0 });
-  }, []);
+  
   return (
     <div className=" pt-[100px]">
       <Nav colorText="text-black" />

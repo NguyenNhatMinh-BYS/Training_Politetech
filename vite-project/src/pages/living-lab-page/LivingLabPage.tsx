@@ -3,7 +3,7 @@ import Content from "./Component/Content";
 import Footer from "@/component/Footter/Footer";
 import Nav from "@/component/Navigate/Nav";
 import useAuth from "@/hooks/useAuth";
-import {useEffect} from "react"
+import { useEffect } from "react";
 const LivingLabPage = () => {
   const { auth } = useAuth();
   console.log(auth);

@@ -28,6 +28,8 @@ const Content = () => {
   const [noticeEdit, setNoticeEdit] = useState(false);
   const [totalChecked, setTotalChecked] = useState<string[]>([]);
   const [isDelete, setIsDelete] = useState(false);
+  const [totaData, setTotalData] = useState<number>(0);
+  const [isEmpty, setIsEmpty] = useState(false);
   //set data
   const getData = async (placeholder?: string, inputSearch?: string) => {
     inputSearchBy.current = placeholder || "";
@@ -44,7 +46,8 @@ const Content = () => {
     let data = response.data.data?.list;
 
     const totalData = response.data.data?.total;
-
+    totaData === 0 ? setIsEmpty(true) : setIsEmpty(false);
+    setTotalData(totalData);
     setListData(data);
     for (
       let i = 10 * Number(colDataCurrent), x = 0;
@@ -64,6 +67,7 @@ const Content = () => {
   };
   //get api
   useEffect(() => {
+  
     let dataUser = localStorage.getItem("dataUser");
     if (dataUser) {
       if (JSON.parse(dataUser).role === "Admin") {
@@ -187,7 +191,7 @@ const Content = () => {
         searchBy={true}
       />
       {/* list contents */}
-      <div className="w-3/4 ">
+      <div className="w-3/4 min-h-[580px]">
         {/* header list contents */}
         <div className="flex bg-[#b4dcfff7] py-[10px] rounded-sm">
           <p className="font-semibold py-[10px] w-[100px]  text-center border-r-[2px] border-solid border-[#7DA7CC]">
@@ -258,66 +262,74 @@ const Content = () => {
         </div>
         {/* footer list contents */}
         <div className="my-[60px] relative">
-          <div className="flex justify-center">
-            {maxMinListData[0] !== colDataCurrent ? (
-              <>
-                <span
-                  onClick={() => setColDataCurrent(maxMinListData[0])}
-                  className=" bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid border-[#CCCCCC]  mx-[6px] cursor-pointer hover:bg-[#a5d5ffa7]"
-                >
-                  <i className="bi bi-chevron-double-left"></i>
-                </span>
-                <span
-                  onClick={() =>
-                    setColDataCurrent((Number(colDataCurrent) - 1).toString())
-                  }
-                  className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid border-[#CCCCCC]  mx-[6px] cursor-pointer hover:bg-[#a5d5ffa7]"
-                >
-                  <i className="bi bi-chevron-left"></i>
-                </span>
-              </>
-            ) : (
-              ""
-            )}
+          {totaData > 0 ? (
+            <div className="flex justify-center">
+              {maxMinListData[0] !== colDataCurrent ? (
+                <>
+                  <span
+                    onClick={() => setColDataCurrent(maxMinListData[0])}
+                    className=" bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid border-[#CCCCCC]  mx-[6px] cursor-pointer hover:bg-[#a5d5ffa7]"
+                  >
+                    <i className="bi bi-chevron-double-left"></i>
+                  </span>
+                  <span
+                    onClick={() =>
+                      setColDataCurrent((Number(colDataCurrent) - 1).toString())
+                    }
+                    className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid border-[#CCCCCC]  mx-[6px] cursor-pointer hover:bg-[#a5d5ffa7]"
+                  >
+                    <i className="bi bi-chevron-left"></i>
+                  </span>
+                </>
+              ) : (
+                ""
+              )}
 
-            {totalListData &&
-              totalListData.map((item, index) => (
-                <a
-                  href="#search"
-                  key={index}
-                  onClick={() => handleClickIndexList(index)}
-                  className="p-[8px] px-[14px]  border-[1px] text-black border-solid border-[#CCCCCC]  mx-[6px]"
-                  style={{
-                    backgroundColor:
-                      colDataCurrent === index.toString() ? "#0066C1" : "",
-                    color: colDataCurrent === index.toString() ? "white" : "",
-                  }}
-                >
-                  {index + 1}
-                </a>
-              ))}
+              {totalListData &&
+                totalListData.map((item, index) => (
+                  <a
+                    href="#search"
+                    key={index}
+                    onClick={() => handleClickIndexList(index)}
+                    className="p-[8px] px-[14px]  border-[1px] text-black border-solid border-[#CCCCCC]  mx-[6px]"
+                    style={{
+                      backgroundColor:
+                        colDataCurrent === index.toString() ? "#0066C1" : "",
+                      color: colDataCurrent === index.toString() ? "white" : "",
+                    }}
+                  >
+                    {index + 1}
+                  </a>
+                ))}
 
-            {maxMinListData[1] !== colDataCurrent ? (
-              <>
-                <span
-                  onClick={() =>
-                    setColDataCurrent((Number(colDataCurrent) + 1).toString())
-                  }
-                  className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid mx-[6px] border-[#CCCCCC] cursor-pointer hover:bg-[#a5d5ffa7]"
-                >
-                  <i className="bi bi-chevron-right"></i>
-                </span>
-                <span
-                  onClick={() => setColDataCurrent(maxMinListData[1])}
-                  className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid mx-[6px] border-[#CCCCCC] cursor-pointer hover:bg-[#a5d5ffa7]"
-                >
-                  <i className="bi bi-chevron-double-right"></i>
-                </span>
-              </>
-            ) : (
-              " "
-            )}
-          </div>
+              {maxMinListData[1] !== colDataCurrent ? (
+                <>
+                  <span
+                    onClick={() =>
+                      setColDataCurrent((Number(colDataCurrent) + 1).toString())
+                    }
+                    className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid mx-[6px] border-[#CCCCCC] cursor-pointer hover:bg-[#a5d5ffa7]"
+                  >
+                    <i className="bi bi-chevron-right"></i>
+                  </span>
+                  <span
+                    onClick={() => setColDataCurrent(maxMinListData[1])}
+                    className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid mx-[6px] border-[#CCCCCC] cursor-pointer hover:bg-[#a5d5ffa7]"
+                  >
+                    <i className="bi bi-chevron-double-right"></i>
+                  </span>
+                </>
+              ) : (
+                " "
+              )}
+            </div>
+          ) : isEmpty ? (
+            <div className="flex justify-center mt-[60px]">
+              현재 사용 가능한 데이터가 없습니다.
+            </div>
+          ) : (
+            <div className="flex justify-center mt-[60px]">Loading...</div>
+          )}
           {isAdmin ? (
             <div className="flex justify-center mt-[20px] xl:absolute xl:right-0 xl:bottom-[4px] cursor-pointer">
               {/* put  */}

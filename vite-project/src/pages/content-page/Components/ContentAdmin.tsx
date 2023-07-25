@@ -25,6 +25,8 @@ const ContentAdmin = () => {
   const itemChecked = useRef<string[]>([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const totalDatas = useRef<number>(0);
+  const [isEmpty, setIsEmpty] = useState(false);
   const getData = async (search_by?: string, search_value?: string) => {
     dispatch(activeLoading(true));
     inputSearchBy.current = search_by || "";
@@ -38,7 +40,8 @@ const ContentAdmin = () => {
 
     let data = response.data.data?.list;
     const totalData = response.data.data?.total;
-
+    totalDatas.current = totalData;
+    totalData > 0 ? setIsEmpty(false) : setIsEmpty(true);
     for (
       let i = 10 * Number(page), x = 0;
       i <= 10 * Number(page) + 10 && x < 10;
@@ -157,7 +160,7 @@ const ContentAdmin = () => {
         manageUser={false}
         searchBy={true}
       />
-      <div className="w-3/4 relative">
+      <div className="w-3/4 relative min-h-[580px]">
         <table className="w-full">
           <thead className="bg-[#b4dcfff7] text-[14px]">
             <tr>
@@ -220,14 +223,23 @@ const ContentAdmin = () => {
               ))}
           </tbody>
         </table>
-        <div className="my-[40px] relative  z-40 w-full flex justify-center">
-          <Pagination
-            totalList={totalList}
-            page={page}
-            setColDataCurrent={setColDataCurrent}
-            sizePage={10}
-          />
-        </div>
+        {totalDatas.current > 0 ? (
+          <div className="my-[40px] relative  z-40 w-full flex justify-center">
+            <Pagination
+              totalList={totalList}
+              page={page}
+              setColDataCurrent={setColDataCurrent}
+              sizePage={10}
+            />
+          </div>
+        ) : isEmpty ? (
+          <div className="flex justify-center mt-[60px]">
+            현재 사용 가능한 데이터가 없습니다.
+          </div>
+        ) : (
+          <div className="flex justify-center mt-[60px]">Loading...</div>
+        )}
+
         {isAdmin ? (
           <div className="flex justify-center xl:mt-[20px] xl:absolute xl:right-0 xl:bottom-[28px] cursor-pointer z-40 max-[1200px]:mb-[20px]">
             {/* put  */}

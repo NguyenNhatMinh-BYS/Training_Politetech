@@ -7,8 +7,8 @@ import Loading from "../loading/Loading";
 
 const LandingPage = () => {
   useEffect(() => {
-    window.scrollTo({ top: 0 });
-  }, []);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
 
   return (
     <div className="w-full bg-white ">

@@ -20,43 +20,50 @@ const Content = () => {
   const [noticeEdit, setNoticeEdit] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
   const [itemDelete, setItemDelete] = useState("");
+  const totalDatas = useRef<number>(0);
   const id = useRef("");
+  const [isEmpty, setIsEmpty] = useState(false);
   const getData = async (search_by?: string, search_value?: string) => {
     dispatch(activeLoading(true));
-    const token = localStorage.getItem("token");
-    console.log(token);
+    try {
+      const token = localStorage.getItem("token");
 
-    inputSearchBy.current = search_by || "";
-    searchValue.current = search_value || "";
-    const response = await manageUser(
-      {
-        page_size: "10",
-        page: page,
-        search_by: search_by,
-        search_value: search_value,
-      },
-      token || ""
-    );
-    console.log(response.data.data);
+      inputSearchBy.current = search_by || "";
+      searchValue.current = search_value || "";
+      const response = await manageUser(
+        {
+          page_size: "10",
+          page: page,
+          search_by: search_by || "",
+          search_value: search_value || "",
+        },
+        token || ""
+      );
 
-    let data = response.data.data?.list;
-    const totalData = response.data.data?.total;
-    for (
-      let i = 10 * Number(page), x = 0;
-      i <= 10 * Number(page) + 10 && x < 10;
-      i++, x++
-    ) {
-      if (data[x]) {
-        data[x].index = totalData - i;
-      } else {
-        break;
+      let data = response.data.data?.list;
+      const totalData = response.data.data?.total;
+      totalDatas.current = totalData;
+      totalData > 0 ? setIsEmpty(false) : setIsEmpty(true);
+      if (totalData > 0) {
+        for (
+          let i = 10 * Number(page), x = 0;
+          i <= 10 * Number(page) + 10 && x < 10;
+          i++, x++
+        ) {
+          if (data[x]) {
+            data[x].index = totalData - i;
+          } else {
+            break;
+          }
+        }
       }
-
       setData(data);
 
       setTotalList(totalData);
-      dispatch(activeLoading(false));
+    } catch (e) {
+      console.log(e);
     }
+    dispatch(activeLoading(false));
   };
   useEffect(() => {
     getData();
@@ -92,7 +99,7 @@ const Content = () => {
   };
   return (
     <div
-      className="w-full flex justify-center flex-col items-center"
+      className="w-full flex flex-col justify-around items-center h-full"
       onClick={() => {
         listItem.current?.classList.add("hidden");
         clickButton.current?.classList.remove("border-[#0075DC]");
@@ -120,7 +127,7 @@ const Content = () => {
           searchBy={true}
         />
       </div>
-      <div className="w-3/4 relative">
+      <div className="w-3/4 relative min-h-[580px]">
         <div>
           <table className="w-full ">
             <thead className="bg-[#b4dcfff7] text-[14px]">
@@ -198,14 +205,22 @@ const Content = () => {
             </tbody>
           </table>
         </div>
-        <div className="my-[40px] relative  z-30 w-full flex justify-center">
-          <Pagination
-            totalList={totalList}
-            page={page}
-            setColDataCurrent={setColDataCurrent}
-            sizePage={10}
-          />
-        </div>
+        {totalDatas.current > 0 ? (
+          <div className="my-[40px] relative  z-30 w-full flex justify-center">
+            <Pagination
+              totalList={totalList}
+              page={page}
+              setColDataCurrent={setColDataCurrent}
+              sizePage={10}
+            />
+          </div>
+        ) : isEmpty ? (
+          <div className="flex justify-center mt-[60px]">
+            현재 사용 가능한 데이터가 없습니다.
+          </div>
+        ) : (
+          <div className="flex justify-center mt-[60px]">Loading...</div>
+        )}
       </div>
     </div>
   );

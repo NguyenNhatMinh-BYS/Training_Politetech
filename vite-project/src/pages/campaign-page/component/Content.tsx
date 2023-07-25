@@ -14,12 +14,12 @@ const Content = () => {
   const [inputSearch, setInputSearch] = useState("");
   const [totalListData, setTotalListData] = useState<string[]>([]);
   const [colDataCurrent, setColDataCurrent] = useState("0");
-  const [pageSize, setPageSize] = useState("12");
+
   const [listData, setListData] = useState([]);
   const [maxMinListData, setMaxMinListData] = useState<string[]>([]);
   const navigate = useNavigate();
   const dispath = useDispatch();
-
+  const [isEmpty, setIsEmpty] = useState(false);
   const handleClickSelect = () => {
     listItem.current?.classList.toggle("hidden");
     const addClass = "border-[#0075DC]";
@@ -27,16 +27,17 @@ const Content = () => {
     clickButton.current?.classList.toggle(addClass);
   };
   const setData = async () => {
+    dispath(activeLoading(true));
     try {
       const response = await campaign({
         page: colDataCurrent,
-        page_size: pageSize,
+        page_size: "12",
         search_value: inputSearch,
       });
       let data = response.data.data?.list;
 
       const totalData = response.data.data?.total;
-
+      data.length > 0 ? setIsEmpty(false) : setIsEmpty(true);
       setListData(data);
       for (
         let i = 12 * Number(colDataCurrent), x = 0;
@@ -54,11 +55,10 @@ const Content = () => {
     } catch (e) {
       console.log(e);
     }
+    dispath(activeLoading(false));
   };
   useEffect(() => {
-    dispath(activeLoading(true));
     setData();
-    dispath(activeLoading(false));
   }, [colDataCurrent]);
   //css input
   const autoResizeInput = (input: HTMLInputElement) => {
@@ -74,6 +74,7 @@ const Content = () => {
   //handle sreach
   const handleClickSearch = () => {
     setData();
+    setColDataCurrent("0");
   };
   //handle click index list
   const handleClickIndexList = (index: number) => {
@@ -81,6 +82,8 @@ const Content = () => {
     //
     setColDataCurrent(index.toString());
   };
+  console.log(1);
+
   return (
     <div
       onClick={() => {
@@ -153,7 +156,7 @@ const Content = () => {
           </div>
         </div>
       </div>
-      <div className="w-4/5  ">
+      <div className="w-4/5   min-h-[580px] ">
         <div className=" px-[50px] grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 w-full">
           {listData &&
             listData.map((item: campaigngApi, index: number) => (
@@ -176,66 +179,74 @@ const Content = () => {
             ))}
         </div>
       </div>
-      <div className="my-[60px] flex justify-center">
-        {maxMinListData[0] !== colDataCurrent ? (
-          <>
-            <span
-              onClick={() => setColDataCurrent(maxMinListData[0])}
-              className=" bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid border-[#CCCCCC]  mx-[6px] cursor-pointer hover:bg-[#a5d5ffa7]"
-            >
-              <i className="bi bi-chevron-double-left"></i>
-            </span>
-            <span
-              onClick={() =>
-                setColDataCurrent((Number(colDataCurrent) - 1).toString())
-              }
-              className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid border-[#CCCCCC]  mx-[6px] cursor-pointer hover:bg-[#a5d5ffa7]"
-            >
-              <i className="bi bi-chevron-left"></i>
-            </span>
-          </>
-        ) : (
-          ""
-        )}
+      {listData.length > 0 ? (
+        <div className="my-[60px] flex justify-center">
+          {maxMinListData[0] !== colDataCurrent ? (
+            <>
+              <span
+                onClick={() => setColDataCurrent(maxMinListData[0])}
+                className=" bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid border-[#CCCCCC]  mx-[6px] cursor-pointer hover:bg-[#a5d5ffa7]"
+              >
+                <i className="bi bi-chevron-double-left"></i>
+              </span>
+              <span
+                onClick={() =>
+                  setColDataCurrent((Number(colDataCurrent) - 1).toString())
+                }
+                className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid border-[#CCCCCC]  mx-[6px] cursor-pointer hover:bg-[#a5d5ffa7]"
+              >
+                <i className="bi bi-chevron-left"></i>
+              </span>
+            </>
+          ) : (
+            ""
+          )}
 
-        {totalListData &&
-          totalListData.map((item, index) => (
-            <a
-              href="#search"
-              key={index}
-              onClick={() => handleClickIndexList(index)}
-              className="p-[8px] px-[14px]  border-[1px] text-black border-solid border-[#CCCCCC]  mx-[6px]"
-              style={{
-                backgroundColor:
-                  colDataCurrent === index.toString() ? "#0066C1" : "",
-                color: colDataCurrent === index.toString() ? "white" : "",
-              }}
-            >
-              {index + 1}
-            </a>
-          ))}
+          {totalListData &&
+            totalListData.map((item, index) => (
+              <a
+                href="#search"
+                key={index}
+                onClick={() => handleClickIndexList(index)}
+                className="p-[8px] px-[14px]  border-[1px] text-black border-solid border-[#CCCCCC]  mx-[6px]"
+                style={{
+                  backgroundColor:
+                    colDataCurrent === index.toString() ? "#0066C1" : "",
+                  color: colDataCurrent === index.toString() ? "white" : "",
+                }}
+              >
+                {index + 1}
+              </a>
+            ))}
 
-        {maxMinListData[1] !== colDataCurrent ? (
-          <>
-            <span
-              onClick={() =>
-                setColDataCurrent((Number(colDataCurrent) + 1).toString())
-              }
-              className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid mx-[6px] border-[#CCCCCC] cursor-pointer hover:bg-[#a5d5ffa7]"
-            >
-              <i className="bi bi-chevron-right"></i>
-            </span>
-            <span
-              onClick={() => setColDataCurrent(maxMinListData[1])}
-              className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid mx-[6px] border-[#CCCCCC] cursor-pointer hover:bg-[#a5d5ffa7]"
-            >
-              <i className="bi bi-chevron-double-right"></i>
-            </span>
-          </>
-        ) : (
-          " "
-        )}
-      </div>
+          {maxMinListData[1] !== colDataCurrent ? (
+            <>
+              <span
+                onClick={() =>
+                  setColDataCurrent((Number(colDataCurrent) + 1).toString())
+                }
+                className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid mx-[6px] border-[#CCCCCC] cursor-pointer hover:bg-[#a5d5ffa7]"
+              >
+                <i className="bi bi-chevron-right"></i>
+              </span>
+              <span
+                onClick={() => setColDataCurrent(maxMinListData[1])}
+                className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid mx-[6px] border-[#CCCCCC] cursor-pointer hover:bg-[#a5d5ffa7]"
+              >
+                <i className="bi bi-chevron-double-right"></i>
+              </span>
+            </>
+          ) : (
+            " "
+          )}
+        </div>
+      ) : isEmpty ? (
+        <div className="flex justify-center mt-[60px]">
+          현재 사용 가능한 데이터가 없습니다.
+        </div>
+      ) : (
+        <div className="flex justify-center mt-[60px]">Loading...</div>
+      )}
     </div>
   );
 };

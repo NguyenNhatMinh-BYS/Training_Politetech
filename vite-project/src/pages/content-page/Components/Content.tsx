@@ -10,9 +10,9 @@ const Content = () => {
   const [dataPageCurrent, setDataPageCurrent] = useState([]);
   const dispath = useDispatch();
   const [totalListData, setTotalListData] = useState<string[]>([]);
-
+  const [isEmpty, setIsempty] = useState(false);
   const [maxMinListData, setMaxMinListData] = useState<string[]>([]);
-
+  const totalDatas = useRef<number>(0);
   const getId = (url: string) => {
     url = url.split("v=")[1];
     return url;
@@ -34,7 +34,6 @@ const Content = () => {
     idIconHidden?.classList.remove(
       ..."opacity-0 pointer-events-none".split(" ")
     );
-    console.log("showFull");
 
     let checkHeight = document.getElementById(`${id}`);
     checkHeight?.classList.remove(..."line-clamp-4 h-[110px]".split(" "));
@@ -53,7 +52,6 @@ const Content = () => {
     let idIconHidden = document.getElementById(`${hiddenIcon}`);
     idIconShow?.classList.remove(..."opacity-0 pointer-events-none".split(" "));
     idIconHidden?.classList.add(..."opacity-0 pointer-events-none".split(" "));
-    console.log("showShort");
 
     let checkHeight = document.getElementById(`${id}`);
     const height = checkHeight?.offsetHeight;
@@ -61,14 +59,15 @@ const Content = () => {
     checkHeight?.classList.add(..."line-clamp-4 h-[110px]".split(" "));
   };
   const getDataContent = async () => {
+    dispath(activeLoading(true));
     try {
       const response = await content({ page: colDataCurrent, page_size: "10" });
 
       setDataPageCurrent(response.data.data.list);
       let data = response.data.data?.list;
-
+      data.length === 0 ? setIsempty(true) : setIsempty(false);
       const totalData = response.data.data?.total;
-
+      totalDatas.current = totalData;
       for (
         let i = 10 * Number(colDataCurrent), x = 0;
         i <= 10 * Number(colDataCurrent) + 10 && x < 10;
@@ -89,15 +88,13 @@ const Content = () => {
     }
   };
   useEffect(() => {
-    dispath(activeLoading(true));
     getDataContent();
-
     dispath(activeLoading(false));
   }, [colDataCurrent]);
   return (
     <div className="w-full flex justify-center mt-[60px] mb-[80px] transition-all duration-200 ease-in-out ">
       <Loading />
-      <div className="w-3/5">
+      <div className="w-3/5 min-h-[580px]">
         <div>
           <h1 className="text-transparent text-[28px] font-black bg-gradient-to-r from-blue-700 to-blue-400 bg-clip-text w-[120px] ">
             시설현황
@@ -176,70 +173,78 @@ const Content = () => {
               </div>
             </div>
           ))}
-        <div className="my-[60px] flex justify-center">
-          {maxMinListData[0] !== colDataCurrent ? (
-            <>
-              <a
-                href="#video"
-                onClick={() => setColDataCurrent(maxMinListData[0])}
-                className=" bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid border-[#CCCCCC]  mx-[6px] cursor-pointer hover:bg-[#a5d5ffa7]"
-              >
-                <i className="bi bi-chevron-double-left"></i>
-              </a>
-              <a
-                href="#video"
-                onClick={() =>
-                  setColDataCurrent((Number(colDataCurrent) - 1).toString())
-                }
-                className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid border-[#CCCCCC]  mx-[6px] cursor-pointer hover:bg-[#a5d5ffa7]"
-              >
-                <i className="bi bi-chevron-left"></i>
-              </a>
-            </>
-          ) : (
-            ""
-          )}
+        {totalDatas.current > 0 ? (
+          <div className="my-[60px] flex justify-center">
+            {maxMinListData[0] !== colDataCurrent ? (
+              <>
+                <a
+                  href="#video"
+                  onClick={() => setColDataCurrent(maxMinListData[0])}
+                  className=" bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid border-[#CCCCCC]  mx-[6px] cursor-pointer hover:bg-[#a5d5ffa7]"
+                >
+                  <i className="bi bi-chevron-double-left"></i>
+                </a>
+                <a
+                  href="#video"
+                  onClick={() =>
+                    setColDataCurrent((Number(colDataCurrent) - 1).toString())
+                  }
+                  className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid border-[#CCCCCC]  mx-[6px] cursor-pointer hover:bg-[#a5d5ffa7]"
+                >
+                  <i className="bi bi-chevron-left"></i>
+                </a>
+              </>
+            ) : (
+              ""
+            )}
 
-          {totalListData &&
-            totalListData.map((item, index) => (
-              <a
-                href="#video"
-                key={index}
-                onClick={() => handleClickIndexList(index)}
-                className="p-[8px] px-[14px]  border-[1px] text-black border-solid border-[#CCCCCC]  mx-[6px]"
-                style={{
-                  backgroundColor:
-                    colDataCurrent === index.toString() ? "#0066C1" : "",
-                  color: colDataCurrent === index.toString() ? "white" : "",
-                }}
-              >
-                {index + 1}
-              </a>
-            ))}
+            {totalListData &&
+              totalListData.map((item, index) => (
+                <a
+                  href="#video"
+                  key={index}
+                  onClick={() => handleClickIndexList(index)}
+                  className="p-[8px] px-[14px]  border-[1px] text-black border-solid border-[#CCCCCC]  mx-[6px]"
+                  style={{
+                    backgroundColor:
+                      colDataCurrent === index.toString() ? "#0066C1" : "",
+                    color: colDataCurrent === index.toString() ? "white" : "",
+                  }}
+                >
+                  {index + 1}
+                </a>
+              ))}
 
-          {maxMinListData[1] !== colDataCurrent ? (
-            <>
-              <a
-                href="#video"
-                onClick={() =>
-                  setColDataCurrent((Number(colDataCurrent) + 1).toString())
-                }
-                className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid mx-[6px] border-[#CCCCCC] cursor-pointer hover:bg-[#a5d5ffa7]"
-              >
-                <i className="bi bi-chevron-right"></i>
-              </a>
-              <a
-                href="#video"
-                onClick={() => setColDataCurrent(maxMinListData[1])}
-                className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid mx-[6px] border-[#CCCCCC] cursor-pointer hover:bg-[#a5d5ffa7]"
-              >
-                <i className="bi bi-chevron-double-right"></i>
-              </a>
-            </>
-          ) : (
-            " "
-          )}
-        </div>
+            {maxMinListData[1] !== colDataCurrent ? (
+              <>
+                <a
+                  href="#video"
+                  onClick={() =>
+                    setColDataCurrent((Number(colDataCurrent) + 1).toString())
+                  }
+                  className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid mx-[6px] border-[#CCCCCC] cursor-pointer hover:bg-[#a5d5ffa7]"
+                >
+                  <i className="bi bi-chevron-right"></i>
+                </a>
+                <a
+                  href="#video"
+                  onClick={() => setColDataCurrent(maxMinListData[1])}
+                  className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid mx-[6px] border-[#CCCCCC] cursor-pointer hover:bg-[#a5d5ffa7]"
+                >
+                  <i className="bi bi-chevron-double-right"></i>
+                </a>
+              </>
+            ) : (
+              " "
+            )}
+          </div>
+        ) : isEmpty ? (
+          <div className="flex justify-center mt-[60px]">
+            현재 사용 가능한 데이터가 없습니다.
+          </div>
+        ) : (
+          <div className="flex justify-center mt-[60px]">Loading...</div>
+        )}
         {/* list page */}
       </div>
     </div>

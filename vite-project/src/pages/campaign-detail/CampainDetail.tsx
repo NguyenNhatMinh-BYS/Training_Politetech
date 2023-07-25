@@ -12,7 +12,7 @@ const CampainDetail = () => {
   const [data, setData] = useState<campaigngApi>();
 
   useEffect(() => {
-    window.scrollTo({ top: 0 });
+    
     try {
       (async () => {
         const response = await campaignDetail({ id: id });

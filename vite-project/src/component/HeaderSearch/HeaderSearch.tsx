@@ -1,11 +1,12 @@
 import React, { useRef, useState } from "react";
 interface Props {
-  getData: (inputSearch: string, placeholder: string) => void;
+  getData: (inputSearch?: string, placeholder?: string) => void;
   listItem?: React.RefObject<HTMLDivElement>;
   clickButton?: React.RefObject<HTMLDivElement>;
   searchAuthor?: Boolean;
   manageUser?: Boolean;
   searchBy?: Boolean;
+  searchDefault?: Boolean;
 }
 const HeaderSearch: React.FC<Props> = ({
   getData,
@@ -14,6 +15,7 @@ const HeaderSearch: React.FC<Props> = ({
   searchAuthor,
   manageUser,
   searchBy,
+  searchDefault,
 }) => {
   const [inputSearch, setInputSearch] = useState("");
   const [placeholder, setPlaceholder] = useState(
@@ -37,12 +39,14 @@ const HeaderSearch: React.FC<Props> = ({
     }
   };
   const handleClickSearch = () => {
-    console.log(123);
+    console.log(inputSearch);
 
-    if (placeholder === "제목") getData("title", inputSearch);
+    if (searchDefault === true) {
+      getData(inputSearch);
+    } else if (placeholder === "제목") getData("title", inputSearch);
     else if (placeholder === "작성자") getData("author", inputSearch);
     else if (placeholder === "이름") getData("name", inputSearch);
-    else getData("email", inputSearch);
+    else if (placeholder === "이메일") getData("email", inputSearch);
   };
   return (
     <div className="max-[1024px]:flex-col max-[1024px]:items-start my-[60px] flex justify-between  w-3/4  items-center">

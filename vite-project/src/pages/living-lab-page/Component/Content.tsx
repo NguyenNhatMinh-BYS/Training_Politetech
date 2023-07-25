@@ -28,6 +28,9 @@ const Content = () => {
   const [totalChecked, setTotalChecked] = useState<string[]>([]);
   const [isDelete, setIsDelete] = useState(false);
   const userName = useRef("");
+  const [isClient, setIsClient] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(false);
+  const totalDatas = useRef<number>(0);
   //set data
   const getData = async (placeholder?: string, inputSearch?: string) => {
     dispath(activeLoading(true));
@@ -35,7 +38,7 @@ const Content = () => {
     inputSearchBy.current = placeholder || "";
     searchValue.current = inputSearch || "";
     let response;
-    if (isAdmin) {
+    if (isAdmin || isClient) {
       response = await livingLab({
         page_size: "10",
         page: colDataCurrent,
@@ -43,8 +46,6 @@ const Content = () => {
         search_by: placeholder,
       });
     } else {
-      console.log(userName);
-
       response = await livingLab({
         page_size: "10",
         page: colDataCurrent,
@@ -53,10 +54,10 @@ const Content = () => {
       });
     }
     let data = response?.data.data?.list;
-    console.log(data);
+    data.length > 0 ? setIsEmpty(false) : setIsEmpty(true);
 
     const totalData = response?.data.data?.total;
-
+    totalDatas.current = totalData;
     setListData(data);
     for (
       let i = 10 * Number(colDataCurrent), x = 0;
@@ -83,6 +84,9 @@ const Content = () => {
       } else {
         userName.current = JSON.parse(dataUser).username;
       }
+    }
+    if (!dataUser) {
+      setIsClient(true);
     }
     (async () => {
       try {
@@ -182,9 +186,9 @@ const Content = () => {
         />
       </div>
       {/* list contents */}
-      <div className="w-4/5 px-[40px] relative">
+      <div className="w-4/5 px-[40px] relative min-h-[560px]">
         {/* header list contents */}
-        <div className="flex bg-[#b4dcfff7] py-[10px] rounded-sm">
+        <div className="flex bg-[#b4dcfff7] py-[10px] rounded-sm ">
           <p className="font-semibold py-[10px] w-[100px]  text-center border-r-[2px] border-solid border-[#7DA7CC]">
             번호
           </p>
@@ -259,14 +263,23 @@ const Content = () => {
             ))}
         </div>
         {/* footer list contents */}
-        <div className="w-full flex justify-center my-[40px]">
-          <Pagination
-            totalList={totalListData}
-            page={colDataCurrent}
-            setColDataCurrent={setColDataCurrent}
-            sizePage={10}
-          />
-        </div>
+        {totalDatas.current > 0 ? (
+          <div className="w-full flex justify-center my-[40px] ">
+            <Pagination
+              totalList={totalListData}
+              page={colDataCurrent}
+              setColDataCurrent={setColDataCurrent}
+              sizePage={10}
+            />
+          </div>
+        ) : isEmpty ? (
+          <div className="flex justify-center mt-[60px]">
+            현재 사용 가능한 데이터가 없습니다.
+          </div>
+        ) : (
+          <div className="flex justify-center mt-[60px]">Loading...</div>
+        )}
+
         {isAdmin || userName.current !== "" ? (
           <div className="flex justify-center mt-[20px] xl:absolute xl:right-0 xl:bottom-[48px] cursor-pointer max-[1280px]:mb-[20px] ">
             {/* put  */}

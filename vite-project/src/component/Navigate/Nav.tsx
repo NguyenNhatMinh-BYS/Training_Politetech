@@ -25,17 +25,16 @@ const Nav = ({ colorText }: Prop) => {
   const active = useRef<HTMLDivElement>(null);
   const location = useLocation();
   useEffect(() => {
-    window.scroll({ top: 0, behavior: "smooth" });
-  }, []);
-  useEffect(() => {
+    if (location.pathname !== "/facility")
+      window.scroll({ top: 0, behavior: "smooth" });
     if (
       location.pathname === "/living-lab" ||
       location.pathname === "/manager-user"
     ) {
-      console.log(123);
       active.current?.classList.add(..."text-white font-bold".split(" "));
     }
-
+  });
+  useEffect(() => {
     const getLocalstorage = localStorage.getItem("dataUser");
 
     if (getLocalstorage) {
@@ -120,7 +119,7 @@ const Nav = ({ colorText }: Prop) => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [bg]);
+  }, []);
   // click logo
   const handleClickLogo = () => {
     window.scrollTo(0, 0);
@@ -147,8 +146,6 @@ const Nav = ({ colorText }: Prop) => {
       navIconClose.current.classList.remove(...addClassListNav.split(" "));
   };
   const handleClickCloseNav = () => {
-    // window.scrollBy({ top: 0 });
-    // dispath(activeLoading(true));
     document.body.style.overflow = "auto";
     const addClass =
       "max-[1279px]:right-10 max-[1279px]:translate-x-full max-[1279px]:opacity-0 max-[1279px]:pointer-events-none";

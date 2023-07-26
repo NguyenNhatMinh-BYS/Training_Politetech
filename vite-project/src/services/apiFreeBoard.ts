@@ -16,7 +16,6 @@ export const freeBoard = (data: Notice) => {
   if (data.search_value) x = `&search_value=${data.search_value}`;
   if (data.page_size) y = `&page_size=${data.page_size}`;
   if (data.search_by) z = `&search_by=${data.search_by}`;
-  console.log(`/free-board?page=${data.page}${y}${z}${x}`);
 
   return instance.get(`/free-board?page=${data.page}${y}${z}${x}`);
 };

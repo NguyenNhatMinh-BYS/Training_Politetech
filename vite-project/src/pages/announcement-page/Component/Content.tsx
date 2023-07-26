@@ -46,7 +46,8 @@ const Content = () => {
     let data = response.data.data?.list;
 
     const totalData = response.data.data?.total;
-    totaData === 0 ? setIsEmpty(true) : setIsEmpty(false);
+
+    data.length > 0 ? setIsEmpty(false) : setIsEmpty(true);
     setTotalData(totalData);
     setListData(data);
     for (
@@ -67,7 +68,6 @@ const Content = () => {
   };
   //get api
   useEffect(() => {
-  
     let dataUser = localStorage.getItem("dataUser");
     if (dataUser) {
       if (JSON.parse(dataUser).role === "Admin") {

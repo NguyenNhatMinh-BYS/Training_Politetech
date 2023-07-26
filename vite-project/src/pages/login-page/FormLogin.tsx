@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Login } from "../../services/apiUser";
 import { toast } from "react-toastify";
 
@@ -19,6 +19,19 @@ const FormLogin = () => {
   // const payload = useSelector((state: RootState) => state.dataUser);
   const dispatch = useDispatch();
   //post api
+  useEffect(() => {
+    const handleKeyPress = (e: any) => {
+      if (e.code === "Enter") {
+        handleSubmit();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [inputName, inputPassword]);
   const handlePostAPI = async (data: User) => {
     try {
       const response = await Login(data);

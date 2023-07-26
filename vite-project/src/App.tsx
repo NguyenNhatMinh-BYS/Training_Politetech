@@ -25,11 +25,13 @@ import FreeBoardCreateUser from "./pages/freeboard-create-user/FreeBoardCreateUs
 import AdminAuth from "./component/Auth/AdminAuth";
 import ManagerUser from "./pages/manager-user/ManagerUser";
 import NormalAuth from "./component/Auth/NormalAuth";
+import ReactQuery from "./pages/ReactQuery";
 function App() {
   return (
     <div>
       <Routes>
         <Route path="/">
+          <Route path="/react-query" element={<ReactQuery />}></Route>
           <Route path="" element={<LandingPage />}></Route>
           <Route path="*" element={<LandingPage />}></Route>
           <Route path="/introduce" element={<Introduce />}></Route>

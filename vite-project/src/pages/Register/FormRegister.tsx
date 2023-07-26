@@ -7,6 +7,7 @@ import { regex } from "utils/regex";
 import { Register } from "services/apiUser";
 import { FormValueRegister } from "model/Auth.model";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 const schema = yub.object().shape({
   username: yub.string().required("Username is required").min(4).max(100),
   password: yub
@@ -34,6 +35,7 @@ const schema = yub.object().shape({
 });
 
 const FormRegister = () => {
+  const navigate = useNavigate();
   const [policyConfirm, setPolicyConfirm] = useState(true);
   const [policyConfirmActive, setpolicyConfirmActive] = useState(false);
   const {
@@ -86,6 +88,7 @@ const FormRegister = () => {
         });
 
         toast.success("Register successfully !");
+        navigate("/login");
       } catch (err) {
         console.log(err);
 
@@ -122,10 +125,10 @@ const FormRegister = () => {
                 name="full_name"
                 render={({ field: { onChange } }) => (
                   <InputRegister
-                  onChange={onChange}
-                  errors={errors}
-                  title="이름"
-                  register={register}
+                    onChange={onChange}
+                    errors={errors}
+                    title="이름"
+                    register={register}
                     dataInput="full_name"
                   />
                 )}

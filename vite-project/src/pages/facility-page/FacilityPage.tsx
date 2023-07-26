@@ -17,7 +17,7 @@ const FacilityPage = () => {
   const [totalCount, setTotalCount] = useState(0);
   const { VITE_SOCKET_FACILITY_ENDPOINT } = import.meta.env;
   const [isLoad, setIsload] = useState<Boolean>(false);
-  const [isError,setIsError] = useState<Boolean>(false);
+  const [isError, setIsError] = useState<Boolean>(false);
   const { readyState, sendJsonMessage } = useWebSocket(
     VITE_SOCKET_FACILITY_ENDPOINT,
     {
@@ -54,6 +54,7 @@ const FacilityPage = () => {
       filter: () => false,
     }
   );
+
   useEffect(() => {
     if (readyState === 1) {
       // 1 - open
@@ -72,9 +73,6 @@ const FacilityPage = () => {
     if (dataUser) {
       setRole(JSON.parse(dataUser).role);
     }
-  });
-  useEffect(() => {
-    window.scrollTo({ top: 0 });
   }, []);
 
   return (
@@ -86,7 +84,7 @@ const FacilityPage = () => {
       </div>
       <div className="grow-[7] min-h-[600px]">
         {role !== "Admin" ? (
-          <Content data={data} isLoad={isLoad} isError={isError}/>
+          <Content data={data} isLoad={isLoad} isError={isError} />
         ) : (
           <ContentAdmin data={data} isLoad={isLoad} />
         )}

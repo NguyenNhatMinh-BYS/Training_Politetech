@@ -92,51 +92,55 @@ const DetailFacility: React.FC<FormDetailFacility> = ({
             alt="imgDetail"
             className="h-[200px] mr-[20px]   max-[1280px]:mr-[0px] max-[1280px]:w-full object-cover "
           />
-          <div className="grow-[8] h-[200px]  max-[1280px]:w-full max-[1280px]:mt-[16px] overflow-auto border-solid border-[1px] ">
-            <table className="w-full relative">
-              <thead className="bg-[#b4dcfff7] ">
+          <div className="grow-[8] max-[1280px]:w-full max-[1280px]:mt-[16px] overflow-auto border-solid border-[1px] ">
+            <table className="w-full">
+              <thead className="bg-[#b4dcfff7] h-[40px]  ">
                 <tr>
-                  <th className="py-[10px]">수거일자</th>
-                  <th>수거시간</th>
-                  <th>수거량</th>
-                  <th>투입인력</th>
+                  <th className="py-[10px] w-[20%]">수거일자</th>
+                  <th className="py-[10px] w-[20%]">수거시간</th>
+                  <th className="py-[10px] w-[20%]">수거량</th>
+                  <th className="py-[10px] w-[20%]">투입인력</th>
                 </tr>
               </thead>
-              {dataDetail && dataDetail.length !== 0 ? (
-                <tbody>
-                  {dataDetail.map((item, index: number) => (
-                    <tr key={index}>
-                      <th className="font-normal py-[26px]">
-                        {dayjs(item.returntime).format("YYYY.MM.DD")}
-                      </th>
-                      <th className="font-normal py-[26px]">
-                        {handleTime(item.returntime, item.usingtime)}
-                      </th>
-                      <th className="font-normal py-[26px]">
-                        {(Number(item.garbage) / 1000).toFixed(1)} T
-                      </th>
-                      <th className="font-normal py-[26px]">
-                        {item.manpower} 명
-                      </th>
-                    </tr>
-                  ))}
-                </tbody>
-              ) : (
-                ""
-              )}
-
-              {isLoading && dataDetail.length === 0 ? (
-                <div className="absolute text-center left-0 right-0 py-[20px] text-[16px]">
-                  Loading...
-                </div>
-              ) : !isLoading && dataDetail.length === 0 ? (
-                <div className="absolute text-center left-0 right-0 py-[20px] text-[16px]">
-                  현재 사용 가능한 데이터가 없습니다.{" "}
-                </div>
-              ) : (
-                ""
-              )}
             </table>
+            <div className=" h-[160px]  max-[1280px]:w-full  overflow-auto border-solid border-[1px] ">
+              <table className="w-full relative">
+                {dataDetail && dataDetail.length !== 0 ? (
+                  <tbody>
+                    {dataDetail.map((item, index: number) => (
+                      <tr key={index}>
+                        <th className="font-normal py-[26px] w-[20%]">
+                          {dayjs(item.returntime).format("YYYY.MM.DD")}
+                        </th>
+                        <th className="font-normal py-[26px] w-[20%]">
+                          {handleTime(item.returntime, item.usingtime)}
+                        </th>
+                        <th className="font-normal py-[26px] w-[20%]">
+                          {(Number(item.garbage) / 1000).toFixed(1)} T
+                        </th>
+                        <th className="font-normal py-[26px] w-[20%]">
+                          {item.manpower} 명
+                        </th>
+                      </tr>
+                    ))}
+                  </tbody>
+                ) : (
+                  ""
+                )}
+
+                {isLoading && dataDetail.length === 0 ? (
+                  <div className="absolute text-center left-0 right-0 py-[20px] text-[16px]">
+                    Loading...
+                  </div>
+                ) : !isLoading && dataDetail.length === 0 ? (
+                  <div className="absolute text-center left-0 right-0 py-[20px] text-[16px]">
+                    현재 사용 가능한 데이터가 없습니다.{" "}
+                  </div>
+                ) : (
+                  ""
+                )}
+              </table>
+            </div>
           </div>
         </div>
       </div>

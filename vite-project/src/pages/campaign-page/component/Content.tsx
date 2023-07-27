@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { campaign } from "@/services/apiCampaign";
 import { campaigngApi } from "@/model/Auth.model";
 import { Link, useNavigate } from "react-router-dom";
-import Loading from "@/pages/loading/Loading";
+import Loading from "@/component/loading/Loading";
 import { useDispatch } from "react-redux";
 import { activeLoading } from "@/features/loadingSlice/loadingSlice";
 const Content = () => {
@@ -86,6 +86,7 @@ const Content = () => {
 
   return (
     <div
+      id="searchCampaign"
       onClick={() => {
         listItem.current?.classList.add("hidden");
         clickButton.current?.classList.remove("border-[#0075DC]");
@@ -183,20 +184,22 @@ const Content = () => {
         <div className="my-[60px] flex justify-center">
           {maxMinListData[0] !== colDataCurrent ? (
             <>
-              <span
+              <a
+                href="#searchCampaign"
                 onClick={() => setColDataCurrent(maxMinListData[0])}
                 className=" bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid border-[#CCCCCC]  mx-[6px] cursor-pointer hover:bg-[#a5d5ffa7]"
               >
                 <i className="bi bi-chevron-double-left"></i>
-              </span>
-              <span
+              </a>
+              <a
+                href="#searchCampaign"
                 onClick={() =>
                   setColDataCurrent((Number(colDataCurrent) - 1).toString())
                 }
                 className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid border-[#CCCCCC]  mx-[6px] cursor-pointer hover:bg-[#a5d5ffa7]"
               >
                 <i className="bi bi-chevron-left"></i>
-              </span>
+              </a>
             </>
           ) : (
             ""
@@ -205,7 +208,7 @@ const Content = () => {
           {totalListData &&
             totalListData.map((item, index) => (
               <a
-                href="#search"
+                href="#searchCampaign"
                 key={index}
                 onClick={() => handleClickIndexList(index)}
                 className="p-[8px] px-[14px]  border-[1px] text-black border-solid border-[#CCCCCC]  mx-[6px]"
@@ -221,20 +224,22 @@ const Content = () => {
 
           {maxMinListData[1] !== colDataCurrent ? (
             <>
-              <span
+              <a
+                href="#searchCampaign"
                 onClick={() =>
                   setColDataCurrent((Number(colDataCurrent) + 1).toString())
                 }
                 className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid mx-[6px] border-[#CCCCCC] cursor-pointer hover:bg-[#a5d5ffa7]"
               >
                 <i className="bi bi-chevron-right"></i>
-              </span>
-              <span
+              </a>
+              <a
+                href="#searchCampaign"
                 onClick={() => setColDataCurrent(maxMinListData[1])}
                 className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid mx-[6px] border-[#CCCCCC] cursor-pointer hover:bg-[#a5d5ffa7]"
               >
                 <i className="bi bi-chevron-double-right"></i>
-              </span>
+              </a>
             </>
           ) : (
             " "

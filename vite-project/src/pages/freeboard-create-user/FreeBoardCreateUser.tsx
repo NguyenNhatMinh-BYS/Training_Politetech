@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import Nav from "@/component/Navigate/Nav";
-import Footer from "@/component/Footter/Footer";
-import Quill from "component/Quill/Quill";
+import Nav from "@/component/navigate/Nav";
+import Footer from "@/component/footter/Footer";
+import Quill from "@/component/quill/Quill";
 import { Controller, useForm } from "react-hook-form";
 import * as yub from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -24,7 +24,8 @@ const schema = yub.object().shape({
   author: yub.string().required("입력하세요"),
 });
 const FreeBoardCreateUser = () => {
-  const { infor } = useLocation().state;
+  const { state } = useLocation();
+  const { infor } = state || "";
   const [contentt, setContent] = useState("");
   const [isError, setError] = useState(false);
   const navigate = useNavigate();
@@ -48,7 +49,7 @@ const FreeBoardCreateUser = () => {
   });
 
   useEffect(() => {
-    if (infor !== "") {
+    if (infor) {
       (async () => {
         try {
           const response = await freeBoardDetail({ id: infor.toString() });
@@ -88,7 +89,6 @@ const FreeBoardCreateUser = () => {
 
   return (
     <div className=" pt-[100px] ">
-      <Nav colorText="text-black" />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full flex justify-center ">
           <div className="w-3/5">
@@ -211,7 +211,6 @@ const FreeBoardCreateUser = () => {
           </div>
         </div>
       </form>
-      <Footer />
     </div>
   );
 };

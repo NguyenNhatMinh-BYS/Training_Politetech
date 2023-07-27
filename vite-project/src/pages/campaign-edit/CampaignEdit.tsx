@@ -1,11 +1,11 @@
-import Footer from "@/component/Footter/Footer";
-import Nav from "@/component/Navigate/Nav";
+import Footer from "@/component/footter/Footer";
+import Nav from "@/component/navigate/Nav";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import * as yub from "yup";
 
-import Quill from "component/Quill/Quill";
+import Quill from "@/component/quill/Quill";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -17,20 +17,37 @@ import {
   putCampaign,
 } from "@/services/apiCampaign";
 import { upLoadImg } from "@/services/apiCommon";
-import Loading from "../loading/Loading";
+import Loading from "../../component/loading/Loading";
 interface Title {
   title: string;
   link: string;
   img: string;
+  content: string;
 }
+const module = {
+  toolbar: [
+    [{ header: [1, 2, false] }],
+
+    ["bold", "italic", "underline", "blockquote"],
+
+    [
+      { list: "ordered" },
+      { list: "bullet" },
+      { indent: "-1" },
+      { indent: "+1" },
+    ],
+  ],
+};
 const schema = yub.object().shape({
   title: yub.string().required("입력하세요"),
   link: yub.string().required("입력하세요"),
   img: yub.string().required("입력하세요"),
+  content: yub.string().required("입력하세요"),
 });
 const CampaignEdit = () => {
-  const { infor } = useLocation().state;
-  const [contentt, setContent] = useState("");
+  const { state } = useLocation();
+  const { infor } = state || "";
+
   const navigate = useNavigate();
   const [nameImg, setNameImg] = useState("");
   const dispatch = useDispatch();
@@ -46,17 +63,18 @@ const CampaignEdit = () => {
       title: "",
       link: "",
       img: "",
+      content: "",
     },
     resolver: yupResolver(schema),
   });
 
   useEffect(() => {
     dispatch(activeLoading(true));
-    if (infor !== "") {
+    if (infor) {
       (async () => {
         try {
           const response = await campaignDetail({ id: infor.toString() });
-          setContent(response.data.data.content);
+          setValue("content", response.data.data.content);
           setValue("title", response.data.data.title);
           setValue("link", response.data.data.link);
           setValue("img", response.data.data.image_name);
@@ -68,7 +86,7 @@ const CampaignEdit = () => {
     }
     dispatch(activeLoading(false));
   }, []);
-  
+
   const createNotice = (data: Title, token: string) => {
     try {
       (async () => {
@@ -83,7 +101,7 @@ const CampaignEdit = () => {
           await postCampaign(
             {
               title: data.title,
-              content: contentt,
+              content: data.content,
               link: data.link,
               image: postFileImg.data.data.filename,
               image_name: postFileImg.data.data.original_name,
@@ -101,7 +119,7 @@ const CampaignEdit = () => {
 
   const onSubmit = (data: Title) => {
     const token = localStorage.getItem("token") || "";
-    if (infor === "") createNotice(data, token);
+    if (!infor) createNotice(data, token);
     else {
       dispatch(activeLoading(true));
       try {
@@ -123,7 +141,7 @@ const CampaignEdit = () => {
                 {
                   id: infor.toString(),
                   title: data.title,
-                  content: contentt,
+                  content: data.content,
                   link: data.link,
                   image: postFileImg.data.data.filename,
                   image_name: postFileImg.data.data.original_name,
@@ -143,10 +161,6 @@ const CampaignEdit = () => {
       }
     }
     dispatch(activeLoading(false));
-  };
-
-  const handleChangeContent = (value: string) => {
-    setContent(value);
   };
 
   const handleGetFile = () => {
@@ -169,7 +183,7 @@ const CampaignEdit = () => {
   return (
     <div className=" pt-[100px] ">
       <Loading />
-      <Nav colorText="text-black" />
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full flex justify-center ">
           <div className="w-3/5">
@@ -202,24 +216,14 @@ const CampaignEdit = () => {
             </div>
 
             <div className="mt-[20px]">
-              <Quill
-                content={contentt}
-                handleChangeContent={handleChangeContent}
-                module={{
-                  toolbar: [
-                    [{ header: [1, 2, false] }],
-
-                    ["bold", "italic", "underline", "blockquote"],
-
-                    [
-                      { list: "ordered" },
-                      { list: "bullet" },
-                      { indent: "-1" },
-                      { indent: "+1" },
-                    ],
-                  ],
-                }}
+              <Controller
+                control={control}
+                name="content"
+                render={({ field }) => <Quill field={field} module={module} />}
               />
+              <p className="text-red-500 absolute bottom-[-30px] left-0">
+                {errors.content?.message}
+              </p>
             </div>
             <div className="flex w-full  relative  bg-white border-[2px] border-solid mt-[-42px] mb-[20px]">
               <h1 className="  grow-[3] text-[18px] font-bold text-center bg-[#b9e0ff] py-[14px]">
@@ -271,7 +275,7 @@ const CampaignEdit = () => {
                 control={control}
                 name="img"
                 render={({ field: { onChange } }) => (
-                  <div className="grow-[7]  flex ">
+                  <div className="grow-[7]  flex  relative">
                     <input
                       id="files"
                       type="file"
@@ -305,7 +309,6 @@ const CampaignEdit = () => {
           </div>
         </div>
       </form>
-      <Footer />
     </div>
   );
 };

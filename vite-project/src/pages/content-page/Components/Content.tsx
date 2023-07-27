@@ -2,7 +2,7 @@ import { ContentApi } from "@/model/Auth.model";
 import React, { useEffect, useRef, useState } from "react";
 import { content } from "services/apiContent";
 import dayjs from "dayjs";
-import Loading from "@/pages/loading/Loading";
+import Loading from "@/component/loading/Loading";
 import { useDispatch } from "react-redux";
 import { activeLoading } from "@/features/loadingSlice/loadingSlice";
 const Content = () => {
@@ -92,7 +92,10 @@ const Content = () => {
     dispath(activeLoading(false));
   }, [colDataCurrent]);
   return (
-    <div className="w-full flex justify-center mt-[60px] mb-[80px] transition-all duration-200 ease-in-out ">
+    <div
+      id="video"
+      className="w-full flex justify-center mt-[60px] mb-[80px] transition-all duration-200 ease-in-out "
+    >
       <Loading />
       <div className="w-3/5 min-h-[580px]">
         <div>

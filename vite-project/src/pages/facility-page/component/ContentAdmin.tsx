@@ -1,9 +1,9 @@
 import React from "react";
 import { useRef, useState, useEffect } from "react";
-import HeaderSearch from "@/component/HeaderSearch/HeaderSearch";
+import HeaderSearch from "@/component/headerSearch/HeaderSearch";
 import { FacilityData } from "@/model/Auth.model";
 import { table } from "console";
-import Pagination from "@/component/Pagination/Pagination";
+import Pagination from "@/component/pagination/Pagination";
 const ContentAdmin = ({ data, isLoad }: any) => {
   const totalData = useRef<Array<Array<FacilityData>>>([]);
   const [renderData, setRednerData] = useState<Array<FacilityData>>([]);
@@ -50,7 +50,10 @@ const ContentAdmin = ({ data, isLoad }: any) => {
     setPage(parseInt(pageChange));
   };
   return (
-    <div className="w-full flex justify-center flex-col items-center">
+    <div
+      id="facilityAdmin"
+      className="w-full flex justify-center flex-col items-center"
+    >
       <div className="max-[1024px]:flex-col  flex justify-center  w-full  items-center">
         <HeaderSearch
           searchAuthor={false}
@@ -152,6 +155,7 @@ const ContentAdmin = ({ data, isLoad }: any) => {
           page={page.toString()}
           setColDataCurrent={setColDataCurrent}
           sizePage={10}
+          href={"#facilityAdmin"}
         />
       </div>
     </div>

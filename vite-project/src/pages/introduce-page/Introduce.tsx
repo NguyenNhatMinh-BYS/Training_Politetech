@@ -1,15 +1,13 @@
 import React, { useEffect } from "react";
-import Nav from "@/component/Navigate/Nav";
-import Footer from "@/component/Footter/Footer";
+import Nav from "@/component/navigate/Nav";
+import Footer from "@/component/footter/Footer";
 import ocean from "assets/img/ocean.png";
 import logo from "assets/img/logo@2x.png";
 import group513 from "assets/img/group513.png";
 import group526 from "assets/img/group526.png";
 import { useRef } from "react";
-import useAuth from "@/hooks/useAuth";
+
 const Introduce = () => {
-  const { auth } = useAuth();
-  console.log(auth);
   const headerSmooth = useRef<HTMLDivElement>(null);
   const mainSmooth = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -30,7 +28,6 @@ const Introduce = () => {
   }, []);
   return (
     <div className=" pt-[100px]">
-      <Nav colorText="text-black" />
       <div className="w-full flex justify-center text-[17px] text-[#4D4D4D] select-none">
         <div className="w-4/5  flex flex-col items-center mt-[80px]">
           <div
@@ -105,8 +102,6 @@ const Introduce = () => {
           </div>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 };

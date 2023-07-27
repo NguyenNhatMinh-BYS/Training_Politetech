@@ -1,7 +1,7 @@
 import ContentDetailHeader from "./ContentDetailHeader";
 import { useEffect } from "react";
 import { useRef } from "react";
-import ChildListContent from "./ChildListContent";
+import ChildListContent from "./ChildListContent"
 const listCol = [
   {
     title: "콘텐츠",

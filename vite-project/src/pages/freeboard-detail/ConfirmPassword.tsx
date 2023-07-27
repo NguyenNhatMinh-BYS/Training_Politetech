@@ -1,18 +1,19 @@
 import { deleteFreeBoardPost, validateAuthor } from "@/services/apiFreeBoard";
 import { useState } from "react";
-import NoticeTitle from "../announcement-page/Component/NoticeTitle";
+import NoticeTitle from "../announcement-page/component/NoticeTitle";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 interface Validate {
   CloseConfirmPW: () => void;
   isDeleted: boolean;
   idItem: string;
-  editIteam:(password:string)=>void;
+  editIteam: (password: string) => void;
 }
 const ConfirmPassword: React.FC<Validate> = ({
   CloseConfirmPW,
   isDeleted,
-  idItem,editIteam
+  idItem,
+  editIteam,
 }) => {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState(false);
@@ -29,8 +30,7 @@ const ConfirmPassword: React.FC<Validate> = ({
 
       if (response.status === 200 && isDeleted) {
         setIsTrue(true);
-      }
-      else if(response.status ===200 && !isDeleted) {
+      } else if (response.status === 200 && !isDeleted) {
         editIteam(password);
       }
     } catch (e) {

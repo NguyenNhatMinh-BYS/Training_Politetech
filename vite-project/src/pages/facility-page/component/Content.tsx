@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { FacilityData } from "@/model/Auth.model";
 import { activeLoading } from "@/features/loadingSlice/loadingSlice";
 import { useDispatch } from "react-redux";
-import Loading from "@/pages/loading/Loading";
+import Loading from "@/component/loading/Loading";
 import DetailFacility from "./DetailFacility";
 const Content = ({ data, isLoad, isError }: any) => {
   const [location, setLocation] = useState("");

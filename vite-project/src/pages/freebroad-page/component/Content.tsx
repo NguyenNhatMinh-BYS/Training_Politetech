@@ -1,14 +1,14 @@
-import HeaderSearch from "@/component/HeaderSearch/HeaderSearch";
+import HeaderSearch from "@/component/headerSearch/HeaderSearch";
 import { useRef, useEffect, useState } from "react";
 
 import { DataNotice } from "@/model/Auth.model";
 import dayjs from "dayjs";
-import Pagination from "@/component/Pagination/Pagination";
-import NoticeTitle from "@/pages/announcement-page/Component/NoticeTitle";
+import Pagination from "@/component/pagination/Pagination";
+import NoticeTitle from "@/pages/announcement-page/component/NoticeTitle";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import Loading from "@/pages/loading/Loading";
+import Loading from "@/component/loading/Loading";
 import { activeLoading } from "@/features/loadingSlice/loadingSlice";
 import { delFreeBoard, freeBoard } from "@/services/apiFreeBoard";
 const ContentAdmin = () => {
@@ -151,6 +151,7 @@ const ContentAdmin = () => {
   };
   return (
     <div
+      id="freeboard"
       className="w-full flex justify-center flex-col items-center"
       onClick={() => {
         listItem.current?.classList.add("hidden");
@@ -256,6 +257,7 @@ const ContentAdmin = () => {
               page={page}
               setColDataCurrent={setColDataCurrent}
               sizePage={10}
+              href={"#freeboard"}
             />
           </div>
         ) : isEmpty ? (

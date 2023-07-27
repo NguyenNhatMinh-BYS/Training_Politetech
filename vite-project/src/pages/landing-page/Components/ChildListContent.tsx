@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import { other } from "@/services/apiNotice";
-import Loading from "@/pages/loading/Loading";
-import { useDispatch } from "react-redux";
-import { activeLoading } from "@/features/loadingSlice/loadingSlice";
-import { Link, useNavigate } from "react-router-dom";
+
+
+
+import { Link } from "react-router-dom";
 interface Prop {
   url: string;
 }
 const ChildListContent = ({ url }: Prop) => {
   const [dataListContent, setdataListContent] = useState([]);
-  const dispath = useDispatch();
-  const navigate = useNavigate();
+  
+
   const getData = async () => {
-    dispath(activeLoading(true));
+   
 
     try {
       const responsive = await other(url);
@@ -23,35 +23,42 @@ const ChildListContent = ({ url }: Prop) => {
       console.log(err);
     }
 
-    dispath(activeLoading(false));
+   
   };
   useEffect(() => {
     getData();
   }, []);
   return (
-    <div className="border-y-[2px] border-main mt-[12px]">
+    <div className="border-y-[2px] border-main mt-[12px] min-h-[200px]">
+    
       <ul className="list-square">
-        {dataListContent &&
-          dataListContent.map(
-            (item: { title: string; id?: string }, index: number) => (
-              <Link
-                key={index}
-                to={`${url === "/free-board" ? "/freeboard" : url}/${
-                  url === "/content" ? "" : item.id
-                }`}
-              >
-                <li className=" cursor-pointer   hover:bg-hoverContent">
-                  <div className="p-2 flex items-center justify-between w-full  ">
-                    <div className="bg-black w-[8px] h-[8px] mx-[2px] "></div>
-                    <div className="w-4/5 flex  items-center truncate overflow-hidden">
-                      <span className="truncate ">{item.title}</span>
-                    </div>
-                    <i className="bi bi-chevron-right p-1 "></i>
-                  </div>
-                </li>
-              </Link>
-            )
-          )}
+        {dataListContent.length === 0 ? (
+          <div className="flex justify-center">Loading...</div>
+        ) : (
+          <div>
+            {dataListContent &&
+              dataListContent.map(
+                (item: { title: string; id?: string }, index: number) => (
+                  <Link
+                    key={index}
+                    to={`${url === "/free-board" ? "/freeboard" : url}/${
+                      url === "/content" ? "" : item.id
+                    }`}
+                  >
+                    <li className=" cursor-pointer   hover:bg-hoverContent">
+                      <div className="p-2 flex items-center justify-between w-full  ">
+                        <div className="bg-black w-[8px] h-[8px] mx-[2px] "></div>
+                        <div className="w-4/5 flex  items-center truncate overflow-hidden">
+                          <span className="truncate ">{item.title}</span>
+                        </div>
+                        <i className="bi bi-chevron-right p-1 "></i>
+                      </div>
+                    </li>
+                  </Link>
+                )
+              )}
+          </div>
+        )}
       </ul>
     </div>
   );

@@ -3,14 +3,14 @@ import { useState } from "react";
 import { notice } from "@/services/apiNotice";
 import { DataNotice } from "@/model/Auth.model";
 import dayjs from "dayjs";
-import NoticeTitle from "@/pages/announcement-page/Component/NoticeTitle";
+import NoticeTitle from "@/pages/announcement-page/component/NoticeTitle";
 import { useNavigate } from "react-router-dom";
-import Loading from "@/pages/loading/Loading";
+import Loading from "@/component/loading/Loading";
 import { useDispatch } from "react-redux";
 import { activeLoading } from "@/features/loadingSlice/loadingSlice";
 import { delLivingLab, livingLab } from "@/services/apiLivingLab";
-import HeaderSearch from "@/component/HeaderSearch/HeaderSearch";
-import Pagination from "@/component/Pagination/Pagination";
+import HeaderSearch from "@/component/headerSearch/HeaderSearch";
+import Pagination from "@/component/pagination/Pagination";
 import { toast } from "react-toastify";
 const Content = () => {
   const listItem = useRef<HTMLDivElement>(null);
@@ -159,7 +159,7 @@ const Content = () => {
         listItem.current?.classList.add("hidden");
         clickButton.current?.classList.remove("border-[#0075DC]");
       }}
-      id="search"
+      id="living-lab"
       className=" w-full flex justify-center flex-col items-center "
     >
       {" "}
@@ -270,6 +270,7 @@ const Content = () => {
               page={colDataCurrent}
               setColDataCurrent={setColDataCurrent}
               sizePage={10}
+              href={"#living-lab"}
             />
           </div>
         ) : isEmpty ? (

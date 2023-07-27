@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   QueryClient,
   QueryClientProvider,
@@ -16,20 +16,20 @@ const ReactQuery = () => {
   );
 };
 const fetchData = async ({ queryKey }: any): Promise<Array<DataNotice>> => {
-  const { data } = await notice({ page: "0" });
-  const [key, sss, { age }] = queryKey;
-  console.log(key, sss, age);
+  const [key, { pageSize }] = queryKey;
+  const { data } = await notice({ page: "0", page_size: pageSize.toString() });
 
   console.log(data.data.list);
 
   return data.data.list;
 };
 const Example = () => {
-  const age = 18;
+  const [pageSize, setPageSize] = useState(1);
+
   const { status, fetchStatus, error, data } = useQuery<
     Array<DataNotice>,
     Error
-  >({ queryKey: ["repoData", "Minh", { age }], queryFn: fetchData });
+  >({ queryKey: ["pageData", { pageSize }], queryFn: fetchData });
   if (status === "loading" && fetchStatus === "fetching") {
     return <div>Loading...</div>;
   }
@@ -40,6 +40,20 @@ const Example = () => {
     <div>
       {data &&
         data.map((item: DataNotice) => <div key={item.id}>{item.author}</div>)}
+      <div className="flex ">
+        <button
+          className="mr-[20px] bg-slate-400 px-[10px]"
+          onClick={() => setPageSize(pageSize - 1)}
+        >
+          delete
+        </button>
+        <button
+          className=" bg-slate-400 px-[10px]"
+          onClick={() => setPageSize(pageSize + 1)}
+        >
+          add
+        </button>
+      </div>
     </div>
   );
 };

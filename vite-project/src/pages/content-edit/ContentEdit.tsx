@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import Nav from "@/component/Navigate/Nav";
-import Footer from "@/component/Footter/Footer";
+import Nav from "@/component/navigate/Nav";
+import Footer from "@/component/footter/Footer";
 
 import { Controller, useForm } from "react-hook-form";
 import * as yub from "yup";
@@ -11,20 +11,26 @@ import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { activeLoading } from "@/features/loadingSlice/loadingSlice";
-import Loading from "../loading/Loading";
+import Loading from "../../component/loading/Loading";
 import { contentDetail, postContent, putContent } from "@/services/apiContent";
-import Quill from "component/Quill/Quill";
+import Quill from "@/component/quill/Quill";
 interface Title {
   title: string;
   video: string;
+  content:string;
+}
+const module={
+  toolbar: false,
 }
 const schema = yub.object().shape({
   title: yub.string().required("입력하세요"),
   video: yub.string().required("입력하세요"),
+  content: yub.string().required("입력하세요"),
 });
 const AnnouncementEdit = () => {
-  const { infor } = useLocation().state;
-  const [contentt, setContent] = useState("");
+  const { state } = useLocation();
+  const { infor } = state || "";
+ 
   const navigate = useNavigate();
   const dispath = useDispatch();
   const {
@@ -44,14 +50,13 @@ const AnnouncementEdit = () => {
   });
 
   useEffect(() => {
-    
     dispath(activeLoading(true));
-    if (infor !== "") {
+    if (infor) {
       (async () => {
         try {
           const response = await contentDetail({ id: infor.toString() });
 
-          setContent(response.data.data.description);
+          setValue("content",response.data.data.description);
           setValue("title", response.data.data.title);
           setValue("video", response.data.data.video);
         } catch (e) {
@@ -68,7 +73,7 @@ const AnnouncementEdit = () => {
         await postContent(
           {
             title: data.title,
-            description: contentt,
+            description: data.content,
             video: data.video,
           },
           token
@@ -83,7 +88,7 @@ const AnnouncementEdit = () => {
 
   const onSubmit = (data: Title) => {
     const token = localStorage.getItem("token") || "";
-    if (infor === "") createNotice(data, token);
+    if (!infor) createNotice(data, token);
     else {
       try {
         (async () => {
@@ -91,7 +96,7 @@ const AnnouncementEdit = () => {
             {
               id: infor.toString(),
               title: data.title,
-              description: contentt,
+              description: data.content,
               video: data.video,
             },
 
@@ -106,13 +111,11 @@ const AnnouncementEdit = () => {
       }
     }
   };
-  const handleChangeContent = (value: string) => {
-    setContent(value);
-  };
+  
   return (
     <div className=" pt-[100px] ">
       <Loading />
-      <Nav colorText="text-black" />
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full flex justify-center ">
           <div className="w-3/5">
@@ -168,12 +171,10 @@ const AnnouncementEdit = () => {
               />
             </div>
             <div className="mt-[40px]">
-              <Quill
-                content={contentt}
-                handleChangeContent={handleChangeContent}
-                module={{
-                  toolbar: false,
-                }}
+            <Controller
+                control={control}
+                name="content"
+                render={({ field }) => <Quill field={field} module={module} />}
               />
             </div>
           </div>
@@ -193,7 +194,6 @@ const AnnouncementEdit = () => {
           </div>
         </div>
       </form>
-      <Footer />
     </div>
   );
 };

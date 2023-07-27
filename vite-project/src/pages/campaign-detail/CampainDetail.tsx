@@ -1,8 +1,8 @@
 import { campaignDetail } from "@/services/apiCampaign";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Nav from "@/component/Navigate/Nav";
-import Footer from "@/component/Footter/Footer";
+import Nav from "@/component/navigate/Nav";
+import Footer from "@/component/footter/Footer";
 import { campaigngApi } from "@/model/Auth.model";
 import "@/index.css";
 
@@ -12,7 +12,6 @@ const CampainDetail = () => {
   const [data, setData] = useState<campaigngApi>();
 
   useEffect(() => {
-    
     try {
       (async () => {
         const response = await campaignDetail({ id: id });
@@ -26,7 +25,6 @@ const CampainDetail = () => {
   }, []);
   return (
     <div className=" pt-[100px]  ">
-      <Nav colorText="text-black" />
       <div className="w-full flex justify-center">
         <div className="w-3/5 ">
           <div className="my-[40px]">
@@ -80,8 +78,6 @@ const CampainDetail = () => {
           </div>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 };

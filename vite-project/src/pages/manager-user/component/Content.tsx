@@ -1,12 +1,12 @@
 import { delUserNormal, manageUser } from "@/services/apiMangeUser";
 import React, { useEffect, useState, useRef } from "react";
-import Loading from "@/pages/loading/Loading";
+import Loading from "@/component/loading/Loading";
 import { activeLoading } from "@/features/loadingSlice/loadingSlice";
 import { useDispatch } from "react-redux";
 import { dataUser } from "@/model/Auth.model";
-import HeaderSearch from "@/component/HeaderSearch/HeaderSearch";
-import Pagination from "@/component/Pagination/Pagination";
-import NoticeTitle from "@/pages/announcement-page/Component/NoticeTitle";
+import HeaderSearch from "@/component/headerSearch/HeaderSearch";
+import Pagination from "@/component/pagination/Pagination";
+import NoticeTitle from "@/pages/announcement-page/component/NoticeTitle";
 
 const Content = () => {
   const [page, setPage] = useState("0");

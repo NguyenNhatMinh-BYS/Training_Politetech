@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import Nav from "@/component/Navigate/Nav";
-import Footer from "@/component/Footter/Footer";
+import Nav from "@/component/navigate/Nav";
+import Footer from "@/component/footter/Footer";
 
 import { Controller, useForm } from "react-hook-form";
 import * as yub from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Quill from "component/Quill/Quill";
+import Quill from "@/component/quill/Quill";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useEffect, useRef, useState } from "react";
@@ -18,13 +18,31 @@ import {
 } from "@/services/apiFreeBoard";
 interface Title {
   title: string;
+  content:string
+}
+const module={
+  toolbar: [
+    [{ header: [1, 2, false] }],
+
+    ["bold", "italic", "underline", "blockquote"],
+
+    [
+      { list: "ordered" },
+      { list: "bullet" },
+      { indent: "-1" },
+      { indent: "+1" },
+    ],
+    ["link", "image"],
+  ],
 }
 const schema = yub.object().shape({
   title: yub.string().required("입력하세요"),
+  content: yub.string().required("입력하세요"),
 });
 const FreeBoardEdit = () => {
-  const { infor, password } = useLocation().state;
-  const [contentt, setContent] = useState("");
+  const { state } = useLocation();
+  const { infor, password } = state || "";
+ 
   const navigate = useNavigate();
   const author = useRef("");
   const {
@@ -37,18 +55,19 @@ const FreeBoardEdit = () => {
     mode: "onChange",
     defaultValues: {
       title: "",
+      content:""
     },
     resolver: yupResolver(schema),
   });
 
   useEffect(() => {
-    if (infor !== "") {
+    if (infor) {
       (async () => {
         try {
           const response = await freeBoardDetail({ id: infor.toString() });
           if (password) author.current = response.data.data.author;
 
-          setContent(response.data.data.content);
+          setValue("content",response.data.data.content);
           setValue("title", response.data.data.title);
         } catch (e) {
           console.log(e);
@@ -63,7 +82,7 @@ const FreeBoardEdit = () => {
         await postFreeBoard(
           {
             title: data.title,
-            content: contentt,
+            content: data.content,
           },
           token
         );
@@ -83,7 +102,7 @@ const FreeBoardEdit = () => {
         const response = await editFreeBoard(infor, {
           password: password,
           title: data.title,
-          content: contentt,
+          content: data.content,
         });
         console.log(response);
 
@@ -94,13 +113,13 @@ const FreeBoardEdit = () => {
       }
     } else {
       const token = localStorage.getItem("token") || "";
-      if (infor === "") createNotice(data, token);
+      if (!infor) createNotice(data, token);
       else {
         try {
-          const response = await putFreeBoard(
+          await putFreeBoard(
             {
               title: data.title,
-              content: contentt,
+              content: data.content,
             },
 
             token,
@@ -116,13 +135,10 @@ const FreeBoardEdit = () => {
     }
   };
 
-  const handleChangeContent = (value: string) => {
-    setContent(value);
-  };
+  
 
   return (
     <div className=" pt-[100px] ">
-      <Nav colorText="text-black" />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full flex justify-center ">
           <div className="w-3/5">
@@ -183,24 +199,10 @@ const FreeBoardEdit = () => {
             </div>
 
             <div className="mt-[40px]">
-              <Quill
-                content={contentt}
-                handleChangeContent={handleChangeContent}
-                module={{
-                  toolbar: [
-                    [{ header: [1, 2, false] }],
-
-                    ["bold", "italic", "underline", "blockquote"],
-
-                    [
-                      { list: "ordered" },
-                      { list: "bullet" },
-                      { indent: "-1" },
-                      { indent: "+1" },
-                    ],
-                    ["link", "image"],
-                  ],
-                }}
+            <Controller
+                control={control}
+                name="content"
+                render={({ field }) => <Quill field={field} module={module} />}
               />
             </div>
           </div>
@@ -220,7 +222,6 @@ const FreeBoardEdit = () => {
           </div>
         </div>
       </form>
-      <Footer />
     </div>
   );
 };

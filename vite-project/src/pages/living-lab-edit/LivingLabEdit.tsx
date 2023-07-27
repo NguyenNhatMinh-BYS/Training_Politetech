@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import Nav from "@/component/Navigate/Nav";
-import Footer from "@/component/Footter/Footer";
-import Quill from "component/Quill/Quill";
+import Nav from "@/component/navigate/Nav";
+import Footer from "@/component/footter/Footer";
+import Quill from "@/component/quill/Quill";
 import { Controller, useForm } from "react-hook-form";
 import * as yub from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -17,13 +17,31 @@ import {
 } from "@/services/apiLivingLab";
 interface Title {
   title: string;
+  content: string;
 }
+const module = {
+  toolbar: [
+    [{ header: [1, 2, false] }],
+
+    ["bold", "italic", "underline", "strike", "blockquote"],
+
+    [
+      { list: "ordered" },
+      { list: "bullet" },
+      { indent: "-1" },
+      { indent: "+1" },
+    ],
+    ["clean", "link", "image"],
+  ],
+};
 const schema = yub.object().shape({
   title: yub.string().required("입력하세요"),
+  content: yub.string().required("입력하세요"),
 });
 const LivingLabEdit = () => {
-  const { infor } = useLocation().state;
-  const [contentt, setContent] = useState("");
+  const { state } = useLocation();
+  const { infor } = state || "";
+
   const navigate = useNavigate();
 
   const {
@@ -36,18 +54,19 @@ const LivingLabEdit = () => {
     mode: "onChange",
     defaultValues: {
       title: "",
+      content: "",
     },
     resolver: yupResolver(schema),
   });
 
   useEffect(() => {
-    if (infor !== "") {
+    if (infor) {
       (async () => {
         try {
           const response = await livingLabDetail({ id: infor.toString() });
           console.log(response);
 
-          setContent(response.data.data.content);
+          setValue("content", response.data.data.content);
           setValue("title", response.data.data.title);
         } catch (e) {
           console.log(e);
@@ -62,7 +81,7 @@ const LivingLabEdit = () => {
         await postLivingLab(
           {
             title: data.title,
-            content: contentt,
+            content: data.content,
           },
           token
         );
@@ -78,7 +97,7 @@ const LivingLabEdit = () => {
     const token = localStorage.getItem("token") || "";
     console.log(data.title);
 
-    if (infor === "") createNotice(data, token);
+    if (!infor) createNotice(data, token);
     else {
       try {
         (async () => {
@@ -86,7 +105,7 @@ const LivingLabEdit = () => {
             {
               id: infor[0],
               title: data.title,
-              content: contentt,
+              content: data.content,
             },
 
             token
@@ -101,15 +120,11 @@ const LivingLabEdit = () => {
     }
   };
 
-  const handleChangeContent = (value: string) => {
-    setContent(value);
-  };
   useEffect(() => {
     window.scrollTo({ top: 0 });
   }, []);
   return (
     <div className=" pt-[100px] ">
-      <Nav colorText="text-black" />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full flex justify-center ">
           <div className="w-3/5">
@@ -142,24 +157,10 @@ const LivingLabEdit = () => {
             </div>
 
             <div className="mt-[40px]">
-              <Quill
-                content={contentt}
-                handleChangeContent={handleChangeContent}
-                module={{
-                  toolbar: [
-                    [{ header: [1, 2, false] }],
-
-                    ["bold", "italic", "underline", "strike", "blockquote"],
-
-                    [
-                      { list: "ordered" },
-                      { list: "bullet" },
-                      { indent: "-1" },
-                      { indent: "+1" },
-                    ],
-                    ["clean", "link", "image"],
-                  ],
-                }}
+              <Controller
+                control={control}
+                name="content"
+                render={({ field }) => <Quill field={field} module={module} />}
               />
             </div>
           </div>
@@ -179,7 +180,6 @@ const LivingLabEdit = () => {
           </div>
         </div>
       </form>
-      <Footer />
     </div>
   );
 };

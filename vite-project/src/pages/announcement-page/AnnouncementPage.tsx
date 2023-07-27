@@ -1,18 +1,16 @@
-import Banner from "./Component/Banner";
-import Content from "./Component/Content";
-import Footer from "@/component/Footter/Footer";
-import Nav from "@/component/Navigate/Nav";
-import { useEffect } from "react";
+import Banner from "component/banner/Banner";
+import Content from "./component/Content";
+import imgPage3 from "assets/img/BannerPage3.png";
+import iconPage3 from "assets/img/iconPage3.png";
 const AnnouncementPage = () => {
-  
-
   return (
     <div className=" pt-[100px]">
-      <Nav colorText="text-black" />
-
-      <Banner />
+      <Banner
+        imgBanner={imgPage3}
+        icon={iconPage3}
+        text={"깨바부의 새로운 소식을 전합니다."}
+      />
       <Content />
-      <Footer />
     </div>
   );
 };

@@ -6,7 +6,7 @@ import { DataNotice } from "model/Auth.model";
 import { useDispatch } from "react-redux";
 import { activeLoading } from "@/features/loadingSlice/loadingSlice";
 import { useNavigate } from "react-router-dom";
-import Loading from "@/pages/loading/Loading";
+import Loading from "@/component/loading/Loading";
 const ContentDetail = () => {
   const scroller = useRef<HTMLDivElement>(null);
   const [dataNotice, setDataNotice] = useState([]);
@@ -55,7 +55,7 @@ const ContentDetail = () => {
     dispath(activeLoading(false));
   }, []);
   return (
-    <div className="flex justify-center w-full  duration-500 transition-all ">
+    <div className="flex justify-center w-full  duration-500 transition-all  ">
       <Loading />
       <div
         className="w-80 mt-140 opacity-0 duration-500 transition-all "

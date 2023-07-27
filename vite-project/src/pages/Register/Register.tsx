@@ -1,5 +1,5 @@
 import HeaderLogin from "../login-page/HeaderLogin";
-import Footer from "component/Footter/Footer";
+import Footer from "@/component/footter/Footer";
 import FormRegister from "./FormRegister";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -16,14 +16,8 @@ const Register = () => {
   }, [tokens]);
   return (
     <div className="w-full h-screen flex  flex-col ">
-      <div className="">
-        <HeaderLogin />
-      </div>
       <div className="grow-[9] flex items-center justify-center mx-[60px]">
         <FormRegister />
-      </div>
-      <div className="">
-        <Footer />
       </div>
     </div>
   );

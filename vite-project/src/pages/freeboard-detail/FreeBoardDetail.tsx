@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { DataNotice } from "@/model/Auth.model";
-import Nav from "@/component/Navigate/Nav";
+import Nav from "@/component/navigate/Nav";
 import dayjs from "dayjs";
-import Footer from "@/component/Footter/Footer";
+import Footer from "@/component/footter/Footer";
 import { useNavigate } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import { activeLoading } from "@/features/loadingSlice/loadingSlice";
 import { useLocation } from "react-router-dom";
-import Loading from "../loading/Loading";
+import Loading from "../../component/loading/Loading";
 import { freeBoardDetail } from "@/services/apiFreeBoard";
 import ConfirmPassword from "./ConfirmPassword";
 const FreeBoardDetail = () => {
@@ -64,7 +64,7 @@ const FreeBoardDetail = () => {
         ""
       )}
       <Loading />
-      <Nav colorText="text-black" />
+
       <div className="h-full flex justify-between flex-col ">
         {/* main  */}
         <div className="w-full flex justify-center mt-[160px] mb-[120px]  ">
@@ -160,9 +160,6 @@ const FreeBoardDetail = () => {
               </div>
             </div>
           </div>
-        </div>
-        <div className="  w-full">
-          <Footer />
         </div>
       </div>
     </div>

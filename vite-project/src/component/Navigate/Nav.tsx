@@ -7,10 +7,8 @@ import { useNavigate } from "react-router-dom";
 import "./style.css";
 import { setToken } from "@/features/DataUserSlice/authSlice";
 import { useDispatch } from "react-redux";
-interface Prop {
-  colorText: string;
-}
-const Nav = ({ colorText }: Prop) => {
+
+const Nav = () => {
   const scrollYElement = useRef<HTMLDivElement>(null);
   const navIcon = useRef<HTMLDivElement>(null);
   const navIconClose = useRef<HTMLDivElement>(null);
@@ -21,9 +19,22 @@ const Nav = ({ colorText }: Prop) => {
   const shadow = useRef("");
   const [role, setRole] = useState("");
   const [bg, setBg] = useState("");
-  const [textNav, setTextNav] = useState(colorText);
+  const colorText = useRef<String>("text-white");
+  const [textNav, setTextNav] = useState<String>(colorText.current);
   const active = useRef<HTMLDivElement>(null);
   const location = useLocation();
+  const [isPageLogin, setIsPageLogin] = useState(false);
+  useEffect(() => {
+    if (location.pathname !== "/") {
+      colorText.current = "text-black";
+      shadow.current = "shadow-lg";
+    } else {
+      colorText.current = "text-white";
+      shadow.current = "";
+      setBg("bg-transparent");
+    }
+    setTextNav(colorText.current);
+  }, [location.pathname]);
   useEffect(() => {
     if (location.pathname !== "/facility")
       window.scroll({ top: 0, behavior: "smooth" });
@@ -32,6 +43,20 @@ const Nav = ({ colorText }: Prop) => {
       location.pathname === "/manager-user"
     ) {
       active.current?.classList.add(..."text-white font-bold".split(" "));
+    } else if (
+      location.pathname !== "/living-lab" &&
+      location.pathname !== "/manager-user"
+    ) {
+      active.current?.classList.remove(..."text-white font-bold".split(" "));
+    }
+    if (
+      location.pathname === "/Login" ||
+      location.pathname === "/login" ||
+      location.pathname === "/register"
+    ) {
+      setIsPageLogin(true);
+    } else {
+      setIsPageLogin(false);
     }
   });
   useEffect(() => {
@@ -43,74 +68,62 @@ const Nav = ({ colorText }: Prop) => {
       if (dataUser != null) {
         setIsLogin(true);
         setRole(dataUser.role);
-        if (dataUser.role === "Admin") {
-          setBg("bg-transparent text-white");
-        }
-        if (dataUser.role === "Admin" && colorText === "text-black") {
-          setBg("bg-gradient-to-b from-blue-700 to-blue-400 text-white");
-          setTextNav("text-[#fffdfd72]");
-        }
-        if (dataUser.role === "Normal" && colorText === "text-black") {
-          setBg("bg-gradient-to-b from-sky-600 to-teal-700 text-white");
-        }
       }
     }
-    if (!dataUser && colorText === "text-black") {
-      setBg("bg-white ");
+
+    if (role === "Admin") {
+      if (colorText.current === "text-black") {
+        shadow.current = "shadow-lg";
+        setBg("bg-gradient-to-b from-blue-600 to-blue-400");
+        setTextNav("text-[#ffffffa8]");
+      }
+    } else if (role === "") {
+      if (colorText.current === "text-black") {
+        shadow.current = "shadow-lg";
+        setBg("bg-white");
+      }
+    } else if (role === "Normal") {
+      if (colorText.current === "text-black") {
+        shadow.current = "shadow-lg";
+        setBg("bg-gradient-to-b from-sky-600 to-teal-700");
+      }
     }
-    if (!dataUser && colorText === "text-white") {
-      setBg("bg-transparent ");
-    }
-    if (colorText === "text-black") shadow.current = "shadow-lg";
 
     function handleScroll() {
       let scrollY = window.scrollY;
 
-      const classesToAdd = `bg-white shadow-black-400 shadow-lg text-black`;
-      const classesToAddAdmin =
-        "text-[#fffdfd72] bg-gradient-to-b from-blue-700 to-blue-400 shadow-black-400 shadow-lg";
-      if (scrollY > 0) {
-        navIcon.current?.classList.remove("text-white");
-        if (dataUser && dataUser.role === "Normal") {
-          setBg(" bg-gradient-to-b from-sky-600 to-teal-700");
+      if (role === "") {
+        if (scrollY > 0 && colorText.current === "text-white") {
+          setBg("bg-white");
+          setTextNav("text-black");
+          shadow.current = "shadow-lg";
+        } else if (scrollY === 0 && colorText.current === "text-white") {
+          setBg("bg-transparent");
+          setTextNav("text-white");
+          shadow.current = "";
         }
-        scrollYElement.current?.classList.add(...classesToAdd.split(" "));
-        if (dataUser && dataUser.role === "Admin") {
-          scrollYElement.current?.classList.remove("text-black");
-          scrollYElement.current?.classList.add(
-            ...classesToAddAdmin.split(" ")
-          );
-          if (colorText === "text-black") {
-            scrollYElement.current?.classList.remove(
-              ..."text-black bg-transparent".split(" ")
-            );
-          }
-        }
-        navIconOpen.current?.classList.remove("max-[1279px]:text-white");
       }
-
-      if (scrollY === 0) {
-        scrollYElement.current?.classList.remove(...classesToAdd.split(" "));
+      if (role === "Admin") {
+        if (scrollY > 0 && colorText.current === "text-white") {
+          setBg("bg-gradient-to-b from-blue-600 to-blue-400");
+          setTextNav("text-[#ffffffa8]");
+          shadow.current = "shadow-lg";
+        } else if (scrollY === 0 && colorText.current === "text-white") {
+          setBg("bg-transparent");
+          setTextNav("text-white");
+          shadow.current = "";
+        }
       }
-      if (scrollY === 0 && colorText !== "text-black") {
-        if (dataUser && dataUser.role === "Normal") {
-          setBg("");
+      if (role === "Normal") {
+        if (scrollY > 0 && colorText.current === "text-white") {
+          setBg("bg-gradient-to-b from-sky-600 to-teal-700");
+          setTextNav("text-[#ffffffa8]");
+          shadow.current = "shadow-lg";
+        } else if (scrollY === 0 && colorText.current === "text-white") {
+          setBg("bg-transparent");
+          setTextNav("text-white");
+          shadow.current = "";
         }
-        if (!dataUser) {
-          navIcon.current?.classList.add(colorText);
-        }
-        if (dataUser && dataUser.role === "Admin") {
-          scrollYElement.current?.classList.remove(
-            ...classesToAddAdmin.split(" ")
-          );
-        }
-        scrollYElement.current?.classList.add("bg-transparent");
-
-        scrollYElement.current?.classList.remove(
-          ...`${classesToAdd} bg-white`.split(" ")
-        );
-
-        navIconOpen.current?.classList.add(`max-[1279px]:${colorText}`);
       }
     }
 
@@ -119,7 +132,7 @@ const Nav = ({ colorText }: Prop) => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [shadow, textNav, location.pathname, colorText.current]);
   // click logo
   const handleClickLogo = () => {
     window.scrollTo(0, 0);
@@ -163,6 +176,8 @@ const Nav = ({ colorText }: Prop) => {
     dispath(setToken({ userToken: null }));
     localStorage.clear();
     handleClickCloseNav();
+    setIsLogin(false);
+    setRole("");
   };
   const handleClickList = (to: string) => {
     navigate(to);
@@ -170,162 +185,75 @@ const Nav = ({ colorText }: Prop) => {
 
   return (
     <div>
-      <div
-        className={`flex ${bg}  justify-center w-full fixed	z-[100]  transform transition-all duration-200 linear  top-0 ${shadow.current}`}
-        ref={scrollYElement}
-      >
-        <header
-          className=" justify-between flex h-100  items-center w-80  "
-          ref={scrollYElement}
-        >
-          <div
-            onClick={handleClickLogo}
-            className="flex w-1/2 text-white items-center"
-          >
+      {isPageLogin ? (
+        <div className="bg-gradient-to-b from-blue-600 to-blue-400 h-[100px] w-full flex justify-center fixed">
+          <div className="flex items-center h-full w-80 ">
             <img
-              className="h-full w-56 cursor-pointer object-cover mr-[10px]"
               src={logo}
               alt="logo"
+              className="h-8 cursor-pointer"
+              onClick={() => navigate("/")}
             />
-            {role === "Admin" ? (
-              <p>[ 관리자 ]</p>
-            ) : role === "Normal" ? (
-              <p>[ 리빙랩 관리자 ]</p>
-            ) : (
-              ""
-            )}
+            <div className="bg-red h-full flex items-end m-4">
+              {" "}
+              <p className=" mb-8 text-white">[ 관리자 ]</p>
+            </div>
           </div>
-          {role !== "Normal" ? (
+        </div>
+      ) : (
+        <div
+          className={`flex ${bg}  justify-center w-full fixed	z-[100]  transform transition-all duration-200 linear  top-0 ${shadow.current}`}
+          ref={scrollYElement}
+        >
+          <header
+            className=" justify-between flex h-100  items-center w-80  "
+            ref={scrollYElement}
+          >
             <div
-              ref={navIcon}
-              className={` xl:pt-8 xl:sm:backdrop-blur-0  xl:block xl:h-full xl:w-full xl:right-0 xl:translate-y-2 xl:text-end xl:leading-3  xl:static xl:bg-transparent xl:translate-x-0 xl:opacity-100  xl:pointer-events-auto  sm:transform sm:transition-all sm:duration-100 sm:linear max-[1279px]:flex max-[1279px]:flex-col max-[1279px]:absolute max-[1279px]:top-0 max-[1279px]:bg-nav max-[1279px]:p-6  max-[1279px]:w-full max-[1279px]:h-screen max-[1279px]:right-0  max-[1279px]:right-10 max-[1279px]:backdrop-blur-md sm:bg-[#7d7d7d90] max-[1279px]:translate-x-full max-[1279px]:opacity-0 max-[1279px]:pointer-events-none max-[1279px]:text-end max-[1279px]:pt-20 max-[1279px]:pr-16 ${textNav} `}
+              onClick={handleClickLogo}
+              className="flex w-1/2 text-white items-center"
             >
-              <NavLink
-                onClick={handleClickCloseNav}
-                to="/"
-                className={({ isActive }) =>
-                  isActive && role === "Admin"
-                    ? "text-white font-semibold sm:mt-9"
-                    : isActive
-                    ? "text-main font-semibold sm:mt-9"
-                    : "sm:mt-9"
-                }
-              >
-                <span
-                  className="m-2.5 text-xl   "
-                  onClick={() => window.scroll({ top: 0, behavior: "smooth" })}
-                >
-                  홈
-                </span>
-              </NavLink>
-              <NavLink
-                onClick={handleClickCloseNav}
-                to="/introduce"
-                className={({ isActive }) =>
-                  isActive && role === "Admin"
-                    ? "text-white font-semibold sm:mt-9"
-                    : isActive
-                    ? "text-main font-semibold sm:mt-9"
-                    : "sm:mt-9"
-                }
-              >
-                <span
-                  className="m-2.5 text-xl sm:mt-4"
-                  onClick={() => window.scroll({ top: 0, behavior: "smooth" })}
-                >
-                  소개
-                </span>
-              </NavLink>
-              <NavLink
-                onClick={handleClickCloseNav}
-                to="/announcement"
-                className={({ isActive }) =>
-                  isActive && role === "Admin"
-                    ? "text-white font-semibold sm:mt-9"
-                    : isActive
-                    ? "text-main font-semibold sm:mt-9"
-                    : "sm:mt-9"
-                }
-              >
-                <span
-                  className="m-2.5 text-xl sm:mt-4"
-                  onClick={() => window.scroll({ top: 0, behavior: "smooth" })}
-                >
-                  공지사항
-                </span>
-              </NavLink>
-              <NavLink
-                onClick={handleClickCloseNav}
-                to="/facility"
-                className={({ isActive }) =>
-                  isActive && role === "Admin"
-                    ? "text-white font-semibold sm:mt-9"
-                    : isActive
-                    ? "text-main font-semibold sm:mt-9"
-                    : "sm:mt-9"
-                }
-              >
-                <span
-                  className="m-2.5 text-xl sm:mt-4"
-                  onClick={() => window.scroll({ top: 0, behavior: "smooth" })}
-                >
-                  시설현황
-                </span>
-              </NavLink>
-              <NavLink
-                onClick={handleClickCloseNav}
-                to="/content"
-                className={({ isActive }) =>
-                  isActive && role === "Admin"
-                    ? "text-white font-semibold sm:mt-9"
-                    : isActive
-                    ? "text-main font-semibold sm:mt-9"
-                    : "sm:mt-9"
-                }
-              >
-                {" "}
-                <span
-                  className="m-2.5 text-xl sm:mt-4"
-                  onClick={() => window.scroll({ top: 0, behavior: "smooth" })}
-                >
-                  콘텐츠
-                </span>
-              </NavLink>
+              <img
+                className="h-full w-56 cursor-pointer object-cover mr-[10px]"
+                src={logo}
+                alt="logo"
+              />
               {role === "Admin" ? (
-                <div className="inline-block relative  parent sm:mt-[28px] xl:mt-0 ">
+                <p>[ 관리자 ]</p>
+              ) : role === "Normal" ? (
+                <p>[ 리빙랩 관리자 ]</p>
+              ) : (
+                ""
+              )}
+            </div>
+            {role !== "Normal" ? (
+              <div
+                ref={navIcon}
+                className={`  xl:pt-8 xl:sm:backdrop-blur-0  xl:block xl:h-full xl:w-full xl:right-0 xl:translate-y-2 xl:text-end xl:leading-3  xl:static xl:bg-transparent xl:translate-x-0 xl:opacity-100  xl:pointer-events-auto  sm:transform sm:transition-all sm:duration-100 sm:linear max-[1279px]:flex max-[1279px]:flex-col max-[1279px]:absolute max-[1279px]:top-0 max-[1279px]:bg-nav max-[1279px]:p-6  max-[1279px]:w-full max-[1279px]:h-screen max-[1279px]:right-0  max-[1279px]:right-10 max-[1279px]:backdrop-blur-md sm:bg-[#7d7d7d90] max-[1279px]:translate-x-full max-[1279px]:opacity-0 max-[1279px]:pointer-events-none max-[1279px]:text-end max-[1279px]:pt-20 max-[1279px]:pr-16 ${textNav} `}
+              >
+                <NavLink
+                  onClick={handleClickCloseNav}
+                  to="/"
+                  className={({ isActive }) =>
+                    isActive && role === "Admin"
+                      ? "text-white font-semibold sm:mt-9"
+                      : isActive
+                      ? "text-main font-semibold sm:mt-9"
+                      : "sm:mt-9"
+                  }
+                >
                   <span
-                    className="m-2.5 text-xl sm:mt-4"
+                    className="m-2.5 text-xl   "
                     onClick={() =>
                       window.scroll({ top: 0, behavior: "smooth" })
                     }
-                    ref={active}
                   >
-                    리빙랩
+                    홈
                   </span>
-                  <div className="  sm:right-[40px]  absolute w-[160px] h-auto bg-white text-black border-[1px] border-[black] xl:left-0 xl:right-0  child  ">
-                    <div
-                      className="py-[10px] px-[18px] text-lg font-normal text-center hover:bg-[#9e9e9e94]"
-                      onClick={(e) => {
-                        handleClickList("/living-lab");
-                      }}
-                    >
-                      게시글 관리
-                    </div>
-
-                    <div
-                      className="py-[10px] px-[18px] text-lg font-normal text-center hover:bg-[#9e9e9e94] "
-                      onClick={(e) => {
-                        handleClickList("/manager-user");
-                      }}
-                    >
-                      회원 관리
-                    </div>
-                  </div>
-                </div>
-              ) : (
+                </NavLink>
                 <NavLink
                   onClick={handleClickCloseNav}
-                  to="/living-lab"
+                  to="/introduce"
                   className={({ isActive }) =>
                     isActive && role === "Admin"
                       ? "text-white font-semibold sm:mt-9"
@@ -340,53 +268,52 @@ const Nav = ({ colorText }: Prop) => {
                       window.scroll({ top: 0, behavior: "smooth" })
                     }
                   >
-                    캠페인
+                    소개
                   </span>
                 </NavLink>
-              )}
-              <NavLink
-                onClick={handleClickCloseNav}
-                to="/campaign"
-                className={({ isActive }) =>
-                  isActive && role === "Admin"
-                    ? "text-white font-semibold sm:mt-9"
-                    : isActive
-                    ? "text-main font-semibold sm:mt-9"
-                    : "sm:mt-9"
-                }
-              >
-                {" "}
-                <span
-                  className="m-2.5 text-xl sm:mt-4"
-                  onClick={() => window.scroll({ top: 0, behavior: "smooth" })}
-                >
-                  캠페인
-                </span>
-              </NavLink>
-
-              <NavLink
-                onClick={handleClickCloseNav}
-                to="/freeboard"
-                className={({ isActive }) =>
-                  isActive && role === "Admin"
-                    ? "text-white font-semibold sm:mt-9"
-                    : isActive
-                    ? "text-main font-semibold sm:mt-9"
-                    : "sm:mt-9"
-                }
-              >
-                {" "}
-                <span
-                  className="m-2.5 text-xl sm:mt-4"
-                  onClick={() => window.scroll({ top: 0, behavior: "smooth" })}
-                >
-                  자유게시판
-                </span>
-              </NavLink>
-              {isLogin ? (
                 <NavLink
-                  onClick={Logout}
-                  to="/login"
+                  onClick={handleClickCloseNav}
+                  to="/announcement"
+                  className={({ isActive }) =>
+                    isActive && role === "Admin"
+                      ? "text-white font-semibold sm:mt-9"
+                      : isActive
+                      ? "text-main font-semibold sm:mt-9"
+                      : "sm:mt-9"
+                  }
+                >
+                  <span
+                    className="m-2.5 text-xl sm:mt-4"
+                    onClick={() =>
+                      window.scroll({ top: 0, behavior: "smooth" })
+                    }
+                  >
+                    공지사항
+                  </span>
+                </NavLink>
+                <NavLink
+                  onClick={handleClickCloseNav}
+                  to="/facility"
+                  className={({ isActive }) =>
+                    isActive && role === "Admin"
+                      ? "text-white font-semibold sm:mt-9"
+                      : isActive
+                      ? "text-main font-semibold sm:mt-9"
+                      : "sm:mt-9"
+                  }
+                >
+                  <span
+                    className="m-2.5 text-xl sm:mt-4"
+                    onClick={() =>
+                      window.scroll({ top: 0, behavior: "smooth" })
+                    }
+                  >
+                    시설현황
+                  </span>
+                </NavLink>
+                <NavLink
+                  onClick={handleClickCloseNav}
+                  to="/content"
                   className={({ isActive }) =>
                     isActive && role === "Admin"
                       ? "text-white font-semibold sm:mt-9"
@@ -402,51 +329,173 @@ const Nav = ({ colorText }: Prop) => {
                       window.scroll({ top: 0, behavior: "smooth" })
                     }
                   >
-                    로그아웃
+                    콘텐츠
                   </span>
                 </NavLink>
-              ) : (
-                ""
-              )}
-            </div>
-          ) : isLogin ? (
-            <NavLink className="text-right w-1/2" onClick={Logout} to="/login">
-              <span className="m-2.5 text-xl sm:mt-4 text-white">로그아웃</span>
-            </NavLink>
-          ) : (
-            ""
-          )}
+                {role === "Admin" ? (
+                  <div className="inline-block relative  parent sm:mt-[28px] xl:mt-0 ">
+                    <span
+                      className="m-2.5 text-xl sm:mt-4"
+                      onClick={() =>
+                        window.scroll({ top: 0, behavior: "smooth" })
+                      }
+                      ref={active}
+                    >
+                      리빙랩
+                    </span>
+                    <div className="  sm:right-[40px]  absolute w-[160px] h-auto bg-white text-black border-[1px] border-[black] xl:left-0 xl:right-0  child  ">
+                      <div
+                        className="py-[10px] px-[18px] text-lg font-normal text-center hover:bg-[#9e9e9e94]"
+                        onClick={(e) => {
+                          handleClickList("/living-lab");
+                        }}
+                      >
+                        게시글 관리
+                      </div>
 
-          {role !== "Normal" ? (
-            <div>
-              <div onClick={handleClickOpenNav}>
-                <i
-                  className={`bi bi-list  xl:hidden max-[1279px]:block max-[1279px]:text-4xl max-[1279px]:${colorText}`}
-                  ref={navIconOpen}
-                ></i>
+                      <div
+                        className="py-[10px] px-[18px] text-lg font-normal text-center hover:bg-[#9e9e9e94] "
+                        onClick={(e) => {
+                          handleClickList("/manager-user");
+                        }}
+                      >
+                        회원 관리
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <NavLink
+                    onClick={handleClickCloseNav}
+                    to="/living-lab"
+                    className={({ isActive }) =>
+                      isActive && role === "Admin"
+                        ? "text-white font-semibold sm:mt-9"
+                        : isActive
+                        ? "text-main font-semibold sm:mt-9"
+                        : "sm:mt-9"
+                    }
+                  >
+                    <span
+                      className="m-2.5 text-xl sm:mt-4"
+                      onClick={() =>
+                        window.scroll({ top: 0, behavior: "smooth" })
+                      }
+                    >
+                      캠페인
+                    </span>
+                  </NavLink>
+                )}
+                <NavLink
+                  onClick={handleClickCloseNav}
+                  to="/campaign"
+                  className={({ isActive }) =>
+                    isActive && role === "Admin"
+                      ? "text-white font-semibold sm:mt-9"
+                      : isActive
+                      ? "text-main font-semibold sm:mt-9"
+                      : "sm:mt-9"
+                  }
+                >
+                  {" "}
+                  <span
+                    className="m-2.5 text-xl sm:mt-4"
+                    onClick={() =>
+                      window.scroll({ top: 0, behavior: "smooth" })
+                    }
+                  >
+                    캠페인
+                  </span>
+                </NavLink>
+
+                <NavLink
+                  onClick={handleClickCloseNav}
+                  to="/freeboard"
+                  className={({ isActive }) =>
+                    isActive && role === "Admin"
+                      ? "text-white font-semibold sm:mt-9"
+                      : isActive
+                      ? "text-main font-semibold sm:mt-9"
+                      : "sm:mt-9"
+                  }
+                >
+                  {" "}
+                  <span
+                    className="m-2.5 text-xl sm:mt-4"
+                    onClick={() =>
+                      window.scroll({ top: 0, behavior: "smooth" })
+                    }
+                  >
+                    자유게시판
+                  </span>
+                </NavLink>
+                {isLogin ? (
+                  <NavLink
+                    onClick={Logout}
+                    to="/login"
+                    className={({ isActive }) =>
+                      isActive && role === "Admin"
+                        ? "text-white font-semibold sm:mt-9"
+                        : isActive
+                        ? "text-main font-semibold sm:mt-9"
+                        : "sm:mt-9"
+                    }
+                  >
+                    {" "}
+                    <span
+                      className="m-2.5 text-xl sm:mt-4"
+                      onClick={() =>
+                        window.scroll({ top: 0, behavior: "smooth" })
+                      }
+                    >
+                      로그아웃
+                    </span>
+                  </NavLink>
+                ) : (
+                  ""
+                )}
               </div>
-              <div
-                ref={navIconClose}
-                onClick={handleClickCloseNav}
-                className="max-[1279px]:top-[30px] max-[1279px]:flex max-[1279px]:justify-between max-[1279px]:w-full max-[1279px]:transform max-[1279px]:transition-all max-[1279px]:duration-100 max-[1279px]:linear absolute max-[1279px]:opacity-0 max-[1279px]:pointer-events-none z-20 right-20 xl:hidden"
+            ) : isLogin ? (
+              <NavLink
+                className="text-right w-1/2"
+                onClick={Logout}
+                to="/login"
               >
-                {" "}
-                <img
-                  src={logo}
-                  alt="logo"
-                  className="max-[1279px]:relative min-[640px]:left-44  w-56 cursor-pointer min-[180px]:left-32"
-                />
-                <i className="bi bi-x-lg  max-[1279px]:text-3xl max-[1279px]:text-nav "></i>
+                <span className="m-2.5 text-xl sm:mt-4 text-white">
+                  로그아웃
+                </span>
+              </NavLink>
+            ) : (
+              ""
+            )}
+
+            {role !== "Normal" ? (
+              <div>
+                <div onClick={handleClickOpenNav}>
+                  <i
+                    className={`bi bi-list  xl:hidden max-[1279px]:block max-[1279px]:text-4xl max-[1279px]:${colorText.current}`}
+                    ref={navIconOpen}
+                  ></i>
+                </div>
+                <div
+                  ref={navIconClose}
+                  onClick={handleClickCloseNav}
+                  className="max-[1279px]:top-[30px] max-[1279px]:flex max-[1279px]:justify-between max-[1279px]:w-full max-[1279px]:transform max-[1279px]:transition-all max-[1279px]:duration-100 max-[1279px]:linear absolute max-[1279px]:opacity-0 max-[1279px]:pointer-events-none z-20 right-20 xl:hidden"
+                >
+                  {" "}
+                  <img
+                    src={logo}
+                    alt="logo"
+                    className="max-[1279px]:relative min-[640px]:left-44  w-56 cursor-pointer min-[180px]:left-32"
+                  />
+                  <i className="bi bi-x-lg  max-[1279px]:text-3xl max-[1279px]:text-nav "></i>
+                </div>
               </div>
-            </div>
-          ) : (
-            ""
-          )}
-        </header>
-      </div>
-      <div>
-        <Outlet />
-      </div>
+            ) : (
+              ""
+            )}
+          </header>
+        </div>
+      )}
     </div>
   );
 };

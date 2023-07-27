@@ -5,12 +5,12 @@ import { DataNotice, Notice } from "@/model/Auth.model";
 import dayjs from "dayjs";
 import { generatePath, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import Loading from "@/pages/loading/Loading";
+import Loading from "@/component/loading/Loading";
 import { useDispatch } from "react-redux";
 import { activeLoading } from "@/features/loadingSlice/loadingSlice";
 import NoticeTitle from "./NoticeTitle";
 import { toast } from "react-toastify";
-import HeaderSearch from "@/component/HeaderSearch/HeaderSearch";
+import HeaderSearch from "@/component/headerSearch/HeaderSearch";
 
 const Content = () => {
   const listItem = useRef<HTMLDivElement>(null);
@@ -88,6 +88,7 @@ const Content = () => {
 
   //handle click index list
   const handleClickIndexList = (index: number) => {
+    window.scrollTo({ top: 0 });
     setColDataCurrent(index.toString());
   };
   //handle sreach

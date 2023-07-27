@@ -8,14 +8,13 @@ import { useDispatch } from "react-redux";
 import { getDataUser } from "features/DataUserSlice/dataUserSlice";
 import { User } from "model/Auth.model";
 import { setToken } from "features/DataUserSlice/authSlice";
-import useAuth from "@/hooks/useAuth";
 
 const FormLogin = () => {
   const checkBox = useRef<HTMLInputElement>(null);
   const [inputName, setInputName] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const navigate = useNavigate();
-  const { setAuth } = useAuth();
+
   // const payload = useSelector((state: RootState) => state.dataUser);
   const dispatch = useDispatch();
   //post api
@@ -49,7 +48,6 @@ const FormLogin = () => {
         );
         console.log(response.data.data.user.role);
 
-        setAuth(response.data.data.user.role);
         //save tokent redux
         dispatch(
           setToken({

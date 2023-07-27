@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Nav from "@/component/Navigate/Nav";
-import Banner from "./Components/Banner";
-import Footer from "@/component/Footter/Footer";
-import Content from "./Components/Content";
-import ContentAdmin from "./Components/ContentAdmin";
+import imgPage5 from "assets/img/BannerPage5.png";
+import Banner from "component/banner/Banner";
+import iconPage5 from "assets/img/iconPage5.png";
+import Content from "./components/Content";
+import ContentAdmin from "./components/ContentAdmin";
 const ContentPage = () => {
   const [role, setRole] = useState("");
   useEffect(() => {
@@ -15,11 +15,12 @@ const ContentPage = () => {
 
   return (
     <div className=" pt-[100px]">
-      <Nav colorText="text-black" />
-
-      <Banner />
+      <Banner
+        imgBanner={imgPage5}
+        icon={iconPage5}
+        text={"깨바부의 다양한 콘텐츠를 확인해보세요."}
+      />
       {role !== "Admin" ? <Content /> : <ContentAdmin />}
-      <Footer />
     </div>
   );
 };

@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { notice, noticeDetail } from "@/services/apiNotice";
 import { DataNotice } from "@/model/Auth.model";
-import Nav from "@/component/Navigate/Nav";
+import Nav from "@/component/navigate/Nav";
 import dayjs from "dayjs";
-import Footer from "@/component/Footter/Footer";
+import Footer from "@/component/footter/Footer";
 import { useNavigate } from "react-router-dom";
 import "./index.css";
 import { useDispatch } from "react-redux";
 import { activeLoading } from "@/features/loadingSlice/loadingSlice";
 import { useLocation } from "react-router-dom";
-import Loading from "../loading/Loading";
+import Loading from "../../component/loading/Loading";
 import { livingLabDetail } from "@/services/apiLivingLab";
 const LivingLabDetail = () => {
   const param = useParams();
@@ -45,7 +45,7 @@ const LivingLabDetail = () => {
   return (
     <div className="h-screen relative">
       <Loading />
-      <Nav colorText="text-black" />
+
       <div className="h-full flex justify-between flex-col ">
         {/* main  */}
         <div className="w-full flex justify-center mt-[160px] mb-[120px]  ">
@@ -124,9 +124,6 @@ const LivingLabDetail = () => {
               )}
             </div>
           </div>
-        </div>
-        <div className="  w-full">
-          <Footer />
         </div>
       </div>
     </div>

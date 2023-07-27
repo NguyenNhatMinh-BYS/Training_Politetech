@@ -5,12 +5,14 @@ interface DataPagination {
   totalList: number;
   setColDataCurrent: (pageChange: string) => void;
   sizePage: number;
+  href: string;
 }
 const Pagination: React.FC<DataPagination> = ({
   page,
   totalList,
   setColDataCurrent,
   sizePage,
+  href,
 }) => {
   const firstPage = "0";
   const lastPage = parseInt(Math.ceil(totalList / sizePage).toString());
@@ -19,7 +21,7 @@ const Pagination: React.FC<DataPagination> = ({
   ).fill("1");
 
   return (
-    <div className="flex justify-center flex-wrap w-[500px] ">
+    <a href={href} className="flex justify-center flex-wrap w-[500px] ">
       {firstPage !== page && totalList != 0 ? (
         <>
           <span
@@ -49,7 +51,7 @@ const Pagination: React.FC<DataPagination> = ({
         ) {
           return (
             <a
-              href="#search"
+              href={href}
               key={index}
               onClick={() => setColDataCurrent(index.toString())}
               className="my-[4px] p-[8px] px-[14px]  border-[1px] text-black border-solid border-[#CCCCCC]  mx-[6px]"
@@ -67,7 +69,7 @@ const Pagination: React.FC<DataPagination> = ({
         ) {
           return (
             <a
-              href="#search"
+              href={href}
               key={index}
               onClick={() => setColDataCurrent(index.toString())}
               className="my-[4px] p-[8px] px-[14px]  border-[1px] text-black border-solid border-[#CCCCCC]  mx-[6px]"
@@ -100,7 +102,7 @@ const Pagination: React.FC<DataPagination> = ({
       ) : (
         " "
       )}
-    </div>
+    </a>
   );
 };
 

@@ -17,16 +17,31 @@ import {
   putFreeBoard,
 } from "@/services/apiFreeBoard";
 import { UserPostFreeBoard } from "@/model/Auth.model";
+const module = {
+  toolbar: [
+    [{ header: [1, 2, false] }],
 
+    ["bold", "italic", "underline", "blockquote"],
+
+    [
+      { list: "ordered" },
+      { list: "bullet" },
+      { indent: "-1" },
+      { indent: "+1" },
+    ],
+    ["link", "image"],
+  ],
+};
 const schema = yub.object().shape({
   title: yub.string().required("입력하세요"),
   password: yub.string().required("입력하세요"),
   author: yub.string().required("입력하세요"),
+  content: yub.string().required("입력하세요"),
 });
 const FreeBoardCreateUser = () => {
   const { state } = useLocation();
   const { infor } = state || "";
-  const [contentt, setContent] = useState("");
+
   const [isError, setError] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
@@ -44,6 +59,7 @@ const FreeBoardCreateUser = () => {
       title: "",
       author: "",
       password: "",
+      content: "",
     },
     resolver: yupResolver(schema),
   });
@@ -53,7 +69,7 @@ const FreeBoardCreateUser = () => {
       (async () => {
         try {
           const response = await freeBoardDetail({ id: infor.toString() });
-          setContent(response.data.data.content);
+          setValue("content", response.data.data.content);
           setValue("title", response.data.data.title);
         } catch (e) {
           console.log(e);
@@ -63,7 +79,7 @@ const FreeBoardCreateUser = () => {
   }, []);
 
   const onSubmit = (data: UserPostFreeBoard) => {
-    if (contentt.trim() !== "") {
+    if (data.content.trim() !== "") {
       setError(false);
       try {
         (async () => {
@@ -71,7 +87,7 @@ const FreeBoardCreateUser = () => {
             title: data.title,
             author: data.author,
             password: data.password,
-            content: contentt,
+            content: data.content,
           });
         })();
         navigate(-1);
@@ -82,9 +98,6 @@ const FreeBoardCreateUser = () => {
     } else {
       setError(true);
     }
-  };
-  const handleChangeContent = (value: string) => {
-    setContent(value);
   };
 
   return (
@@ -169,30 +182,11 @@ const FreeBoardCreateUser = () => {
             </div>
 
             <div className="mt-[40px] ">
-              <Quill
-                content={contentt}
-                handleChangeContent={handleChangeContent}
-                module={{
-                  toolbar: [
-                    [{ header: [1, 2, false] }],
-
-                    ["bold", "italic", "underline", "blockquote"],
-
-                    [
-                      { list: "ordered" },
-                      { list: "bullet" },
-                      { indent: "-1" },
-                      { indent: "+1" },
-                    ],
-                    ["link", "image"],
-                  ],
-                }}
+              <Controller
+                control={control}
+                name="content"
+                render={({ field }) => <Quill field={field} module={module} />}
               />
-              {isError ? (
-                <div className="text-red-400  bottom-0 ">입력하세요</div>
-              ) : (
-                ""
-              )}
             </div>
           </div>
         </div>

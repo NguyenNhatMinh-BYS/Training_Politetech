@@ -98,7 +98,7 @@ export interface UserPostFreeBoard {
   author?: string;
   password?: string;
   title?: string;
-  content?: string;
+  content: string;
 }
 export interface ValidateAuthor {
   id: string;

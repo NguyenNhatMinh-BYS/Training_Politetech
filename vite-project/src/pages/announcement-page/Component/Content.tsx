@@ -212,7 +212,7 @@ const Content = () => {
         <div>
           {listData &&
             listData.map((item: DataNotice) => (
-              <div key={item.id}>
+              <div key={item.id} className="cursor-pointer">
                 <div
                   onClick={() => {
                     handleShowDetail(item.id);

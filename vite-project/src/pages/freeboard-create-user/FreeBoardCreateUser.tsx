@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import Nav from "@/component/navigate/Nav";
-import Footer from "@/component/footter/Footer";
+
 import Quill from "@/component/quill/Quill";
 import { Controller, useForm } from "react-hook-form";
 import * as yub from "yup";
@@ -10,12 +9,7 @@ import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 
-import {
-  freeBoardDetail,
-  postFreeBoard,
-  postFreeBoardUser,
-  putFreeBoard,
-} from "@/services/apiFreeBoard";
+import { freeBoardDetail, postFreeBoardUser } from "@/services/apiFreeBoard";
 import { UserPostFreeBoard } from "@/model/Auth.model";
 const module = {
   toolbar: [
@@ -42,7 +36,6 @@ const FreeBoardCreateUser = () => {
   const { state } = useLocation();
   const { infor } = state || "";
 
-  const [isError, setError] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     window.scrollTo({ top: 0 });
@@ -80,7 +73,6 @@ const FreeBoardCreateUser = () => {
 
   const onSubmit = (data: UserPostFreeBoard) => {
     if (data.content.trim() !== "") {
-      setError(false);
       try {
         (async () => {
           await postFreeBoardUser({
@@ -95,8 +87,6 @@ const FreeBoardCreateUser = () => {
       } catch (e) {
         console.log(e);
       }
-    } else {
-      setError(true);
     }
   };
 

@@ -219,7 +219,7 @@ const Content = () => {
                   });
                 }}
                 key={index}
-                className=" flex  py-[10px] border-b-[1px] border-solid"
+                className=" flex  py-[10px] border-b-[1px] border-solid cursor-pointer"
               >
                 <div className="w-[100px] py-[10px] relative flex items-center max-[1260px]:flex-col justify-around max-[1260px]:items-center">
                   {isAdmin || userName.current !== "" ? (

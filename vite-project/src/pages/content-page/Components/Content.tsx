@@ -139,7 +139,7 @@ const Content = () => {
                       ></p>
                     </div>
                     {item.description && item.description?.length > 340 ? (
-                      <div className="absolute bg-gradient-to-b from-blue-700 to-blue-400 inline-block py-[8px] px-[12px] text-white right-[-38px]  w-[36px] h-[40px] transition-all duration-200 ease-in-out">
+                      <div className="cursor-pointer absolute bg-gradient-to-b from-blue-700 to-blue-400 inline-block py-[8px] px-[12px] text-white right-[-38px]  w-[36px] h-[40px] transition-all duration-200 ease-in-out">
                         <div>
                           <i
                             id={`${item.description}down`}

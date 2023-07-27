@@ -206,7 +206,7 @@ const ContentAdmin = () => {
               dataList.map((item: DataNotice, index: number) => (
                 <tr
                   key={item?.id}
-                  className="border-b-[1px] border-solid "
+                  className="border-b-[1px] border-solid cursor-pointer"
                   onClick={() => {
                     handleDetail(item?.id);
                   }}

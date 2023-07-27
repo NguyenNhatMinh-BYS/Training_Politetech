@@ -45,6 +45,7 @@ const AnnouncementEdit = () => {
     defaultValues: {
       title: "",
       video: "",
+      content:""
     },
     resolver: yupResolver(schema),
   });

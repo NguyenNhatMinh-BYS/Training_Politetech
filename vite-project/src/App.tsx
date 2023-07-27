@@ -34,104 +34,74 @@ function App() {
       <Route element={<BaseLayout />}>
         <Route path={routes.DEFAULT}>
           {/* <Route path="/react-query" element={<ReactQuery />}></Route> */}
-          <Route path={routes.DEFAULT} element={<LandingPage />}></Route>
+          <Route path={routes.DEFAULT} element={<LandingPage />} />
 
           <Route path="*" element={<LandingPage />}></Route>
-          <Route path={routes.INTRODUCTION} element={<Introduce />}></Route>
-          <Route
-            path={routes.ANNOUNCEMENT}
-            element={<AnnouncementPage />}
-          ></Route>
-          <Route
-            path={routes.ANNOUNCEMENT_DETAIL}
-            element={<NoticeDetail />}
-          ></Route>
+          <Route path={routes.INTRODUCTION} element={<Introduce />} />
+          <Route path={routes.ANNOUNCEMENT} element={<AnnouncementPage />} />
+          <Route path={routes.ANNOUNCEMENT_DETAIL} element={<NoticeDetail />} />
 
-          <Route path={routes.FACILITY} element={<FacilityPage />}></Route>
-          <Route path={routes.LIVING_LAB} element={<LivingLabPage />}></Route>
+          <Route path={routes.FACILITY} element={<FacilityPage />} />
+          <Route path={routes.LIVING_LAB} element={<LivingLabPage />} />
           <Route
             path={routes.LIVING_LAB_DETAIL}
             element={<LivingLabDetail />}
-          ></Route>
+          />
 
-          <Route path={routes.CONTENT} element={<ContentPage />}></Route>
+          <Route path={routes.CONTENT} element={<ContentPage />} />
 
-          <Route path={routes.CAMPAIGN} element={<Campaign />}></Route>
-          <Route
-            path={routes.CAMPAIGN_DETAIL}
-            element={<CampainDetail />}
-          ></Route>
+          <Route path={routes.CAMPAIGN} element={<Campaign />} />
+          <Route path={routes.CAMPAIGN_DETAIL} element={<CampainDetail />} />
 
-          <Route path={routes.FREE_BOARD} element={<Freeboard />}></Route>
+          <Route path={routes.FREE_BOARD} element={<Freeboard />} />
           <Route
             path={routes.FREE_BOARD_DETAIL}
             element={<FreeBoardDetail />}
-          ></Route>
+          />
 
           <Route
             path={routes.FREE_BOARD_CREATE_USER}
             element={<FreeBoardCreateUser />}
-          ></Route>
-          <Route path={routes.LOGIN} element={<Login />}></Route>
-          <Route path={routes.REGISTER} element={<Register />}></Route>
-          <Route
-            path={routes.FREE_BOARD_CREATE}
-            element={<FreeBoardEdit />}
-          ></Route>
-          <Route
-            path={routes.FREE_BOARD_EDIT}
-            element={<FreeBoardEdit />}
-          ></Route>
+          />
+          <Route path={routes.LOGIN} element={<Login />} />
+          <Route path={routes.REGISTER} element={<Register />} />
+
+          <Route path={routes.FREE_BOARD_EDIT} element={<FreeBoardEdit />} />
           {/* normal  */}
           <Route element={<NormalAuth />}>
             <Route
               path={routes.LIVING_LAB_CREATE}
               element={<LivingLabEdit />}
-            ></Route>
-            <Route
-              path={routes.LIVING_LAB_EDIT}
-              element={<LivingLabEdit />}
-            ></Route>
+            />
+            <Route path={routes.LIVING_LAB_EDIT} element={<LivingLabEdit />} />
 
             {/* admin  */}
             <Route element={<AdminAuth />}>
               <Route
                 path={routes.ANNOUNCEMENT_EDIT}
                 element={<AnnouncementEdit />}
-              ></Route>
+              />
               <Route
                 path={routes.ANNOUNCEMENT_CREATE}
                 element={<AnnouncementEdit />}
-              ></Route>
+              />
               <Route
                 path={routes.LIVING_LAB_EDIT}
                 element={<LivingLabEdit />}
-              ></Route>
+              />
               <Route
                 path={routes.LIVING_LAB_CREATE}
                 element={<LivingLabEdit />}
-              ></Route>
+              />
+              <Route path={routes.CONTENT_EDIT} element={<ContentEdit />} />
+              <Route path={routes.CONTENT_CREATE} element={<ContentEdit />} />
+              <Route path={routes.CAMPAIGN_EDIT} element={<CampaignEdit />} />
+              <Route path={routes.CAMPAIGN_CREATE} element={<CampaignEdit />} />
               <Route
-                path={routes.CONTENT_EDIT}
-                element={<ContentEdit />}
-              ></Route>
-              <Route
-                path={routes.CONTENT_CREATE}
-                element={<ContentEdit />}
-              ></Route>
-              <Route
-                path={routes.CAMPAIGN_EDIT}
-                element={<CampaignEdit />}
-              ></Route>
-              <Route
-                path={routes.CAMPAIGN_CREATE}
-                element={<CampaignEdit />}
-              ></Route>
-
-              <Route
-                path={routes.USER_MANAGEMENT}
-                element={<ManagerUser />}
-              ></Route>
+                path={routes.FREE_BOARD_CREATE}
+                element={<FreeBoardEdit />}
+              />
+              <Route path={routes.USER_MANAGEMENT} element={<ManagerUser />} />
             </Route>
           </Route>
         </Route>

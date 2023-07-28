@@ -1,13 +1,11 @@
 import Map from "./Map";
 import { useState, useEffect, useRef } from "react";
 import { FacilityData } from "@/model/Auth.model";
-import { activeLoading } from "@/features/loadingSlice/loadingSlice";
-import { useDispatch } from "react-redux";
-import Loading from "@/component/loading/Loading";
+
 import DetailFacility from "./DetailFacility";
 const Content = ({ data, isLoad, isError }: any) => {
   const [location, setLocation] = useState("");
-  const dispatch = useDispatch();
+
   const isClear = useRef<HTMLDivElement>(null);
   const [offFill, setOffFill] = useState(false);
   const [titleLocation, setTitleLocation] = useState("부산");
@@ -39,15 +37,6 @@ const Content = ({ data, isLoad, isError }: any) => {
         }
       });
 
-  useEffect(() => {
-    console.log(listData, location);
-
-    if (listData.length === 0) dispatch(activeLoading(true));
-    if ((listData.length === 0 && location !== "") || listData.length !== 0) {
-      dispatch(activeLoading(false));
-    }
-    if (isError) dispatch(activeLoading(false));
-  });
   const clearFilter = () => {
     setOffFill(true);
     setPlaceholder("부산");
@@ -81,7 +70,6 @@ const Content = ({ data, isLoad, isError }: any) => {
       className="w-full flex justify-center mt-[60px] mb-[80px]  "
       onClick={() => show.current?.classList.add("hidden")}
     >
-      <Loading />
       {activeDetail === true ? (
         <DetailFacility
           itemSelected={itemSelected}
@@ -371,9 +359,9 @@ const Content = ({ data, isLoad, isError }: any) => {
                     </div>
                   </div>
                 ))}
-              <div className="text-center  text-[20px] font-medium px-[20px] h-[100px]">
+              <div className="text-center  text-[20px] font-medium px-[20px] ">
                 {isLoad === true
-                  ? ["3", "2", "4", "5"].map(() => (
+                  ? ["3", "2", "4", "5", "5", "5"].map(() => (
                       <div
                         role="status"
                         className="relative space-y-8 animate-pulse md:space-y-0 md:space-x-8 flex items-center mt-[14px] border-b-[1px] border-solid pb-[6px] border-[#b9b9b9] "

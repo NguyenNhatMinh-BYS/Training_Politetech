@@ -100,12 +100,13 @@ const LivingLabDetail = () => {
               {/* back */}
               <div
                 onClick={() =>
-                  navigate("/living-lab", {
-                    state: {
-                      search_value: state.search_value,
-                      search_by: state.search_by,
-                    },
-                  })
+                  // navigate("-1", {
+                  //   state: {
+                  //     search_value: state.search_value,
+                  //     search_by: state.search_by,
+                  //   },
+                  // })
+                  navigate(-1)
                 }
                 className="mx-[20px] bg-gradient-to-r from-blue-700 to-blue-400 px-[20px] py-[10px] text-white cursor-pointer"
               >

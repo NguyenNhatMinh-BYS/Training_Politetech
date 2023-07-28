@@ -36,8 +36,6 @@ const Nav = () => {
     setTextNav(colorText.current);
   }, [location.pathname]);
   useEffect(() => {
-    if (location.pathname !== "/facility")
-      window.scroll({ top: 0, behavior: "smooth" });
     if (
       location.pathname === "/living-lab" ||
       location.pathname === "/manager-user"

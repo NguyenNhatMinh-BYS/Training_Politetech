@@ -20,6 +20,7 @@ const AnnouncementDetail = () => {
   const [id, setId] = useState(param.id);
 
   const getDataAnnouncementDetail = async () => {
+    window.scrollTo({ top: 0 });
     dispath(activeLoading(true));
     try {
       const response = await noticeDetail({

@@ -9,11 +9,11 @@ const LandingPage = () => {
     if (location.pathname !== "/") {
       navigate("/");
     }
-  });
+  }, []);
   return (
     <div className="w-full bg-white ">
       <Banner />
-      <div className=" relative z-[10] bg-white pt-[10px]">
+      <div className=" relative z-[10] bg-white pt-[10px] h-[3000px]">
         <Content />
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { ContentApi } from "@/model/Auth.model";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { content } from "services/apiContent";
 import dayjs from "dayjs";
 import Loading from "@/component/loading/Loading";
@@ -13,6 +13,8 @@ const Content = () => {
   const [isEmpty, setIsempty] = useState(false);
   const [maxMinListData, setMaxMinListData] = useState<string[]>([]);
   const totalDatas = useRef<number>(0);
+  const listHeight = useRef<string[]>([]);
+  
   const getId = (url: string) => {
     url = url.split("v=")[1];
     return url;
@@ -23,8 +25,8 @@ const Content = () => {
     setColDataCurrent(index.toString());
   };
   const showFull = (
-    id?: string,
-
+    id: string,
+    index: number,
     showIcon?: string,
     hiddenIcon?: string
   ) => {
@@ -34,17 +36,19 @@ const Content = () => {
     idIconHidden?.classList.remove(
       ..."opacity-0 pointer-events-none".split(" ")
     );
+    // const tmp = listHeight.current[index];
+
+    const x = Number(listHeight.current[index]);
+    const tmp = "400";
+    console.log(x);
 
     let checkHeight = document.getElementById(`${id}`);
+    checkHeight?.classList.add(`h-[${tmp}px]`);
     checkHeight?.classList.remove(..."line-clamp-4 h-[110px]".split(" "));
-    const height = checkHeight?.offsetHeight;
-    console.log(height);
-
-    checkHeight?.classList.add(...`h-[${height}px] tran`.split(" "));
   };
   const showShort = (
-    id?: string,
-
+    id: string,
+    index: number,
     showIcon?: string,
     hiddenIcon?: string
   ) => {
@@ -54,8 +58,10 @@ const Content = () => {
     idIconHidden?.classList.add(..."opacity-0 pointer-events-none".split(" "));
 
     let checkHeight = document.getElementById(`${id}`);
-    const height = checkHeight?.offsetHeight;
-    checkHeight?.classList.remove(`h-[${height}px]`);
+    const x = Number(listHeight.current[index]) + 98;
+    const tmp = "400";
+
+    checkHeight?.classList.remove(`h-[${tmp}px]`);
     checkHeight?.classList.add(..."line-clamp-4 h-[110px]".split(" "));
   };
   const getDataContent = async () => {
@@ -89,13 +95,32 @@ const Content = () => {
   };
   useEffect(() => {
     getDataContent();
+
     dispath(activeLoading(false));
   }, [colDataCurrent]);
+  useEffect(() => {
+    listHeight.current = [];
+
+    const elements = document.querySelectorAll(
+      "#heghtFlex"
+    ) as NodeListOf<HTMLElement>;
+
+    if (elements && elements.length > 0) {
+    
+        elements.forEach((item, index) => {
+          listHeight.current.push(item.offsetHeight.toString());
+          const itemChildren = item.children;
+          for (let i = 0; i < itemChildren.length; i++) {
+            itemChildren[i].classList.add("h-[110px]");
+          }
+        });
+       
+
+      console.log(listHeight);
+    }
+  }, [dataPageCurrent]);
   return (
-    <div
-      id="video"
-      className="w-full flex justify-center mt-[60px] mb-[80px] transition-all duration-200 ease-in-out "
-    >
+    <div className="w-full flex justify-center mt-[60px] mb-[80px] transition-all duration-200 ease-in-out ">
       <Loading />
       <div className="w-3/5 min-h-[580px]">
         <div>
@@ -129,24 +154,28 @@ const Content = () => {
                     </p>
                   </div>
                   <div className="flex items-end relative">
-                    <div className="mt-[10px] flex items-end transition-all duration-[1000ms] ease-in-out w-full bg-[#dfdfdf41] ">
+                    <div
+                      id="heghtFlex"
+                      className="mt-[10px] flex items-end transition-all duration-[600ms] ease-in-out w-full bg-[#dfdfdf41] h-auto "
+                    >
                       <p
-                        className=" text-[16px] bg-[#dfdfdf41] pt-[10px] pb-[5px] px-[10px] line-clamp-4 w-full  h-[110px] transition-all duration-[1s] ease-in-out"
+                        className=" text-[16px] bg-[#dfdfdf41] pt-[10px] pb-[5px] px-[10px] line-clamp-4 w-full  transition-all duration-[600ms] ease-in-out overflow-hidden"
                         id={`${item.title}`}
                         dangerouslySetInnerHTML={{
                           __html: item?.description || "",
                         }}
                       ></p>
                     </div>
-                    {item.description && item.description?.length > 340 ? (
+                    {item.description &&
+                    item.description?.trim().length > 200 ? (
                       <div className="cursor-pointer absolute bg-gradient-to-b from-blue-700 to-blue-400 inline-block py-[8px] px-[12px] text-white right-[-38px]  w-[36px] h-[40px] transition-all duration-200 ease-in-out">
                         <div>
                           <i
                             id={`${item.description}down`}
                             onClick={() =>
                               showFull(
-                                item.title,
-
+                                item.title || " ",
+                                index,
                                 `${item.description}down`,
                                 `${item.description}up`
                               )
@@ -158,8 +187,8 @@ const Content = () => {
                             id={`${item.description}up`}
                             onClick={() =>
                               showShort(
-                                item.title,
-
+                                item.title || "",
+                                index,
                                 `${item.description}down`,
                                 `${item.description}up`
                               )

@@ -15,11 +15,13 @@ const ContentPage = () => {
 
   return (
     <div className=" pt-[100px]">
-      <Banner
-        imgBanner={imgPage5}
-        icon={iconPage5}
-        text={"깨바부의 다양한 콘텐츠를 확인해보세요."}
-      />
+      <div id="video">
+        <Banner
+          imgBanner={imgPage5}
+          icon={iconPage5}
+          text={"깨바부의 다양한 콘텐츠를 확인해보세요."}
+        />
+      </div>
       {role !== "Admin" ? <Content /> : <ContentAdmin />}
     </div>
   );

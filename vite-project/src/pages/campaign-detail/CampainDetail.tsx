@@ -1,30 +1,35 @@
 import { campaignDetail } from "@/services/apiCampaign";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Nav from "@/component/navigate/Nav";
-import Footer from "@/component/footter/Footer";
+import Loading from "@/component/loading/Loading";
 import { campaigngApi } from "@/model/Auth.model";
+import { useDispatch } from "react-redux";
+import { activeLoading } from "@/features/loadingSlice/loadingSlice";
 import "@/index.css";
 
 const CampainDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState<campaigngApi>();
-
-  useEffect(() => {
+  const dispatch = useDispatch();
+  const getData = async () => {
+    activeLoading(true);
     try {
-      (async () => {
-        const response = await campaignDetail({ id: id });
-        console.log(response.data.data);
+      const response = await campaignDetail({ id: id });
 
-        setData(response.data.data);
-      })();
+      setData(response.data.data);
     } catch (e) {
       console.log(e);
     }
+    dispatch(activeLoading(false));
+  };
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+    getData();
   }, []);
   return (
     <div className=" pt-[100px]  ">
+      <Loading />
       <div className="w-full flex justify-center">
         <div className="w-3/5 ">
           <div className="my-[40px]">
@@ -69,7 +74,7 @@ const CampainDetail = () => {
           <div
             className=" flex justify-end mb-[60px]"
             onClick={() => {
-              navigate("/campaign");
+              navigate(-1);
             }}
           >
             <div className="text-white bg-gradient-to-r from-blue-700 to-blue-400 inline-block text-end px-[20px] py-[10px] cursor-pointer">

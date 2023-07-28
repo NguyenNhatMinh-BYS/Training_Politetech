@@ -8,12 +8,13 @@ import "./style.css";
 const Banner = () => {
   const show = useRef<HTMLDivElement>(null);
   const [imgCurrent, setImgCurrent] = useState(0);
+
   useEffect(() => {
     window.scrollTo({ top: 0 });
-  }, []);
-  useEffect(() => {
     show.current?.classList.remove(..."opacity-0 mt-[200px]".split(" "));
   }, []);
+
+  
   useEffect(() => {
     const intervalId = setInterval(() => {
       const allImg = document.querySelectorAll(".slideImg");

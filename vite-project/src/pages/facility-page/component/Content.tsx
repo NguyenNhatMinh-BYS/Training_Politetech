@@ -17,6 +17,7 @@ const Content = ({ data, isLoad, isError }: any) => {
   const show = useRef<HTMLDivElement>(null);
   let listData: any = [];
   const [placeholder, setPlaceholder] = useState("부산");
+  
   const updateLocation = (local: string) => {
     setPlaceholder(local);
     setLocation(local);

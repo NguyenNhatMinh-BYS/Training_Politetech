@@ -3,16 +3,10 @@ import "./style.css";
 import loading from "assets/img/loading.png";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store";
+window.scrollBy({ top: 0 });
 const Loading = () => {
   const selector = useSelector((state: RootState) => state.loadingReducer);
-  useEffect(() => {
-    if (selector.isActive) {
-      window.scrollBy({ top: 0 });
-      // document.body.style.overflow = "hidden";
-    } else {
-      // document.body.style.overflow = "scroll";
-    }
-  });
+
   return (
     <>
       {selector.isActive ? (

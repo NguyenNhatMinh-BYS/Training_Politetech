@@ -11,7 +11,9 @@ const queryClient = new QueryClient();
 const ReactQuery = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <Example />
+      <div className="mt-[200px]">
+        <Example />
+      </div>
     </QueryClientProvider>
   );
 };
@@ -29,7 +31,11 @@ const Example = () => {
   const { status, fetchStatus, error, data } = useQuery<
     Array<DataNotice>,
     Error
-  >({ queryKey: ["pageData", { pageSize }], queryFn: fetchData });
+  >({
+    queryKey: ["pageData", { pageSize }],
+    queryFn: fetchData,
+    keepPreviousData: true,
+  });
   if (status === "loading" && fetchStatus === "fetching") {
     return <div>Loading...</div>;
   }

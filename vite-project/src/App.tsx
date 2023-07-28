@@ -33,7 +33,7 @@ function App() {
     <Routes>
       <Route element={<BaseLayout />}>
         <Route path={routes.DEFAULT}>
-          {/* <Route path="/react-query" element={<ReactQuery />}></Route> */}
+          <Route path="/react-query" element={<ReactQuery />}></Route>
           <Route path={routes.DEFAULT} element={<LandingPage />} />
 
           <Route path="*" element={<LandingPage />}></Route>

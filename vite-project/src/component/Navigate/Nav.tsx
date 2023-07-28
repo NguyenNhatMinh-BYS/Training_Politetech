@@ -333,7 +333,7 @@ const Nav = () => {
                   </span>
                 </NavLink>
                 {role === "Admin" ? (
-                  <div className="inline-block relative  parent sm:mt-[28px] xl:mt-0 ">
+                  <div className="inline-block relative  parent sm:mt-[28px] xl:mt-0 cursor-pointer">
                     <span
                       className="m-2.5 text-xl sm:mt-4"
                       onClick={() =>

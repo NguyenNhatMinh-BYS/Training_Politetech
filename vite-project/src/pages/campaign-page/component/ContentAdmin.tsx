@@ -130,7 +130,7 @@ const ContentAdmin = () => {
   };
   return (
     <div
-    id="searchCampaignAdmin"
+      id="searchCampaignAdmin"
       className="w-full flex justify-center flex-col items-center"
       onClick={() => {
         listItem.current?.classList.add("hidden");
@@ -185,7 +185,7 @@ const ContentAdmin = () => {
               dataList.map((item: DataNotice, index: number) => (
                 <tr
                   key={item?.id}
-                  className="border-b-[1px] border-solid "
+                  className="border-b-[1px] border-solid cursor-pointer "
                   onClick={() => navigate(`/campaign/${item?.id}`)}
                 >
                   <th className="py-[20px] w-[4%] font-normal">

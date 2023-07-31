@@ -13,7 +13,7 @@ const LandingPage = () => {
   return (
     <div className="w-full bg-white ">
       <Banner />
-      <div className=" relative z-[10] bg-white pt-[10px] h-[3000px]">
+      <div className=" relative z-[10] bg-white pt-[10px]">
         <Content />
       </div>
     </div>

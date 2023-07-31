@@ -44,7 +44,7 @@ const Example = () => {
     keepPreviousData: true,
   });
 
-  const mutation = useMutation({
+  const { mutate } = useMutation({
     mutationFn: (dataLogin: FormLogin) => {
       return Login(dataLogin);
     },
@@ -70,7 +70,7 @@ const Example = () => {
   }
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    mutation.mutate({
+    mutate({
       username: name,
       password: passwords,
     });

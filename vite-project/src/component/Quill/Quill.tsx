@@ -7,7 +7,7 @@ interface ChangeContent {
   module: any;
 }
 const FreeBoardQuill: React.FC<ChangeContent> = ({ field, module }) => {
-  console.log(field.value);
+  
 
   return (
     <ReactQuill

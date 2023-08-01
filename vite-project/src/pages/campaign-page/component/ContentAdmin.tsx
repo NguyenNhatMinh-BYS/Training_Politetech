@@ -11,12 +11,16 @@ import { useDispatch } from "react-redux";
 import Loading from "@/component/loading/Loading";
 import { activeLoading } from "@/features/loadingSlice/loadingSlice";
 import { campaign, delCampaign } from "@/services/apiCampaign";
+import {
+  useCampaignDeletion,
+  useCampaignQuery,
+} from "@/queries/campaignQueries";
 const ContentAdmin = () => {
   const listItem = useRef<HTMLDivElement>(null);
   const clickButton = useRef<HTMLDivElement>(null);
-  const [dataList, setDataList] = useState([]);
-  const [page, setPage] = useState<string>("0");
-  const [totalList, setTotalList] = useState<number>(2);
+  // const [dataList, setDataList] = useState([]);
+  // const [page, setPage] = useState<string>("0");
+  // const [totalList, setTotalList] = useState<number>(2);
   const [isAdmin, setIsAdmin] = useState(false);
   const [totalChecked, setTotalChecked] = useState<string[]>([]);
   const [noticeEdit, setNoticeEdit] = useState(false);
@@ -24,37 +28,19 @@ const ContentAdmin = () => {
   const itemChecked = useRef<string[]>([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const searchValue = useRef("");
-
-  const getData = async (search_by?: string, search_value?: string) => {
-    dispatch(activeLoading(true));
-    searchValue.current = search_value || "";
-    const response = await campaign({
-      page_size: "10",
-      page: page,
-
-      search_value: search_value,
-    });
-
-    let data = response.data.data?.list;
-
-    const totalData = response.data.data?.total;
-    for (
-      let i = 10 * Number(page), x = 0;
-      i <= 10 * Number(page) + 10 && x < 10;
-      i++, x++
-    ) {
-      if (data[x]) {
-        data[x].index = totalData - i;
-      } else {
-        break;
-      }
-    }
-    setDataList(data);
-
-    setTotalList(totalData);
-    dispatch(activeLoading(false));
+  // const searchValue = useRef("");
+  const pageParam = useRef({
+    page: "0",
+    page_size: "12",
+    search_value: "",
+  });
+  const { data, isLoading, refetch } = useCampaignQuery(pageParam.current);
+  const getData = (search_by?: string, search_value?: string) => {
+    pageParam.current.search_value = search_value || "";
+    refetch();
   };
+  const mutation = useCampaignDeletion();
+
   const handleCloseNoticeEdit = () => {
     setNoticeEdit(false);
     setIsDelete(false);
@@ -64,18 +50,12 @@ const ContentAdmin = () => {
     if (dataUser) {
       setIsAdmin(JSON.parse(dataUser).role);
     }
-    try {
-      (async () => {
-        getData("", searchValue.current);
-      })();
-    } catch (e) {
-      console.log(e);
-    }
-  }, [page]);
+  }, []);
   const setColDataCurrent = (pageChange: string) => {
-    console.log(pageChange);
+    pageParam.current.page = pageChange;
+    refetch();
 
-    setPage(pageChange);
+    // setPage(pageChange);
   };
   const handleAcceptDelete = () => {
     dispatch(activeLoading(true));
@@ -83,14 +63,15 @@ const ContentAdmin = () => {
     const ids = itemChecked.current.map((item) => {
       return item;
     });
-    try {
-      (async () => {
-        await delCampaign(ids, token);
-        itemChecked.current = [];
-        getData();
-        toast.success("Delete successfully");
-      })();
-    } catch (e) {}
+    mutation.mutate(
+      { ids, token },
+      {
+        onSuccess: () => {
+          itemChecked.current = [];
+        },
+      }
+    );
+
     setNoticeEdit(false);
     dispatch(activeLoading(false));
   };
@@ -181,8 +162,9 @@ const ContentAdmin = () => {
             </tr>
           </thead>
           <tbody>
-            {dataList &&
-              dataList.map((item: DataNotice, index: number) => (
+            {data &&
+              data.data &&
+              data.data.map((item: DataNotice, index: number) => (
                 <tr
                   key={item?.id}
                   className="border-b-[1px] border-solid cursor-pointer "
@@ -228,13 +210,15 @@ const ContentAdmin = () => {
           </tbody>
         </table>
         <div className="mt-[60px] mb-[20px] relative z-40 w-full flex justify-center">
-          <Pagination
-            totalList={totalList}
-            page={page}
-            setColDataCurrent={setColDataCurrent}
-            sizePage={10}
-            href={"#searchCampaignAdmin"}
-          />
+          {data && (
+            <Pagination
+              totalList={data.totalData}
+              page={pageParam.current.page}
+              setColDataCurrent={setColDataCurrent}
+              sizePage={10}
+              href={"#searchCampaignAdmin"}
+            />
+          )}
         </div>
         {isAdmin ? (
           <div className="flex justify-center xl:mt-[20px] xl:absolute xl:right-0 xl:bottom-[28px] cursor-pointer z-40 max-[1200px]:mb-[20px] ">

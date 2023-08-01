@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   QueryClient,
   QueryClientProvider,
@@ -23,58 +23,60 @@ const ReactQuery = () => {
     </QueryClientProvider>
   );
 };
-const fetchData = async ({ queryKey }: any): Promise<Array<DataNotice>> => {
-  const [key, { pageSize }] = queryKey;
-  const { data } = await notice({ page: "0", page_size: pageSize.toString() });
-
-  console.log(data.data.list);
-
-  return data.data.list;
-};
 const Example = () => {
-  const [pageSize, setPageSize] = useState(1);
+  const pageSize = useRef(1);
   const [name, setName] = useState("");
   const [passwords, setPasswords] = useState("");
-  const { status, fetchStatus, error, data } = useQuery<
+  const fetchData = async ({ queryKey }: any): Promise<Array<DataNotice>> => {
+    const [key, pageSize] = queryKey;
+    console.log(pageSize);
+    const { data } = await notice({
+      page: "0",
+      page_size: pageSize.toString(),
+    });
+
+    return data.data.list;
+  };
+  const { status, fetchStatus, data, refetch } = useQuery<
     Array<DataNotice>,
     Error
   >({
-    queryKey: ["pageData", { pageSize }],
+    queryKey: ["pageData", pageSize.current],
     queryFn: fetchData,
     keepPreviousData: true,
+    // retry: 3,
   });
 
   const { mutate } = useMutation({
-    mutationFn: (dataLogin: FormLogin) => {
-      return Login(dataLogin);
+    mutationFn: (data: FormLogin) => {
+      return Login(data);
     },
     onMutate: (variables) => {
       console.log("onMutate", variables);
     },
-    onSuccess: (data) => {
-      console.log("succes", data);
-    },
     onError: (error: any) => {
-      console.log("error", error.message);
+      toast.error(`ERROR ${error.response.data.code} !`);
     },
-    onSettled: (data, error, variables) => {
-      console.log("settled", variables, data);
+    onSuccess: () => {
+      toast.success(`Successfully`);
     },
   });
 
   if (status === "loading" && fetchStatus === "fetching") {
     return <div>Loading...</div>;
   }
-  if (error) {
-    return <div>{error?.message}</div>;
-  }
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    mutate({
-      username: name,
-      password: passwords,
-    });
+    mutate(
+      { username: name, password: passwords },
+      {
+        onSuccess: () => {
+          console.log("success2");
+        },
+      }
+    );
   };
+
   return (
     <div>
       {data &&
@@ -82,18 +84,24 @@ const Example = () => {
       <div className="flex ">
         <button
           className="mr-[20px] bg-slate-400 px-[10px]"
-          onClick={() => setPageSize(pageSize - 1)}
+          onClick={() => {
+            pageSize.current -= 1;
+            refetch();
+          }}
         >
           delete
         </button>
         <button
           className=" bg-slate-400 px-[10px]"
-          onClick={() => setPageSize(pageSize + 1)}
+          onClick={() => {
+            pageSize.current += 1;
+            refetch();
+          }}
         >
           add
         </button>
       </div>
-      <form onSubmit={handleSubmit} className="mt-[60px]">
+      <form className="mt-[60px]" onSubmit={handleSubmit}>
         <input
           className="border-[1px] border-solid"
           type="text"

@@ -1,65 +1,33 @@
-import { useEffect } from "react";
-
 import { useRef, useState } from "react";
-import { campaign } from "@/services/apiCampaign";
+
 import { campaigngApi } from "@/model/Auth.model";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Loading from "@/component/loading/Loading";
-import { useDispatch } from "react-redux";
-import { activeLoading } from "@/features/loadingSlice/loadingSlice";
+
+import { useCampaignQuery } from "@/queries/campaignQueries";
 const Content = () => {
   const clickButton = useRef<HTMLDivElement>(null);
   const [placeholder, setPlaceholder] = useState("제목");
   const listItem = useRef<HTMLDivElement>(null);
   const [inputSearch, setInputSearch] = useState("");
-  const [totalListData, setTotalListData] = useState<string[]>([]);
-  const [colDataCurrent, setColDataCurrent] = useState("0");
 
-  const [listData, setListData] = useState([]);
-  const [maxMinListData, setMaxMinListData] = useState<string[]>([]);
   const navigate = useNavigate();
-  const dispath = useDispatch();
-  const [isEmpty, setIsEmpty] = useState(false);
+
+  const pageParam = useRef({
+    page: "0",
+    page_size: "12",
+    search_value: "",
+  });
+
+  const { data, isLoading, refetch } = useCampaignQuery(pageParam.current);
+  console.log(isLoading);
+
   const handleClickSelect = () => {
     listItem.current?.classList.toggle("hidden");
     const addClass = "border-[#0075DC]";
 
     clickButton.current?.classList.toggle(addClass);
   };
-  const setData = async () => {
-    dispath(activeLoading(true));
-    try {
-      const response = await campaign({
-        page: colDataCurrent,
-        page_size: "12",
-        search_value: inputSearch,
-      });
-      let data = response.data.data?.list;
-
-      const totalData = response.data.data?.total;
-      data.length > 0 ? setIsEmpty(false) : setIsEmpty(true);
-      setListData(data);
-      for (
-        let i = 12 * Number(colDataCurrent), x = 0;
-        i <= 12 * Number(colDataCurrent) + 12 && x < 12;
-        i++, x++
-      ) {
-        if (data[x]) {
-          data[x].index = totalData - i;
-        } else {
-          break;
-        }
-      }
-      setTotalListData(Array(Math.ceil(totalData / 10)).fill(""));
-      setMaxMinListData(["0", (Math.ceil(totalData / 10) - 1).toString()]);
-    } catch (e) {
-      console.log(e);
-    }
-    dispath(activeLoading(false));
-  };
-  useEffect(() => {
-    setData();
-  }, [colDataCurrent]);
   //css input
   const autoResizeInput = (input: HTMLInputElement) => {
     setPlaceholder(input.value);
@@ -73,16 +41,15 @@ const Content = () => {
   };
   //handle sreach
   const handleClickSearch = () => {
-    setData();
-    setColDataCurrent("0");
+    pageParam.current.search_value = inputSearch.toString();
+    pageParam.current.page = "0";
+    refetch();
   };
   //handle click index list
   const handleClickIndexList = (index: number) => {
-    // console.log(index);
-    //
-    setColDataCurrent(index.toString());
+    pageParam.current.page = index.toString();
+    refetch();
   };
-  console.log(1);
 
   return (
     <div
@@ -93,7 +60,7 @@ const Content = () => {
       }}
       className=" w-full flex justify-center flex-col items-center mb-[100px]"
     >
-      <Loading />
+      {isLoading ? <Loading /> : ""}
       <div className="max-[1024px]:flex-col max-[1024px]:items-start my-[60px] flex justify-between  w-3/4 px-[40px] items-center">
         <div>
           {" "}
@@ -159,14 +126,14 @@ const Content = () => {
       </div>
       <div className="w-4/5   min-h-[580px] ">
         <div className=" px-[50px] grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 w-full">
-          {listData &&
-            listData.map((item: campaigngApi, index: number) => (
+          {data?.data &&
+            data.data.map((item: campaigngApi, index: number) => (
               <div
                 onClick={() => {
                   navigate(`/campaign/${item.id}`);
                 }}
                 key={index}
-                className=" cursor-pointer border-solid border-[1px]  bg-[#D4E9FC] mx-[27px] mt-[60px] hover:bg-[#0066C1] hover:text-white hover:border-[#0066C1] transition-all ease-in-out duration-200 rounded-sm"
+                className=" hover:shadow-[0_0_8px_3px_rgba(0,0,0,0.2)]  cursor-pointer border-solid border-[1px]  bg-[#D4E9FC] mx-[27px] mt-[60px] hover:bg-[#0066C1] hover:text-white hover:border-[#0066C1] transition-all ease-in-out duration-200 rounded-sm"
               >
                 <img
                   className="object-cover h-[300px] w-full bg-white"
@@ -180,22 +147,28 @@ const Content = () => {
             ))}
         </div>
       </div>
-      {listData.length > 0 ? (
+      {data && data.data.length > 0 ? (
         <div className="my-[60px] flex justify-center">
-          {maxMinListData[0] !== colDataCurrent ? (
+          {data.maxMinListData[0] !== pageParam.current.page ? (
             <>
               <a
                 href="#searchCampaign"
-                onClick={() => setColDataCurrent(maxMinListData[0])}
+                onClick={() => {
+                  pageParam.current.page = data.maxMinListData[0];
+                  refetch();
+                }}
                 className=" bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid border-[#CCCCCC]  mx-[6px] cursor-pointer hover:bg-[#a5d5ffa7]"
               >
                 <i className="bi bi-chevron-double-left"></i>
               </a>
               <a
                 href="#searchCampaign"
-                onClick={() =>
-                  setColDataCurrent((Number(colDataCurrent) - 1).toString())
-                }
+                onClick={() => {
+                  pageParam.current.page = (
+                    Number(pageParam.current.page) - 1
+                  ).toString();
+                  refetch();
+                }}
                 className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid border-[#CCCCCC]  mx-[6px] cursor-pointer hover:bg-[#a5d5ffa7]"
               >
                 <i className="bi bi-chevron-left"></i>
@@ -205,8 +178,9 @@ const Content = () => {
             ""
           )}
 
-          {totalListData &&
-            totalListData.map((item, index) => (
+          {data &&
+            data.totlalListData &&
+            data.totlalListData.map((item, index) => (
               <a
                 href="#searchCampaign"
                 key={index}
@@ -214,28 +188,37 @@ const Content = () => {
                 className="p-[8px] px-[14px]  border-[1px] text-black border-solid border-[#CCCCCC]  mx-[6px]"
                 style={{
                   backgroundColor:
-                    colDataCurrent === index.toString() ? "#0066C1" : "",
-                  color: colDataCurrent === index.toString() ? "white" : "",
+                    pageParam.current.page === index.toString()
+                      ? "#0066C1"
+                      : "",
+                  color:
+                    pageParam.current.page === index.toString() ? "white" : "",
                 }}
               >
                 {index + 1}
               </a>
             ))}
 
-          {maxMinListData[1] !== colDataCurrent ? (
+          {data.maxMinListData[1] !== pageParam.current.page ? (
             <>
               <a
                 href="#searchCampaign"
-                onClick={() =>
-                  setColDataCurrent((Number(colDataCurrent) + 1).toString())
-                }
+                onClick={() => {
+                  pageParam.current.page = (
+                    Number(pageParam.current.page) + 1
+                  ).toString();
+                  refetch();
+                }}
                 className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid mx-[6px] border-[#CCCCCC] cursor-pointer hover:bg-[#a5d5ffa7]"
               >
                 <i className="bi bi-chevron-right"></i>
               </a>
               <a
                 href="#searchCampaign"
-                onClick={() => setColDataCurrent(maxMinListData[1])}
+                onClick={() => {
+                  pageParam.current.page = data.maxMinListData[1];
+                  refetch();
+                }}
                 className="bg-[#F1F1F1] p-[8px] px-[14px] text-black border-[1px] border-solid mx-[6px] border-[#CCCCCC] cursor-pointer hover:bg-[#a5d5ffa7]"
               >
                 <i className="bi bi-chevron-double-right"></i>
@@ -245,12 +228,12 @@ const Content = () => {
             " "
           )}
         </div>
-      ) : isEmpty ? (
-        <div className="flex justify-center mt-[60px]">
+      ) : data?.isEmpty ? (
+        <div className="flex justify-center mt-[60px] absolute">
           현재 사용 가능한 데이터가 없습니다.
         </div>
       ) : (
-        <div className="flex justify-center mt-[60px]">Loading...</div>
+        <div className="flex justify-center mt-[60px] absolute">Loading...</div>
       )}
     </div>
   );

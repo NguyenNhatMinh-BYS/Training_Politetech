@@ -52,7 +52,7 @@ const FreeBoardDetail = () => {
     });
   };
   return (
-    <div className="h-screen relative">
+    <div className="h-auto relative">
       {showInputPassword ? (
         <ConfirmPassword
           CloseConfirmPW={CloseConfirmPW}

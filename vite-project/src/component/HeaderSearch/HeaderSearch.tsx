@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 interface Props {
-  getData: (inputSearch?: string, placeholder?: string) => void;
+  getData?: (inputSearch?: string, placeholder?: string) => void;
   listItem?: React.RefObject<HTMLDivElement>;
   clickButton?: React.RefObject<HTMLDivElement>;
   searchAuthor?: Boolean;

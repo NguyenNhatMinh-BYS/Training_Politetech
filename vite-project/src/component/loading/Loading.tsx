@@ -3,8 +3,8 @@ import "./style.css";
 import loading from "assets/img/loading.png";
 import { useSelector } from "react-redux";
 import { RootState } from "@/app/store";
-window.scrollBy({ top: 0 });
 
+window.scrollBy({ top: 0 });
 const Loading = () => {
   const selector = useSelector((state: RootState) => state.loadingReducer);
 

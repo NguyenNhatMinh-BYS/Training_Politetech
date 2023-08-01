@@ -25,6 +25,7 @@ const LivingLabDetail = () => {
   }, []);
   const getDataAnnouncementDetail = async () => {
     dispath(activeLoading(true));
+    console.log(state);
 
     try {
       const response = await livingLabDetail({
@@ -43,7 +44,7 @@ const LivingLabDetail = () => {
   }, [id]);
 
   return (
-    <div className="h-screen relative">
+    <div className="h-auto relative">
       <Loading />
 
       <div className="h-full flex justify-between flex-col ">

@@ -14,6 +14,8 @@ const Pagination: React.FC<DataPagination> = ({
   sizePage,
   href,
 }) => {
+  console.log(totalList, sizePage);
+
   const firstPage = "0";
   const lastPage = parseInt(Math.ceil(totalList / sizePage).toString());
   const totalColData = Array(

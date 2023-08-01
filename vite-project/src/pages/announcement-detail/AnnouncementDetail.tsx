@@ -39,7 +39,7 @@ const AnnouncementDetail = () => {
   }, [id]);
 
   return (
-    <div className="h-screen relative">
+    <div className="h-auto relative">
       <Loading />
 
       <div className="h-full flex justify-between flex-col ">

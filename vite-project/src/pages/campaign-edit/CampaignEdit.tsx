@@ -18,6 +18,7 @@ import {
 } from "@/services/apiCampaign";
 import { upLoadImg } from "@/services/apiCommon";
 import Loading from "../../component/loading/Loading";
+import { useCampaignEdit, useCampaignPost } from "@/queries/campaignQueries";
 interface Title {
   title: string;
   link: string;
@@ -49,7 +50,7 @@ const CampaignEdit = () => {
   const { infor } = state || "";
 
   const navigate = useNavigate();
-  const [nameImg, setNameImg] = useState("");
+  const [nameImg, setNameImg] = useState<string>("");
   const dispatch = useDispatch();
   const {
     register,
@@ -57,6 +58,7 @@ const CampaignEdit = () => {
     control,
     formState: { errors },
     setValue,
+    reset,
   } = useForm<Title>({
     mode: "onChange",
     defaultValues: {
@@ -87,6 +89,8 @@ const CampaignEdit = () => {
     dispatch(activeLoading(false));
   }, []);
 
+  const mutateCreateCampaign= useCampaignPost()
+
   const createNotice = (data: Title, token: string) => {
     try {
       (async () => {
@@ -98,16 +102,14 @@ const CampaignEdit = () => {
 
           form.append("file", inputFile?.files[0]);
           const postFileImg = await upLoadImg(form);
-          await postCampaign(
-            {
+          const campaignPost={
               title: data.title,
               content: data.content,
               link: data.link,
               image: postFileImg.data.data.filename,
               image_name: postFileImg.data.data.original_name,
-            },
-            token
-          );
+          }
+          mutateCreateCampaign.mutate({campaignPost,token})
           navigate(-1);
           toast.success("Created notice successfully");
         }
@@ -117,8 +119,11 @@ const CampaignEdit = () => {
     }
   };
 
+  const mutationEdit = useCampaignEdit();
+
   const onSubmit = (data: Title) => {
     const token = localStorage.getItem("token") || "";
+
     if (!infor) createNotice(data, token);
     else {
       dispatch(activeLoading(true));
@@ -127,34 +132,28 @@ const CampaignEdit = () => {
           const inputFile = document.querySelector(
             "#files"
           ) as HTMLInputElement;
-          // const file = inputFile.files ? inputFile.files[0] : null;
 
           if (inputFile?.files) {
             const form = new FormData();
-            console.log(inputFile?.files[0]);
 
             form.append("file", inputFile?.files[0]);
-
-            try {
-              const postFileImg = await upLoadImg(form);
-              const response = await putCampaign(
-                {
-                  id: infor.toString(),
-                  title: data.title,
-                  content: data.content,
-                  link: data.link,
-                  image: postFileImg.data.data.filename,
-                  image_name: postFileImg.data.data.original_name,
-                },
-                token
-              );
-              console.log(response);
-            } catch (e) {
-              console.log(e);
+            console.log(inputFile?.files[0]);
+            let postFileImg;
+            if (inputFile?.files[0]) {
+              postFileImg = await upLoadImg(form);
             }
+            const dataEditCampaign = {
+              id: infor.toString(),
+              title: data.title,
+              content: data.content,
+              link: data.link,
+              image: postFileImg?.data.data.filename || data.img,
+              image_name: postFileImg?.data.data.original_name || nameImg,
+            };
+
+            mutationEdit.mutate({ dataEditCampaign, token });
           }
           navigate(-1);
-          toast.success("Created Edit successfully");
         })();
       } catch (e) {
         console.log(e);
@@ -165,7 +164,8 @@ const CampaignEdit = () => {
 
   const handleGetFile = () => {
     const inputFile = document.querySelector("#files") as HTMLInputElement;
-    // const file = inputFile.files ? inputFile.files[0] : null;
+    console.log(inputFile.files);
+
     inputFile.addEventListener("change", () => {
       if (inputFile?.files) {
         setNameImg(inputFile?.files[0].name);
@@ -176,9 +176,11 @@ const CampaignEdit = () => {
   const delImg = () => {
     const inputFile = document.querySelector("#files") as HTMLInputElement;
     if (inputFile?.files) {
-      inputFile.files = null;
+      inputFile.value = "";
       setNameImg("");
     }
+    setValue("img", "");
+    console.log(inputFile.files);
   };
   return (
     <div className=" pt-[100px] ">
@@ -215,17 +217,17 @@ const CampaignEdit = () => {
               />
             </div>
 
-            <div className="mt-[20px]">
+            <div className="mt-[20px] relative">
               <Controller
                 control={control}
                 name="content"
                 render={({ field }) => <Quill field={field} module={module} />}
               />
-              <p className="text-red-500 absolute bottom-[-30px] left-0">
+              <p className="text-red-500 absolute bottom-[-70px] ">
                 {errors.content?.message}
               </p>
             </div>
-            <div className="flex w-full  relative  bg-white border-[2px] border-solid mt-[-42px] mb-[20px]">
+            <div className="flex w-full  relative  bg-white border-[2px] border-solid mt-[42px] mb-[20px]">
               <h1 className="  grow-[3] text-[18px] font-bold text-center bg-[#b9e0ff] py-[14px]">
                 제목
               </h1>

@@ -212,9 +212,7 @@ const Content = () => {
                   navigate(`/living-lab/${item.id}`, {
                     state: {
                       search_by: isAdmin ? inputSearchBy.current : "author",
-                      search_value: isAdmin
-                        ? searchValue.current
-                        : userName.current,
+                      search_value: searchValue.current,
                     },
                   });
                 }}

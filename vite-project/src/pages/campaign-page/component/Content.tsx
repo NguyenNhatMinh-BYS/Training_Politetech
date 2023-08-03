@@ -141,7 +141,7 @@ const Content = () => {
                   alt="img"
                 />
                 <div className=" text-center px-[16px] py-[14px]">
-                  <p>{item.title}</p>
+                  <p className="break-words">{item.title}</p>
                 </div>
               </div>
             ))}
